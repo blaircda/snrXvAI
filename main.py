@@ -105,9 +105,6 @@ titles = random.sample(title_list, Npapers)
 
 jobs = list(zip(authors, titles))
 
-results = []
-failures = []
-
 def process_paper(job):
     model, title = job
     adapter = PROVIDERS[model["provider"]] 
@@ -125,24 +122,30 @@ def run_processes(jobs):
     """
     Loops over all jobs
     """
+    results = []
+    failures = []
     retry_later = []
     for job in jobs:
         try:
             result = process_paper(job)
-        except TransientError:
-            retry_later.append(job)
-        except (ConfigError, OutputError, GenerationError) as e:
+        except TransientError as e:
+            retry_later.append( (job, e) )
+        except GenerationError as e:
             failures.append( (job, e) )
         else:
             results.append(result)
             
-    return retry_later
+    return results, failures, retry_later
         
-to_retry = run_processes(jobs)
+results, failures, to_retry = run_processes(jobs)
 
 if to_retry:
     time.sleep(10) # minutes for final production
-    to_retry =  run_processes(to_retry)
+    retry = [job for job,_ in retry_later]
+    retry_results, retry_failures, retry_retry =  run_processes(retry)
+    results.extend(retry_results)
+    failures.extend(retry_failures+retry_retry)
+
 
 if results: # replace with the actual write to the website
     print(f"Successful jobs: {results}")
