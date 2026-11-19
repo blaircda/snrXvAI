@@ -1,6 +1,6 @@
-import time, shutil, subprocess, tempfile, os, signal
+import shutil, subprocess, tempfile, os, signal, re
 from pathlib import Path
-from degenerate.errors import GenerationError, OutputError
+from degenerate.errors import OutputError
 
 PREAMBLE = """
 \\documentclass[11pt]{article}
@@ -15,6 +15,21 @@ PREAMBLE = """
 \\numberwithin{equation}{section}
 \\usepackage{tikz}
 \\usetikzlibrary{positioning, calc, arrows.meta}
+\\newcommand\\customtitle[4]{\\begin{center}
+\\baselineskip=2em
+\\vspace{-5cm}
+\\hfill {\\ttfamily #3}
+\\vskip 0.5em
+{\\LARGE \\bf  
+#1
+}
+\\vskip 2em
+{\\large \\bf #2}
+\\vskip 0.5em
+{\\it #4}
+\\vskip 0.5em 
+\\end{center}
+}
 """
 
 def check_source(source):
@@ -31,19 +46,31 @@ def check_source(source):
     "\\begin{document}"
     ]
     
+
+    # strip enclosing markdown if present
+    check = re.search(r"```\s*(?:(?:la)?tex)?(.*?)(?:```|\Z)", source, re.DOTALL | re.IGNORECASE)
+
+    if check:
+        source = check.group(1).strip()
+
+    # next check for invalid commands
+    # I don't do this first in case the model writes
+    # "As instructed, I did not use \input" somewhere outside the actual LaTeX
     if any(x in source for x in do_not_want):
         raise OutputError("LaTeX code contains forbidden command")
-        
+
     return source
 
-def make_full_source(source, title, paper_author):
+def make_full_source(source, title, paper_authors, job_id):
 
     source = check_source(source)
 
     full_source = PREAMBLE
 
-    full_source = PREAMBLE+f"\n\\title{{{title}}}\n\\author{{{paper_author}}}"+"\n\\begin{document}\n\\maketitle"+source+"\n\\end{document}"
-    
+    authors = ', '.join(paper_authors)
+
+    #full_source = PREAMBLE+f"\n\\title{{\\bf {title}}}\n\\author{{{authors}}}"+"\n\\begin{document}\n\\maketitle"+source+"\n\\end{document}"
+    full_source = PREAMBLE+"\n\\begin{document}\n"+f"\n\\customtitle{{{title}}}{{{authors}}}{{{job_id}}}{{ai-snarxiv}}"+source+"\n\\end{document}"
     # extract abstract
     start_abs = "\\begin{abstract}"
     end_abs = "\\end{abstract}"
@@ -77,7 +104,7 @@ def make_paper(source, papername):
         with open(tmp / f"{papername}.tex","w") as f:
             f.write(source)
 
-        print("Building paper")
+        print(f"Building paper {papername}")
         cmd = ["latexmk", "-pdf",
                "-pdflatex=pdflatex -interaction=nonstopmode -no-shell-escape -halt-on-error %O %S",
                f"{papername}.tex"]
@@ -103,6 +130,7 @@ def make_paper(source, papername):
                 shutil.copy(tmp / f, paper_dir)
             raise OutputError(f"Building pdf failed (latexmk exit code {proc.returncode})")
         else:
+            print(f"Building paper {papername} succeeded")
             for f in [ f"{papername}.tex", f"{papername}.pdf"]:
                 shutil.copy(tmp / f, paper_dir)
 

@@ -1,10 +1,10 @@
 import time, random
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 from degenerate.registry import PROVIDERS
-from degenerate.compile import make_paper, make_full_source
-from degenerate.prompts import SYS_PROMPT
+from degenerate.compile import make_paper, make_full_source, check_source
+from degenerate.prompts import make_user_prompt, SYS_PROMPT
 
-def create_jobs(list_of_models, list_of_titles, Npapers):
+def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_collabs=2):
     """
     Assigns titles to models
 
@@ -12,6 +12,9 @@ def create_jobs(list_of_models, list_of_titles, Npapers):
     ------
     list_of_models list of dict
     list_of_titles list of str
+    Npapers number of papers to build
+    Ncollab number of collaborative papers
+    max_collabs max number of models on a single paper
     
     Returns
     ------
@@ -19,23 +22,47 @@ def create_jobs(list_of_models, list_of_titles, Npapers):
         where each dict has keys
         author_model, title, job_id
     """
-    models = random.sample(list_of_models, Npapers)
-    titles = random.sample(list_of_titles, Npapers)
-    
+    # restrict max_collabs to the number of available models
+    if max_collabs > len(list_of_models):
+        max_collabs = len(list_of_models)
+        
+    # get the titles we'll use
+    # if passing only 1 title, then all will be given the same title
+    if Npapers > len(list_of_titles):
+        titles = random.choices(list_of_titles, k=Npapers)
+    else:
+        titles = random.sample(list_of_titles, Npapers)
+
+    # assign flags to say which papers are collaborative
+    if Ncollab < Npapers:
+        flags = [True]*Ncollab + [False]*(Npapers - Ncollab)
+        random.shuffle(flags)
+    else:
+        flags= [True]*Ncollab
+    # if Ncollab > Npapers just take them all to be collaborative without raising
+
+    # record jobs as a list
+    jobs = []
+
+    # generate paper ids
     YYMM = time.strftime("%y%m", time.localtime())
-    #XXXXX = time.strftime("%w%m%S", time.localtime())
     XXXXX = random.randint(0, 30000)
 
-    def to_str(X):
+    def format_id(X):
         return "0"*(5-len(str(X)))+str(X)
 
-    jobs = []
-    for model, title in zip(authors, titles):
-        papername = YYMM+"."+to_str(XXXXX)
+    for title, is_collab in zip(titles, flags): 
+        if is_collab:
+            n_collabs = random.randint(2, max_collabs)
+        else:
+            n_collabs = 1
+        models = random.sample(list_of_models, n_collabs)
+        stages = [ {"model": models[0], "version": "initial"} ] + [{"model":m, "version": "revision"} for m in models[1:]]
+        papername = YYMM+"."+format_id(XXXXX)+"ai"
         job_info = {
-        "model": model,
-        "title": title,
-        "job_id": papername
+            "job_id": papername,
+            "title": title,
+            "stages": stages
         }
         jobs.append(job_info)
         XXXXX = XXXXX + 1 
@@ -46,23 +73,32 @@ def process_paper(job):
     """
     Process a single job
     """
-    model, title, job_id = job["model"], job["title"], job["job_id"]
-    
-    adapter = PROVIDERS[model["provider"]] 
-    r = adapter(model, SYS_PROMPT, title)
-    source = r["output"]
-    tokens = r.get("thought_tokens",0) + r.get("output_tokens",0)
-    paper_author = model["display_name"]
+    stages, title, job_id = job["stages"], job["title"], job["job_id"]
+
+    paper_authors = []
+    output_tokens = 0
+    thought_tokens = 0
+    source = ""
+    for stage in stages:
+        model = stage["model"]
+        adapter = PROVIDERS[model["provider"]]
+        prompt = make_user_prompt(stage["version"], title, source)
+        r = adapter(model, SYS_PROMPT, prompt)
+        source = check_source(r["output"])
+        output_tokens += r.get("output_tokens",0)
+        thought_tokens += r.get("thought_tokens",0) 
+        paper_authors.append(model["display_name"])
 
     # here could try except to send a source with invalid commands back to the model
-    full_source, abstract = make_full_source(source, title, paper_author)
+    full_source, abstract = make_full_source(source, title, paper_authors, job_id)
 
     # here could try except to send a source which does not compile back to the model
     make_paper(full_source, job_id)
     
     # assuming the tex worked return the job and abstract 
     job["abstract"] = abstract
-    job["tokens"] = tokens
+    job["output_tokens"] = output_tokens
+    job["thought_tokens"] = thought_tokens
     return job
 
 def run_processes(jobs):
@@ -76,10 +112,15 @@ def run_processes(jobs):
         try:
             result = process_paper(job)
         except TransientError as e:
-            retry_later.append( (job, str(e)) )
+            job["error"] = str(e)
+            retry_later.append(job)
+            #retry_later.append( (job, str(e)) )
         except GenerationError as e:
-            failures.append( (job, str(e)) )
+            job["error"] = str(e)
+            failures.append(job)
+            #failures.append( (job, str(e)) )
         else:
+            result.pop("error", None)
             results.append(result)
             
     return results, failures, retry_later
