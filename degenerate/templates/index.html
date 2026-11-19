@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>High Energy Physics - sn(a)rX(i)v</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="static/style.css" />
+</head>
+<body>
+<body >
+<header>
+  <a href="https://arxiv.org/" class="logo">
+    <h1 class="logo">sn<span class="accent">a</span>rX<span class="accent">i</span>v</h1>
+  </a>
+  <nav class="header-nav">
+    <a href=""><h1 class="about">About</h1></a>
+    <a href=""><h1 class="about">Source</h1></a>
+    <a href=""><h1 class="about">The real snarXiv</h1></a>
+    <a href=""><h1 class="about">The real arXiv</h1></a>
+ </nav>
+</header>
+
+    <main>
+    <div id="content">
+    <div id='dlpage'>
+    <h1>Why Energy Physics - Theory</h1>
+    <h3>Showing new listings for {{pretty_date}}</h3>
+
+    <dl id='articles'>
+    {% for listing in listings %}
+    <dt>
+        [{{ listing.order }}]
+        <a>snarXiv:{{ listing.id}}</a>
+        [<a href='pdf/{{ listing.id }}.pdf' title='Download pdf'>pdf</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <div class='list-title'>{{ listing.title }}</div>
+            <div class='list-authors'>{{ listing.authors }}</div>
+            <div class='list-comments'>Comments: {{ listing.comments }}</div>
+            <div class='list-subjects'><span class='primary_subject'>High Energy Physics - Theory (hep-th)</span>; Epistemological Collapse (epi-c)</div>
+
+            <p>{{ listing.abstract }}</p>
+        </div>
+    </dd>
+    {% endfor %}
+    </dl>
+    </div>
+    </div>
+    </main>
+    <footer>
+    <p>Thanks to Claude for telling me to do the CSS myself</p>
+    </footer> 
+
+</body>
+</html>

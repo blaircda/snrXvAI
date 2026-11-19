@@ -1,0 +1,184 @@
+body {
+margin: 0;
+padding: 0;
+background-color: #fff;
+color: #000;
+font-family: 'Lucida Grande', helvetica, arial, verdana, sans-serif;
+}
+
+
+a { color: #0000F4 }
+
+a:link,
+a:visited,
+a:active {
+text-decoration: none;
+}
+
+a:hover {
+text-decoration: underline;
+}
+
+
+header {
+# background-color: #b31b1b;
+background-color:#000000;
+color: #fff;
+margin: 0;
+padding: 1.1em 1em 1.1em 0em;
+border-bottom: 2px solid #ccc;
+overflow: hidden;
+}
+
+header h1 {
+margin: 0;
+font-size: 1em;
+padding: 0 0 .2em 20px;
+font-weight: bold;
+font-style: normal;
+float: left;
+}
+
+header h1.logo { 
+float: left;
+margin-left: 15px;
+font-size:1.7em
+}
+
+header h1.about { 
+/* float: right;*/
+margin-right: 15px;
+font-size:1.25em
+}
+
+header a,
+header a:visited {
+color: #fff;
+text-decoration: none;
+}
+
+header a:hover {
+text-decoration: underline;
+}
+
+#content {
+margin: 1.25em;
+font-size: 110%;
+}
+
+nav.header-nav {
+float:right
+}
+
+.accent {
+color:#b31b1b;
+}
+
+/****************************************
+* DL-list styles (/list/arch-ive/new|recent, search)
+****************************************/
+
+#dlpage .list-dateline {
+font-style: italic;
+}
+
+#dlpage dd {
+padding-bottom: 1em;
+}
+
+#dlpage .meta {
+line-height: 130%;
+}
+
+#dlpage .list-identifier {
+font-weight: bold;
+}
+
+#dlpage .descriptor {
+display: inline;
+}
+
+#dlpage .list-authors .descriptor {
+display: none;
+}
+
+#dlpage .list-title .descriptor {
+display: none;
+}
+
+#dlpage .list-title {
+font-size: large;
+font-weight: bold;
+margin: .25em 0 0 0;
+line-height: 120%;
+}
+
+#dlpage .list-authors {
+font-weight: normal;
+font-size: 110%;
+}
+
+#dlpage .list-comments {
+font-weight: normal;
+font-size: 90%;
+}
+
+#dlpage .list-journal-ref {
+font-weight: normal;
+font-size: 90%;
+}
+
+#dlpage .list-subjects {
+font-size: 90%;
+}
+
+
+span.primary_subject {
+font-weight:bold
+}
+
+
+/****************************************
+* Footer
+****************************************/
+
+footer {
+background-color: #fff;
+color: #000;
+margin: 1em 0 0 0;
+padding: .7em;
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+font-size: 100%;
+clear: both;
+}
+
+footer a,
+footer a:visited {
+text-decoration: none;
+}
+
+footer a:hover {
+text-decoration: underline;
+}
+
+
+footer address {
+/*font-size: 90%;*/
+margin: 5px;
+font-style: normal;
+}
+
+footer p,
+footer h1,
+footer h2,
+footer h3,
+footer h4,
+footer h5,
+footer h6 {
+/*font-size: 90%;*/
+margin: 5px;
+color: #333333;
+}
+
+

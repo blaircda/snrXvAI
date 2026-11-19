@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import time, json, argparse
+from pathlib import Path
 from degenerate.registry import MODELS
 from degenerate.prompts import TITLE_LIST
 from degenerate.pipeline import create_jobs, run_processes
@@ -35,8 +36,13 @@ def main(Npapers, Ncollab):
         results.extend(retry_results)
         failures.extend(retry_failures+retry_retry)
 
-    if results: # replace with the actual write to the website
+    if results: # write successful jobs to JSON
         print(f"Successful jobs ({len(results)}/{Npapers}):\n")
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        results_save = { "date": timestamp, "papers": results}
+        wdir = Path("degenerate")
+        with open(wdir / 'listing.json', 'w', encoding='utf-8') as f:
+            json.dump(results_save, f, ensure_ascii=False, indent=2)
         print_jobs(results)
         
     if failures: # replace with a write to a log
