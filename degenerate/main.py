@@ -52,8 +52,8 @@ def main(Npapers, Ncollab):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-N", "--Npapers", type=int, choices=range(1, 5), default=1)
-    parser.add_argument("-C", "--Ncoll", type=int, choices=range(0, 5), default=0)
+    parser.add_argument("-N", "--Npapers", type=int, choices=range(1, 6), default=1)
+    parser.add_argument("-C", "--Ncoll", type=int, choices=range(0, 6), default=0)
     parser.add_argument("-T", "--onetitle", action="store_true")
     args = parser.parse_args()
 
