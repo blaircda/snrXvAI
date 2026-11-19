@@ -19,7 +19,7 @@ def create_jobs(list_of_models, list_of_titles, Npapers):
         where each dict has keys
         author_model, title, job_id
     """
-    authors = random.sample(list_of_models, Npapers)
+    models = random.sample(list_of_models, Npapers)
     titles = random.sample(list_of_titles, Npapers)
     
     YYMM = time.strftime("%y%m", time.localtime())
@@ -30,10 +30,10 @@ def create_jobs(list_of_models, list_of_titles, Npapers):
         return "0"*(5-len(str(X)))+str(X)
 
     jobs = []
-    for author, title in zip(authors, titles):
+    for model, title in zip(authors, titles):
         papername = YYMM+"."+to_str(XXXXX)
         job_info = {
-        "model": author,
+        "model": model,
         "title": title,
         "job_id": papername
         }
@@ -52,7 +52,7 @@ def process_paper(job):
     r = adapter(model, SYS_PROMPT, title)
     source = r["output"]
     tokens = r.get("thought_tokens",0) + r.get("output_tokens",0)
-    paper_author = model["author"]
+    paper_author = model["display_name"]
 
     # here could try except to send a source with invalid commands back to the model
     full_source, abstract = make_full_source(source, title, paper_author)
@@ -76,9 +76,9 @@ def run_processes(jobs):
         try:
             result = process_paper(job)
         except TransientError as e:
-            retry_later.append( (job, e) )
+            retry_later.append( (job, str(e)) )
         except GenerationError as e:
-            failures.append( (job, e) )
+            failures.append( (job, str(e)) )
         else:
             results.append(result)
             

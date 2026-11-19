@@ -14,7 +14,7 @@ def print_jobs(jobs):
 def print_failed_jobs(jobs):
     for job, error in jobs:
         print(json.dumps(job, indent=4))
-        print(error)
+        print(json.dumps(error))
         print()
         
 def main(Npapers=1):
