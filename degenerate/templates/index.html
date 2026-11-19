@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>High Energy Physics - sn(a)rX(i)v</title>
+    <title>snrXvAI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="static/style.css" />
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]}
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+
 </head>
 <body>
 <body >
 <header>
-  <a href="https://arxiv.org/" class="logo">
-    <h1 class="logo">sn<span class="accent">a</span>rX<span class="accent">i</span>v</h1>
+  <a href="index.html" class="logo">
+    <h1 class="logo">snrXv<span class="accent">AI</span></h1>
   </a>
   <nav class="header-nav">
-    <a href=""><h1 class="about">About</h1></a>
-    <a href=""><h1 class="about">Source</h1></a>
-    <a href=""><h1 class="about">The real snarXiv</h1></a>
-    <a href=""><h1 class="about">The real arXiv</h1></a>
+    <a href="static/about.html"><h1 class="about">About</h1></a>
+    <a href="https://github.com/blaircda/ai-snarxiv"><h1 class="about">Source</h1></a>
+    <a href="https://snarxiv.org/"><h1 class="about">The real snarXiv</h1></a>
+    <a href="https://arxiv.org/list/hep-th/new"><h1 class="about">The real arXiv</h1></a>
  </nav>
 </header>
 
@@ -29,7 +41,7 @@
     {% for listing in listings %}
     <dt>
         [{{ listing.order }}]
-        <a>snarXiv:{{ listing.id}}</a>
+        <a>snrXvAI:{{listing.id}}</a>
         [<a href='pdf/{{ listing.id }}.pdf' title='Download pdf'>pdf</a>]
     </dt>
     <dd>

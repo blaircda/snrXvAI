@@ -32,8 +32,7 @@ overflow: hidden;
 
 header h1 {
 margin: 0;
-font-size: 1em;
-padding: 0 0 .2em 20px;
+padding: 8px 5px 5px 5px;
 font-weight: bold;
 font-style: normal;
 float: left;
@@ -42,13 +41,13 @@ float: left;
 header h1.logo { 
 float: left;
 margin-left: 15px;
-font-size:1.7em
+font-size:2em
 }
 
 header h1.about { 
 /* float: right;*/
 margin-right: 15px;
-font-size:1.25em
+font-size:1.45em
 }
 
 header a,
@@ -182,3 +181,10 @@ color: #333333;
 }
 
 
+span.footnote{
+color:#0000F4
+}
+a.footnote{
+font-size:80%;
+vertical-align: top;
+}
