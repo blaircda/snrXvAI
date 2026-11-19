@@ -1,22 +1,69 @@
+import time, random
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 from degenerate.registry import PROVIDERS
-from degenerate.compile import make_paper
+from degenerate.compile import make_paper, make_full_source
 from degenerate.prompts import SYS_PROMPT
+
+def create_jobs(list_of_models, list_of_titles, Npapers):
+    """
+    Assigns titles to models
+
+    Parameters
+    ------
+    list_of_models list of dict
+    list_of_titles list of str
+    
+    Returns
+    ------
+    list of dicts
+        where each dict has keys
+        author_model, title, job_id
+    """
+    authors = random.sample(list_of_models, Npapers)
+    titles = random.sample(list_of_titles, Npapers)
+    
+    YYMM = time.strftime("%y%m", time.localtime())
+    #XXXXX = time.strftime("%w%m%S", time.localtime())
+    XXXXX = random.randint(0, 30000)
+
+    def to_str(X):
+        return "0"*(5-len(str(X)))+str(X)
+
+    jobs = []
+    for author, title in zip(authors, titles):
+        papername = YYMM+"."+to_str(XXXXX)
+        job_info = {
+        "model": author,
+        "title": title,
+        "job_id": papername
+        }
+        jobs.append(job_info)
+        XXXXX = XXXXX + 1 
+        
+    return jobs
 
 def process_paper(job):
     """
     Process a single job
     """
-    model, title = job
+    model, title, job_id = job["model"], job["title"], job["job_id"]
+    
     adapter = PROVIDERS[model["provider"]] 
     r = adapter(model, SYS_PROMPT, title)
     source = r["output"]
+    tokens = r.get("thought_tokens",0) + r.get("output_tokens",0)
+    paper_author = model["author"]
 
-    make_paper(source)
+    # here could try except to send a source with invalid commands back to the model
+    full_source, abstract = make_full_source(source, title, paper_author)
+
+    # here could try except to send a source which does not compile back to the model
+    make_paper(full_source, job_id)
     
     # assuming the tex worked return the job and abstract 
-    abstract = "An abstract was written" # extract from response - needs some thought
-    return job, abstract
+    job["abstract"] = abstract
+    job["tokens"] = tokens
+    return job
 
 def run_processes(jobs):
     """

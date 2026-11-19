@@ -1,16 +1,29 @@
 from dotenv import load_dotenv
-import time, random
+import time, json
 from degenerate.registry import MODELS, PROVIDERS
 from degenerate.prompts import TITLE_LIST
-from degenerate.pipeline import run_processes
+from degenerate.pipeline import create_jobs, run_processes
 load_dotenv()
 
-def main(Npapers=1):
-    
-    authors = random.sample(MODELS, Npapers)
-    titles = random.sample(TITLE_LIST, Npapers) 
 
-    jobs = list(zip(authors, titles))
+def print_jobs(jobs):
+    for job in jobs:
+        print(json.dumps(job, indent=4))
+        print()
+
+def print_failed_jobs(jobs):
+    for job, error in jobs:
+        print(json.dumps(job, indent=4))
+        print(error)
+        print()
+        
+def main(Npapers=1):
+
+    jobs = create_jobs(MODELS, TITLE_LIST, Npapers)
+
+    print("Created the following jobs:")
+    print_jobs(jobs)
+
     results, failures, to_retry = run_processes(jobs)
 
     if to_retry:
@@ -21,13 +34,16 @@ def main(Npapers=1):
         failures.extend(retry_failures+retry_retry)
 
     if results: # replace with the actual write to the website
-        print(f"Successful jobs: {results}")
+        print("Successful jobs:\n")
+        print_jobs(results)
 
     if failures: # replace with a write to a log
-        print (f"Failed solidly: {failures}")
+        print ("Failed with errors:\n")
+        print_failed_jobs(failures)
 
     if to_retry: # replace with a write to a log
-        print (f"Failed despite retrying: {retry_retry}")
+        print ("Failed due to time-outs:\n")
+        print_failed_jobs(to_retry)
 
 if __name__ == "__main__":
     main()

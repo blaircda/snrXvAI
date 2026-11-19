@@ -2,7 +2,7 @@ from google import genai
 from google.genai import _interactions_errors as gerr
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 
-def call_gemini(model, sys_input, txt_input, max_output_tokens=12000):
+def call_gemini(model, sys_input, txt_input, max_output_tokens=20000):
     """
     Wraps a simple prompt of a Gemini model
     """
