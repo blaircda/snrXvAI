@@ -1,13 +1,12 @@
 top ::= <title>
 
 #
-# Original by David Simmons-Duffin (http://www.physics.harvard.edu/~davidsd)
-# March 2010
+# Original by David Simmons-Duffin https://github.com/davidsd/snarxiv
 # 
 # Changes here by Chris Blair:
 # replaced top :: = <paper> with <title>
 # replaced <effect> with <effectt> due to an ocaml compile error
-# tweaks of math variables e.g. \Z replaced with $\mathbb{Z}$
+# tweaks of math variables e.g. \Z replaced with $\mathbb{Z}$, E_6 with $E_6$, and so on
 
 ######## Numbers ########
 
