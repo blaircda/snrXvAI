@@ -5,15 +5,15 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      npapers:
+      Npapers:
         type: number
         default: 1
-      ncollabs: 
+      Ncollabs: 
         type: number
         default: 0
 
 permissions:
-  contents: read      # enough for checkout, nothing else
+  contents: read   
 
 # jobs
 jobs:
@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-26.04
     timeout-minutes: 45
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
@@ -41,3 +40,34 @@ jobs:
           pdflatex --version
           latexmk -v
           ocamlc -version
+      - name: Make grammar
+        working-directory: degenerate/grammar
+        run: |
+          perl compile-grammar snarxiv_titles.gram snarxiv_titles
+          ocamlc snarxiv_titles.ml -o title_generator
+      - name: Generate papers              
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          NPAPERS: ${{ inputs.npapers || 2}}
+          NCOLLABS: ${{ inputs.ncollabs || 0}}
+        run: |
+          python -m degenerate.main -N "$NPAPERS" -C "$NCOLLABS"
+          python -m degenerate.publish
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/
+  # Deploy job
+  deploy:
+    needs: build
+    permissions:
+      pages: write      
+      id-token: write   
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 
+
