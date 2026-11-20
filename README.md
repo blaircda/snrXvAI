@@ -9,7 +9,7 @@ See [snarXiv on GitHub](https://github.com/davidsd/snarxiv) for the original.
 
 `cd degenerate`
 
-`perl compile-grammar snarxiv_titles.gram snarxiv_titles
+`perl compile-grammar snarxiv_titles.gram snarxiv_titles`
 
 `ocamlc snarxiv_titles.ml -o title_generator`
 
