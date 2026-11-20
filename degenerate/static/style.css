@@ -136,6 +136,9 @@ span.primary_subject {
 font-weight:bold
 }
 
+dl#articles dt {
+font-weight:bold
+}
 
 /****************************************
 * Footer

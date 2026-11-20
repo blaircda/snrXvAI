@@ -29,7 +29,7 @@ PREAMBLE = """
 \\newcommand\\customtitle[4]{\\begin{center}
 \\baselineskip=2em
 \\vspace{-5cm}
-\\hfill {\\ttfamily #3}
+\\hfill {\\ttfamily snrXvAI:#3}
 \\vskip 0.5em
 {\\LARGE \\bf  
 #1
@@ -78,7 +78,7 @@ def make_full_source(source, title, paper_authors, job_id):
 
     authors = ', '.join(paper_authors)
     #full_source = PREAMBLE+f"\n\\title{{\\bf {title}}}\n\\author{{{authors}}}"+"\n\\begin{document}\n\\maketitle"+source+"\n\\end{document}"
-    full_source = PREAMBLE+"\n\\begin{document}\n"+f"\n\\customtitle{{{title}}}{{{authors}}}{{{job_id}}}"+"{sn\\color{red}a\\color{black}rX\\color{red}i\\color{black}v}"+source+"\n\\end{document}"
+    full_source = PREAMBLE+"\n\\begin{document}\n"+f"\n\\customtitle{{{title}}}{{{authors}}}{{{job_id}}}"+"{snrXv\\color{red}AI\\color{black}}"+source+"\n\\end{document}"
     # extract abstract
     start_abs = "\\begin{abstract}"
     end_abs = "\\end{abstract}"

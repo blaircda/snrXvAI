@@ -22,13 +22,8 @@ Output only LaTeX source and nothing else. Do not enclose the LaTeX source in an
 
 def make_user_prompt(stage, title, draft):
     if stage == "initial": # add more details later
-        return f"Your job is to generate a fictitious hep-th article based on the following title: {title}. Keep it short - only 4-5 pages."
+        return f"Your job is to generate a hep-th article based on the following title: {title}. Keep it short - about 5-10 pages."
     elif stage == "revision": # add more details later
-        return f"Your job is to revise a fictitious hep-th article, titled {title}. This title cannot be changed. Revise the draft: tighten the arguments, fix inconsistencies, keep the length and the format. The current draft of the paper is below.\n\nCURRENT DRAFT:\n{draft}"
+        return f"Your job is to revise a hep-th article, titled {title}. This title cannot be changed. Revise the draft: tighten the arguments, fix inconsistencies, keep the length and the format. The current draft of the paper is below.\n\nCURRENT DRAFT:\n{draft}"
     else:
         raise ValueError("Unknown prompt stage")
-
-TITLE_LIST = [
-    "The Solution of a Model for Spacetime Foam as Hyperplane Defects",
-    "D-branes at the surface of the sun"
-]

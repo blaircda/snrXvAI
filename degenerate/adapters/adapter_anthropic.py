@@ -1,16 +1,17 @@
 import anthropic, os
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 
-def call_anthropic(model, sys_input, txt_input, max_output_tokens=20000):
+def call_anthropic(model, sys_input, txt_input):
     """
     Wraps a simple prompt of an Anthropic model
     """
-    options = model.get("options", {}) 
-    effort = options.get("effort", "medium")
-
     if not os.environ.get("ANTHROPIC_API_KEY"):
         raise ConfigError("ANTHROPIC_API_KEY not set")
 
+    options = model.get("options", {}) 
+    effort = options.get("effort", "medium")
+    max_output_tokens = options.get("max_output_tokens", 20000)
+    
     client = anthropic.Anthropic()
     try:
         with client.messages.stream(

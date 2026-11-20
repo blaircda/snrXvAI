@@ -1,17 +1,19 @@
+import os
 from google import genai
 from google.genai import _interactions_errors as gerr
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 
-def call_gemini(model, sys_input, txt_input, max_output_tokens=20000):
+def call_gemini(model, sys_input, txt_input):
     """
     Wraps a simple prompt of a Gemini model
-    """
-    
+    """    
     if not os.environ.get("GEMINI_API_KEY"):
         raise ConfigError("GEMINI_API_KEY not set")
 
     options = model.get("options", {}) 
     thinking_level = options.get("thinking_level", "medium")
+    max_output_tokens = options.get("max_output_tokens", 20000)
+
     client = genai.Client()
     try:
         interaction = client.interactions.create(

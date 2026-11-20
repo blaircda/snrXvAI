@@ -1,5 +1,5 @@
-# ai snarxiv
+# snrXvAI
 
-Bringing snarxiv papers to artificial life
+Bringing [snarXiv](https://snarxiv.org/) papers to artificial life
 
 

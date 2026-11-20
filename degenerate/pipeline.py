@@ -46,9 +46,9 @@ def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_collabs=2)
 
     # generate paper ids
     YYMM = time.strftime("%y%m", time.localtime())
-    XXXXX = random.randint(0, 30000)
+    XXXXX = random.randint(60000, 90000) # arXiv ids are up to ~40000 as of 2610 so start higher than that
 
-    def format_id(X):
+    def format_id(X): # format to 5 digits if allowing any ids
         return "0"*(5-len(str(X)))+str(X)
 
     for title, is_collab in zip(titles, flags): 
@@ -58,7 +58,7 @@ def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_collabs=2)
             n_collabs = 1
         models = random.sample(list_of_models, n_collabs)
         stages = [ {"model": models[0], "version": "initial"} ] + [{"model":m, "version": "revision"} for m in models[1:]]
-        papername = YYMM+"."+format_id(XXXXX)+"ai"
+        papername = YYMM+"."+format_id(XXXXX)
         job_info = {
             "job_id": papername,
             "title": title,
@@ -84,6 +84,8 @@ def process_paper(job):
         adapter = PROVIDERS[model["provider"]]
         prompt = make_user_prompt(stage["version"], title, source)
         r = adapter(model, SYS_PROMPT, prompt)
+        if not (r["output"] or "").strip():
+            raise OutputError(f"Empty output for {job['job_id']} with model {model['name']}")
         source = check_source(r["output"])
         output_tokens += r.get("output_tokens",0)
         thought_tokens += r.get("thought_tokens",0) 
