@@ -1,5 +1,5 @@
-from degenerate.adapter_gemini import call_gemini
-from degenerate.adapter_dev import call_example
+from degenerate.adapters.adapter_gemini import call_gemini
+from degenerate.adapters.adapter_dev import call_example
 
 MODELS = [
     #{"name": "gemini-3.8-flash", "provider": "gemini", "display_name": "Gemini 3.8 Flash (medium)", "options": {"thinking_level": "medium"} },
