@@ -34,7 +34,7 @@ OPENROUTER_MODELS = [
     {"name": "recursive/flint-v1.0:free", "provider": "openrouter", "display_name": "Recursive: Flint (free)", "options": {"effort": "low", "max_output_tokens": 50000}},    
 ]   
 
-MODELS = DEV_MODELS
+MODELS = OPENROUTER_MODELS
 #OPENROUTER_MODELS
 #OPEN_API_MODELS
 #ANTHROPIC_MODELS + GEMINI_MODELS

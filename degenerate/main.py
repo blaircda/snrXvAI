@@ -1,11 +1,10 @@
 from dotenv import load_dotenv
-import time, json, argparse
+import time, json, argparse, sys
 from pathlib import Path
 from degenerate.registry import MODELS
 from degenerate.generate_titles import generate_titles
 from degenerate.pipeline import create_jobs, run_processes
 load_dotenv()
-
 
 def print_jobs(jobs):
     for job in jobs:
@@ -30,13 +29,13 @@ def main(Npapers, Ncollab, Ntitles):
     
     jobs = create_jobs(MODELS, titles, Npapers, Ncollab, max_collabs=2)
 
-    print(f"Created {Npapers} jobs:")
+    #print(f"Created {Npapers} jobs:")
     #print_jobs(jobs)
 
     results, failures, to_retry = run_processes(jobs)
 
     if to_retry:
-        time.sleep(10) # minutes for final production
+        time.sleep(60) 
         #retry = [job for job,_ in to_retry]
         retry_results, retry_failures, retry_retry =  run_processes(to_retry)
         results.extend(retry_results)
@@ -44,6 +43,16 @@ def main(Npapers, Ncollab, Ntitles):
 
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
+        
+    if failures: # write failures to JSON
+        print (f"Failed jobs ({len(failures)}/{Npapers}):\n")
+        failures_save = { "date": timestamp, "papers": failures}
+        wdir = Path("degenerate")
+        with open(wdir / 'errors.json', 'w', encoding='utf-8') as f:
+            json.dump(failures_save, f, ensure_ascii=False, indent=2)
+        print(f"Failed job listings saved to {wdir}/errors.json")
+        #print_failed_jobs(failures)
+        
     if results: # write successful jobs to JSON
         print(f"Successful jobs: ({len(results)}/{Npapers})")
         results_save = { "date": timestamp, "papers": results}
@@ -52,15 +61,10 @@ def main(Npapers, Ncollab, Ntitles):
             json.dump(results_save, f, ensure_ascii=False, indent=2)
         print(f"Successful job listing saved to {wdir}/listing.json")
         #print_jobs(results)
-        
-    if failures: # replace with a write to a log
-        print (f"Failed jobs ({len(failures)}/{Npapers}):\n")
-        failures_save = { "date": timestamp, "papers": failures}
-        wdir = Path("degenerate")
-        with open(wdir / 'errors.json', 'w', encoding='utf-8') as f:
-            json.dump(failures_save, f, ensure_ascii=False, indent=2)
-        print(f"Failed job listings saved to {wdir}/errors.json")
-        #print_failed_jobs(failures)
+        return 0
+    else:
+        return 1
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -79,4 +83,5 @@ if __name__ == "__main__":
     else:
         Ntitles = Npapers
     
-    main(Npapers, Ncollabs, Ntitles)
+    if main(Npapers, Ncollabs, Ntitles): # main returns 1 if no papers produced
+        sys.exit("No papers produced")

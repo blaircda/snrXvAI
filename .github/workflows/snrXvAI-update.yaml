@@ -47,9 +47,12 @@ jobs:
           ocamlc snarxiv_titles.ml -o title_generator
       - name: Generate papers              
         env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          NPAPERS: ${{ inputs.npapers || 2}}
-          NCOLLABS: ${{ inputs.ncollabs || 0}}
+          NPAPERS: ${{ inputs.npapers || 5}}
+          NCOLLABS: ${{ inputs.ncollabs || 1}}
         run: |
           python -m degenerate.main -N "$NPAPERS" -C "$NCOLLABS"
           python -m degenerate.publish

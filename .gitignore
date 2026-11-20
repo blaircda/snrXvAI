@@ -2,6 +2,7 @@ dev/
 tex/
 papers/
 log.txt
+degenerate/*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
