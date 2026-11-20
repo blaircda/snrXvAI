@@ -4,6 +4,7 @@ from pathlib import Path
 from degenerate.registry import MODELS
 from degenerate.generate_titles import generate_titles
 from degenerate.pipeline import create_jobs, run_processes
+
 load_dotenv()
 
 def print_jobs(jobs):
@@ -64,7 +65,6 @@ def main(Npapers, Ncollab, Ntitles):
         return 0
     else:
         return 1
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

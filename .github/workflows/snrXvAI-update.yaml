@@ -33,13 +33,6 @@ jobs:
           python-version: '3.13'
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: Look around
-        run: | 
-          ls -R -I .git
-          python --version
-          pdflatex --version
-          latexmk -v
-          ocamlc -version
       - name: Make grammar
         working-directory: degenerate/grammar
         run: |

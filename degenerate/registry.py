@@ -12,14 +12,14 @@ DEV_MODELS = [
 ]
 
 GEMINI_MODELS = [
-    {"name": "gemini-3.5-flash-lite", "provider": "gemini", "display_name": "Gemini 3.5 Flash Lite (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 50000} },
-    {"name": "gemini-3.8-flash", "provider": "gemini", "display_name": "Gemini 3.8 Flash (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 50000} },
-    {"name": "gemini-3.6-flash", "provider": "gemini", "display_name": "Gemini 3.6 Flash (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 50000} },
+    {"name": "gemini-3.5-flash-lite", "provider": "gemini", "display_name": "Gemini 3.5 Flash Lite (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 40000} },
+    {"name": "gemini-3.8-flash", "provider": "gemini", "display_name": "Gemini 3.8 Flash (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 40000} },
+    {"name": "gemini-3.6-flash", "provider": "gemini", "display_name": "Gemini 3.6 Flash (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 40000} },
 ]
 
 ANTHROPIC_MODELS = [
     {"name": "claude-haiku-5-5", "provider": "anthropic", "display_name": "Claude Haiku 5.5 (medium)", "options": {"effort": "medium",  "max_output_tokens": 25000} },
-    {"name": "claude-opus-5-5", "provider": "anthropic", "display_name": "Claude Haiku 5.5 (high)", "options": {"effort": "high",  "max_output_tokens": 50000} },
+    {"name": "claude-opus-5-5", "provider": "anthropic", "display_name": "Claude Opus 5.5 (high)", "options": {"effort": "high",  "max_output_tokens": 40000} },
 ]
 
 OPEN_API_MODELS = [
@@ -34,10 +34,7 @@ OPENROUTER_MODELS = [
     {"name": "recursive/flint-v1.0:free", "provider": "openrouter", "display_name": "Recursive: Flint (free)", "options": {"effort": "low", "max_output_tokens": 50000}},    
 ]   
 
-MODELS = OPENROUTER_MODELS
-#OPENROUTER_MODELS
-#OPEN_API_MODELS
-#ANTHROPIC_MODELS + GEMINI_MODELS
+MODELS = OPENROUTER_MODELS+ OPEN_API_MODELS+ ANTHROPIC_MODELS + GEMINI_MODELS
 
 PROVIDERS = {
     "dev": call_example,
