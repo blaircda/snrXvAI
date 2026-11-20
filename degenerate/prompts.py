@@ -10,8 +10,10 @@ YOUR OUTPUT GOES HERE
 
 \end{document}
 
-The [PREAMBLE] defines the following packages:
+The preamble imports the following packages:
     xcolor (with dvipsnames), amssymb, amsfonts, amsmath, amsthm, cite, hyperref, tikz (with  libraries positioning, calc, arrows.meta)
+The preamble also defines these environments: theorem, lemma, proposition, corollary, conjecture, definition, example, remark (and proof from amsthm).
+Do not use other theorem-like environments unless you first declare them with \newtheorem.
 Do not write any further packages into the file, and do not use \input, \include, \includegraphics, or \write to add content. 
 Begin your output with an abstract enclosed by `\begin{abstract}` and `\end{abstract}`, followed by the body of the paper.
 Use an inline bibliography enclosed by `\begin{thebibliography}` and `\end{thebibliography}'.

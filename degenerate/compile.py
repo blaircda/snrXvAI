@@ -15,6 +15,17 @@ PREAMBLE = """
 \\numberwithin{equation}{section}
 \\usepackage{tikz}
 \\usetikzlibrary{positioning, calc, arrows.meta}
+\\theoremstyle{plain}
+\\newtheorem{theorem}{Theorem}[section]
+\\newtheorem{lemma}[theorem]{Lemma}
+\\newtheorem{proposition}[theorem]{Proposition}
+\\newtheorem{corollary}[theorem]{Corollary}
+\\newtheorem{conjecture}[theorem]{Conjecture}
+\\theoremstyle{definition}
+\\newtheorem{definition}[theorem]{Definition}
+\\newtheorem{example}[theorem]{Example}
+\\theoremstyle{remark}
+\\newtheorem{remark}[theorem]{Remark}
 \\newcommand\\customtitle[4]{\\begin{center}
 \\baselineskip=2em
 \\vspace{-5cm}
@@ -46,19 +57,17 @@ def check_source(source):
     "\\begin{document}"
     ]
     
-
     # strip enclosing markdown if present
     check = re.search(r"```\s*(?:(?:la)?tex)?(.*?)(?:```|\Z)", source, re.DOTALL | re.IGNORECASE)
-
     if check:
         source = check.group(1).strip()
 
     # next check for invalid commands
     # I don't do this first in case the model writes
     # "As instructed, I did not use \input" somewhere outside the actual LaTeX
-    if any(x in source for x in do_not_want):
-        raise OutputError("LaTeX code contains forbidden command")
-
+    found = [x for x in do_not_want if x in source]
+    if found:
+        raise OutputError("LaTeX code contains forbidden commands: "+" ".join(found))
     return source
 
 def make_full_source(source, title, paper_authors, job_id):

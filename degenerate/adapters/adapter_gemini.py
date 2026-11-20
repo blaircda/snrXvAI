@@ -6,11 +6,13 @@ def call_gemini(model, sys_input, txt_input, max_output_tokens=20000):
     """
     Wraps a simple prompt of a Gemini model
     """
+    
+    if not os.environ.get("GEMINI_API_KEY"):
+        raise ConfigError("GEMINI_API_KEY not set")
+
     options = model.get("options", {}) 
     thinking_level = options.get("thinking_level", "medium")
-
     client = genai.Client()
-
     try:
         interaction = client.interactions.create(
             model=model["name"],
