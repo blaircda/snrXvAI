@@ -7,13 +7,11 @@ Bringing [snarXiv](https://snarxiv.org/) papers to artificial life as [snrXvAI](
 
 See [snarXiv on GitHub](https://github.com/davidsd/snarxiv) for the original.
 
-`cd degenerate`
+In `degenerate/grammar`:
 
 `perl compile-grammar snarxiv_titles.gram snarxiv_titles`
 
 `ocamlc snarxiv_titles.ml -o title_generator`
-
-`cd ..`
 
 **Generate 5 snarXiv paper titles, send these to AI models, with 1 paper being a collaboration between different models**
 
