@@ -11,7 +11,7 @@ YOUR OUTPUT GOES HERE
 \end{document}
 
 The preamble imports the following packages:
-    xcolor (with dvipsnames), amssymb, amsfonts, amsmath, amsthm, cite, hyperref, tikz (with  libraries positioning, calc, arrows.meta)
+    xcolor (with dvipsnames), amssymb, amsfonts, amsmath, amsthm, cite, hyperref, tikz (with these libraries: positioning, calc, arrows.meta)
 The preamble also defines these environments: theorem, lemma, proposition, corollary, conjecture, definition, example, remark (and proof from amsthm).
 Do not use other theorem-like environments unless you first declare them with \newtheorem.
 Do not write any further packages into the file, and do not use \input, \include, \includegraphics, or \write to add content. 
@@ -22,7 +22,7 @@ Output only LaTeX source and nothing else. Do not enclose the LaTeX source in an
 
 def make_user_prompt(stage, title, draft):
     if stage == "initial": # add more details later
-        return f"Your job is to generate a hep-th article based on the following title: {title}. Keep it short - about 5-10 pages."
+        return f"Your job is to write a hep-th article with the following title: {title}. The paper should be fully internally consistent and less than about 20 pages."
     elif stage == "revision": # add more details later
         return f"Your job is to revise a hep-th article, titled {title}. This title cannot be changed. Revise the draft: tighten the arguments, fix inconsistencies, keep the length and the format. The current draft of the paper is below.\n\nCURRENT DRAFT:\n{draft}"
     else:
