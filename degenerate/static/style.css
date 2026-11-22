@@ -191,3 +191,16 @@ a.footnote{
 font-size:80%;
 vertical-align: top;
 }
+
+span.prompt {
+margin-left:20px;
+font-weight:bold;
+color:darkslategray
+}
+
+code { 
+}
+
+pre {
+    white-space: pre-wrap;
+}

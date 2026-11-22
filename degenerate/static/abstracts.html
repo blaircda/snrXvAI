@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>snrXvAI | about</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]}
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+
+</head>
+<body>
+<body >
+<header>
+  <a href="../index.html" class="logo">
+    <h1 class="logo">snrXv<span class="accent">AI</span></h1>
+  </a>
+  <nav class="header-nav">
+    <a href="about.html"><h1 class="about">About</h1></a>
+    <a href="https://github.com/blaircda/snrXvAI"><h1 class="about">Source</h1></a>
+    <a href="https://snarxiv.org/"><h1 class="about">The real snarXiv</h1></a>
+    <a href="https://arxiv.org/list/hep-th/new"><h1 class="about">The real arXiv</h1></a>
+ </nav>
+</header>
+
+    <main>
+    <div id="content">
+    <div id='dlpage'>
+    <h1>Making the abstract concrete</h1>
+    <p>snrXv<span class="accent">AI</span> as implemented only feeds snarXiv-generated titles to the AIs. You might wonder what nonsense ensues if they are given snarXiv-generated abstracts as well. These are trivially easy to distinguish from genuine abstracts, by virtue of the pleasant sensation of mental disorientation one gets from reading them (whereas real abstracts give an <i>un</i>pleasant sensation of mental disorientation).</p>
+
+    <h3>An experiment</h3>
+    <p>This is, to be fair, not the smartest thing I've ever done. I prompted a small set of models (Claude in Claude Code, Gemini in Antigravity CLI) with either:</p>
+    <p><span class="prompt">Produce a full, internally consistent, hep-th paper written in LaTeX with the following title and abstract.</span></p>
+    <p>or</p>
+    <p><span class="prompt">Produce a snarXiv-style parodic hep-th paper written in LaTeX with the following title and abstract.</span></p>
+    <p>and provided the following absolutely quintessential snarXiv paper definition:</p>
+    <p>
+    <h4>Title: Analyzing an Instanton</h4>
+    <b>Abstract:</b> Using the behavior of Yangian symmetric harmonic analysis, we understand orientifold planes in the interstellar medium. Next, from classifying fragmentation functions, we study the $AdS_m/S^n$ correspondence. While evaluating cosmic rays in the early universe, we derive that a check of inflation at the Planck scale can be incorporated into a compactification of duality in longitudinal models of dark energy (taking into account M-Theory ), by dilation symmetry. In short, recently, work on a Landau-Ginzburg model has opened up a leading class of Planck models. Inspired by this, we find evidence for type IIB. Our results are similar to work done by Witten.
+    </p>
+
+    <h3>The results</h3>
+    <p>In general, the Claudes were unhappy about being made to make an incoherent abstract into a consistent paper and resorting to disclaimers and precise technical mappings to work with it. Despite this Claude Fable 5.2 happily launched into "computer algebra and high-precision numerics" (this was honestly quite disturbing). Gemini models displayed less self-awareness that they were being asked to do something really stupid, with for instance Neon claimed in all apparent seriousness that its paper establihes "an unbroken mathematical chain linking six seemingly disparate arenas of theoretical physics" (maybe it does?). </p>
+    <p>Claude Fable 5.2 wrote in its parodic attempt: "We therefore claim to understand orientifold planes in the interstellar medium. Understanding is meant here in the technical sense: we have stopped having questions." Jealous of this one...</p>
+    <p>All the below were run at "high" effort/thinking-level.</p>
+    <dl id='articles'>
+
+
+    <dt>
+        <a>claude-haiku-5-5</a>
+        [<a href='abstract_pdf/claude-haiku-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>20522 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I wrote the paper and compiled it to a 7-page PDF, but it is a formal toy framework, not a real hep-th result. The abstract you supplied doesn't describe a coherent piece of physics, so I couldn't make it internally consistent as real science.
+
+**Files** :
+- `analyzing_an_instanton.tex`
+- `analyzing_an_instanton.pdf`
+
+The LaTeX compiles cleanly after three passes, with no errors or undefined references. I rendered page 1 to check the layout.
+
+**What I did:**
+- **Abstract:** included verbatim, as the brief specified.
+- **Status box:** a notice on page 1 says the paper is generated from an incoherent brief, and that its claims are unverified hypotheses.
+- **Content:** each section pairs a standard result (the Drinfeld coproduct, the O$p$-plane charge $-2^{p-5}$, the momentum sum rule, slow-roll formulas, the $SL(2,\mathbb{Z})$ action on $\tau$) with a labelled ansatz. The Planck-scale check reproduces the known Starobinsky predictions rather than producing new results.
+- **Witten:** the abstract's claim of similarity is stated, but the paper doesn't compare against a specific Witten result and says so.
+- **References:** I included only citations I'm confident of, and omitted an arXiv number I couldn't verify.
+
+**Choices I made that you may want to change:**
+- I treated "internally consistent" as the requirement, not "true". Making the abstract's claims read as real physics would have meant presenting fabricated results as findings, so I didn't.
+- I left the `.aux`, `.log`, `.out`, and `.toc` files from compilation in the directory. I didn't delete them.
+
+If you want a different reading, such as a parody with the disclaimer kept, or a paper built on one of the topics with a coherent abstract, I can rewrite it.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>claude-haiku-5-5</a>
+        [<a href='abstract_pdf/claude-haiku-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>10858 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>The paper is written and compiled, but I left the LaTeX intermediate files in place. A cleanup command was blocked by a permission prompt on the `.aux` file, and I didn't retry it.
+
+**Deliverables** :
+- `analyzing_an_instanton.tex`: the source
+- `analyzing_an_instanton.pdf`: 5 pages, compiled with `pdflatex` (two passes, clean exit, no errors)
+
+**What the paper contains:** The title and abstract from AGENTS.md appear verbatim. The body is a snarXiv-style parody in standard hep-th article format, with a snarXiv stamp in the header and a "this is a parody" note. It has sections on:
+- instanton action and the tunnelling joke
+- Yangian level-one charges applied to orientifold planes in the ISM, using the real O-plane charge $-2^{p-5}$
+- fragmentation-function sum rules and an $AdS_m/S^n$ dictionary that is "approximately" valid
+- Planck-scale inflation, T-duality, and dilaton-shift dark energy
+- a Landau–Ginzburg double-well "Planck model"
+- "evidence" for type IIB based on the ruler, the gravitini, and the $\mathrm{SL}(2,\mathbb{Z})$ mood transformation
+
+The conclusion ends with "Our results are similar to work done by Witten."
+
+**Choices I made that you may want to change:**
+- **Authors** are fictional ("Quentin R. Tunnelling" and "Mabel P. Effective-Action"), and the affiliations are invented. I did not use your name or email.
+- **References** are deliberately fake or joking. I didn't cite any real papers, so there is nothing to get wrong.
+- **Arbitrary identifier:** the stamp `snarXiv:2611.21337 [hep-th]` is made up.
+- I did not create a Claude Docs document, since you asked for a local file.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>claude-sonnet-5-5</a>
+        [<a href='abstract_pdf/claude-sonnet-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>39418 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I wrote the paper and compiled it to a 13-page PDF with no LaTeX errors and no undefined references. The only warnings are hyperref ones about math in section titles, which don't affect the output.
+
+**Files** 
+- `analyzing_an_instanton.tex`
+- `analyzing_an_instanton.pdf`
+
+The title and abstract are verbatim. Each section develops one sentence of the abstract. The author is listed as "Anonymous" because I didn't put your name or email into the paper.
+
+**Reading the abstract**
+
+The abstract mixes phrases that don't normally go together, so the introduction says how I read each one:
+- **Interstellar medium:** a dilute gas of orientifold planes, treated with an equation of state. It makes no astrophysical claim.
+- **$AdS_m/S^n$:** holography on $AdS_m\times S^n$, with the orientifold quotient $\mathbb{RP}^n$ when planes are present.
+- **Longitudinal dark energy:** the M-theory circle component of the metric, which is the IIA dilaton.
+- **Dilation symmetry:** scaling of the instanton size, which acts as a shift of the inflaton.
+
+**Contents**
+- **Instanton and $AdS_5$:** the instanton moduli space is $AdS_5$, and the instanton action matches the D-instanton action.
+- **Yangian and harmonic analysis:** the Yangian condition is conformally covariant and can be imposed on the harmonic expansion.
+- **Orientifold gas:** it has equation of state $w=-d/3$.
+- **Fragmentation and holography:** a mass formula for $AdS_m\times S^n$, checked against the $AdS_5\times S^5$, $AdS_4\times S^7$ and $AdS_7\times S^4$ cases.
+- **Inflation:** the plateau potential $V_0(1-e^{-\beta\phi})^2$ built from a linear term plus one instanton exponential. For $N=60$ it gives $n_s\simeq0.967$, $r\simeq3.3\times10^{-3}$, $V^{1/4}\simeq8\times10^{15}$ GeV and a field excursion of about $5\,M_P$.
+- **Compactification:** the Landau–Ginzburg point of the quintic and the M-theory dictionary.
+- **Type IIB evidence:** the $SL(2,\mathbb Z)$-invariant $R^4$ coupling.
+- **Witten:** a section comparing the results to his work.
+
+**Caveats**
+- The potential is assumed through a "fake superpotential", not derived from a specific compactification, and the paper says so.
+- The paper does not address the cosmological-constant value.
+- The strong-coupling scaling of $\Delta(j)$ is marked schematic.
+- I wrote the nine references and arXiv numbers from memory and did not check them against the arXiv. Check them before relying on them.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>claude-sonnet-5-5</a>
+        [<a href='abstract_pdf/claude-sonnet-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>6900 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I wrote the paper to `analyzing_an_instanton.tex` and compiled it to `analyzing_an_instanton.pdf`. It comes out at 4 pages with no LaTeX errors.
+
+The log has four hyperref "Token not allowed in a PDF string" warnings, which only affect the PDF bookmark text. I didn't investigate them.
+
+The title and abstract match `AGENTS.md` word for word. The body follows the abstract's claims one by one, with an introduction, sections on Yangian orientifolds, fragmentation functions and $\AdS_m/S^n$, a main theorem on cosmic rays and dilation symmetry, a Landau–Ginzburg model, and evidence for type IIB. It ends with conclusions and a short bibliography.
+
+The author is an invented placeholder ("A. N. Onymous"), so none of your personal details are in the file.
+
+`latexmk` also left its auxiliary files (`.aux`, `.log`, `.fls`, `.fdb_latexmk`, `.out`) next to the paper.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>claude-opus-5-5</a>
+        [<a href='abstract_pdf/claude-opus-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>56022 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I've written the paper to `analyzing_an_instanton.tex` and compiled it to `analyzing_an_instanton.pdf`. It's 14 pages and compiles with no errors, warnings or undefined references. I didn't page through the PDF visually.
+
+**The abstract doesn't make physical sense as written.** Phrases like "orientifold planes in the interstellar medium" and "longitudinal models of dark energy" don't have standard meanings. To keep the paper internally consistent, the introduction defines each phrase in a specific technical sense, and the rest of the paper sticks to those definitions. The abstract itself is kept word for word. The organizing idea is that "analyzing an instanton" means doing harmonic analysis on the instanton's moduli space, which at large N is AdS₅×S⁵.
+
+How the abstract's claims are handled:
+- **Yangian symmetric harmonic analysis:** I prove a lemma that the two-site part of the Yangian's level-one charges cancels on states of identical instantons. That reduces the analysis to a single copy of AdS_m×S^n.
+- **Orientifold planes in the "interstellar medium":** the "medium" is defined as a dilute gas of instantons. The orientifold turns S^n into ℝPⁿ, which keeps only even or only odd harmonics and halves the leading heat-trace (Weyl) coefficient.
+- **Fragmentation functions and AdS_m/S^n:** these are defined as distributions over Kaluza–Klein harmonic levels. They are classified, and all tend to a universal Gamma distribution. When n = d+1 and the two radii are equal, the dual operator dimensions are integers, Δ = ℓ + d.
+- **Inflation, dark energy, dilation symmetry, M-theory:** for a modulus with Kähler potential K = −p log(T+T̄), the axion decay constant times the instanton action is fixed: fS = √(p/2)·M_Pl, with p = 7 for M-theory on a G₂ manifold. The same relation rules out controlled natural inflation and forces this kind of axion dark energy onto a steep hilltop (S ≈ 277, |η| ≈ 10⁴).
+- **Landau–Ginzburg model and type IIB:** an exactly solvable Landau–Ginzburg orientifold serves as a toy model. The type IIB evidence is the standard result that the D-instanton terms of the Eisenstein series E₃/₂ match the large-N instanton measure √K Σ_{d|K} d⁻².
+- **Similar to Witten:** a closing section compares the results with four specific Witten papers.
+
+Things to be aware of:
+- **Not real research.** The standard inputs are reviewed with real references. The paper's own claims are short derivations I checked by hand, plus clearly labelled assumptions; one is that the orientifold halves the instanton measure for Sp(N) and SO(N) gauge groups. It shouldn't be presented as genuine new research without expert review.
+- **Citations:** all 29 references are real papers, cited from memory. I didn't check them against INSPIRE, so volume and page numbers are worth a look.
+- **Placeholders:** the author and affiliation are left as "[Author name]" and "[Affiliation]" for you to fill in.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>claude-opus-5-5</a>
+        [<a href='abstract_pdf/claude-opus-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>8098 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I wrote the paper and compiled it. Both files are in the working directory:
+
+- `analyzing_an_instanton.tex`
+- `analyzing_an_instanton.pdf` (5 pages)
+
+The final build finished with no errors or warnings. I cleaned up the auxiliary build files afterwards.
+
+The title and abstract are exactly as given in AGENTS.md, including the stray space in "M-Theory )". The body has one section for each claim in the abstract:
+
+1. **Yangian harmonic analysis and interstellar orientifolds:** an "orientifold column density" that comes out to $0 \pm \infty$, "consistent with all existing observations."
+2. **Fragmentation functions and $AdS_m/S^n$:** a three-class taxonomy of fragmentation functions, plus an "ambition parameter" $L/R$.
+3. **Cosmic rays, inflation and dilation symmetry:** the Planck-scale check of inflation passes because $1^4 = 1$, and M-theory is taken into account with a net shift of zero.
+4. **Landau–Ginzburg interlude:** a "leading class of Planck models," with an instanton term added "mostly to justify the title."
+5. **Evidence for type IIB:** reported "at the $5\sigma$ level, where $\sigma$ is defined appropriately."
+6. **Conclusion:** the results are similar to work done by Witten, "which, in hindsight, could have been said of nearly any paper in the field."
+
+The authors (A. N. Onymous and P. Seudonym) and their institutions are made up. Apart from the real Maldacena AdS/CFT paper, the references are joke citations, and the Witten papers are marked "(attrib.)" so they don't read as real works.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>claude-fable-5-2</a>
+        [<a href='abstract_pdf/claude-fable-5-2_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>167903 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>The paper is written and compiled: `analyzing_an_instanton.tex` and `analyzing_an_instanton.pdf` (21 pages) are in the working directory, with the title and abstract exactly as given in AGENTS.md. The final build has no LaTeX warnings and no unresolved references.
+
+The abstract reads as randomly generated, so the paper gives each of its phrases a precise technical meaning (collected in Table 1) and builds one argument around them: the harmonic analysis of a single type IIB D-instanton.
+
+- **Yangian / orientifolds / "interstellar medium":** the instanton profile in AdS₅×S⁵ is decomposed exactly into partial waves, and its moduli-space integrals are shown to be Yangian invariants. The "interstellar medium" is defined as a dilute D-instanton gas, in which an O3-plane acts as a mirror that removes the odd harmonics.
+- **Fragmentation functions / AdS_m/S^n:** strong-coupling fragmentation moments are classified by spin and S⁵ harmonic, leading to a general relation Δ/(m−1) = ℓ/(n−1) + 1 for Freund–Rubin backgrounds.
+- **Cosmic rays / inflation / dark energy:** "cosmic rays" are defined as Kaluza–Klein supergravitons of M-theory on a torus. Dilation symmetry fixes the product of axion decay constant and instanton action at the Planck scale, which rules out natural inflation and constrains three-form ("longitudinal") dark-energy models.
+- **Landau–Ginzburg / type IIB:** at the two symmetric points of the duality group, a table shows the instanton sum restoring SL(2,ℤ) invariance numerically.
+
+The exact formulas were checked with computer algebra and high-precision numerics before being stated, as listed in Appendix B.
+
+Things you should know:
+
+- **References are from memory.** Web search was not permitted in this session, so the 68 bibliography entries were not checked online. The ones I am least sure of are Rigatos–Zhou (cited without an arXiv number), Hollowood–Khoze–Mattis, and Becker–Gonzalo–Walcher–Wrase; check them before circulating.
+- **Some content is heuristic, and the paper says so.** The time-like anomalous dimensions for ℓ ≠ 0 assume reciprocity holds sector by sector, and the dark-energy section gives estimates, not a constructed model.
+- **Author field is blank.** AGENTS.md names no author and I did not want to invent one.
+- **Build files remain.** The `.aux`, `.log`, `.out` and `.toc` files are still in the directory because the delete command was declined; they are safe to remove.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>claude-fable-5-2</a>
+        [<a href='abstract_pdf/claude-fable-5-2_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>19666 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>The paper is written and compiled: `analyzing_an_instanton.tex` and the 9-page `analyzing_an_instanton.pdf` are in the working directory. The final build was clean, with no LaTeX warnings.
+
+The title and abstract are used verbatim from AGENTS.md, including the stray space in "M-Theory )". The body follows the abstract sentence by sentence, in deadpan snarXiv style:
+
+- **Orientifold planes:** Yangian "harmonics" give a density of O-planes in the interstellar medium consistent with zero, and with every other number.
+- **Fragmentation functions:** a three-way classification theorem leads to the $AdS_m/S^n$ quotient taken literally, so $AdS_5/S^5$ is zero-dimensional and hence the instanton.
+- **Cosmic rays and the check:** the GZK cutoff is extrapolated to the Planck temperature, and the main theorem integrates a dilation-invariant check mark over the $SL(2,\mathbb{Z})$ fundamental domain to get $\pi/3$.
+- **Type IIB:** the instanton is a D(−1)-brane, which counts as evidence for IIB; a table records the lack of effort spent on the other string theories.
+- **Witten:** the conclusion compares the results to Witten's and recommends Witten.
+
+There is also a TikZ figure of the instanton profile, two tables, a conventions appendix and a bibliography.
+
+Choices I made that the instructions left open:
+
+- **Authors:** the authors and affiliations are invented (C. Zeromode and M. Oduli).
+- **References:** the citations are to real papers (BPST, Witten, Maldacena and others), written from memory and not checked against a database.
+- **Acknowledgments:** these credit the snarXiv.</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-3.8-flash</a>
+        [<a href='abstract_pdf/gemini-3.8-flash_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>47785 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I have completed the task in accordance with [AGENTS.md](AGENTS.md).
+
+### Summary of Completed Work
+1. **Title & Abstract Exact Match**:
+   - **Title**: *Analyzing an Instanton*
+   - **Abstract**: Preserved verbatim, matching every character, equation, and parenthetical spacing.
+2. **Internal Theoretical Consistency**:
+   - Formulated a comprehensive, 20-page theoretical high-energy physics (`hep-th`) paper connecting:
+     - **Yangian Symmetric Harmonic Analysis**: ADHM construction, Bethe ansatz on multi-instanton moduli spaces, and screening/coupling of negative-tension orientifold planes ($O3/O7$) embedded in the interstellar medium (ISM).
+     - **Classification of Fragmentation Functions in $AdS_m/S^n$**: Representation theory of $\mathfrak{so}(m-1, 2) \oplus \mathfrak{so}(n+1)$ and worldsheet instantons governing non-perturbative parton splitting and hadronization.
+     - **Early-Universe Cosmic Rays, Planck Inflation, and Dilation Symmetry**: Evaluating UHECR production from topological defect/instanton decay, implementing Trans-Planckian Censorship (TCC) and Lyth bounds, and deriving longitudinal dark energy models via M-theory duality compactifications unified across cosmological epochs by dilation symmetry.
+     - **Landau-Ginzburg Formulations & Evidence for Type IIB**: Demonstrating that the Landau-Ginzburg/Calabi-Yau correspondence resolves Planck-scale singularities, with D-instanton sums and $SL(2, \mathbb{Z})$ modular invariance establishing evidence for Type IIB superstring theory.
+     - **Parallels to Work Done by Witten**: Detailed comparative analysis aligning each conceptual development with seminal works by Edward Witten (phases of $N=2$ theories, M5/D3 non-perturbative superpotentials, string dualities, AdS/CFT dictionary, and twistor/Yangian symmetries).
+3. **Compilation & Files**:
+   - Source code written to [analyzing_an_instanton.tex](analyzing_an_instanton.tex).
+   - Compiled without errors into [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf) (20 pages, complete with TikZ figures, classification tables, appendices, and INSPIRE-indexed references).
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-3.8-flash</a>
+        [<a href='abstract_pdf/gemini-3.8-flash_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>26094 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I have completed the task in accordance with [AGENTS.md](AGENTS.md).
+
+### Summary of Completed Work
+- **LaTeX Source**: Saved to [analyzing_an_instanton.tex](analyzing_an_instanton.tex).
+  - Uses standard `hep-th` preprint styling with exact title and abstract as specified.
+  - Formulates a 14-page parodic paper analyzing instantons through Yangian harmonic analysis in the interstellar medium, holographic fragmentation functions in $AdS_m/S^n$, Planck-scale inflation via M-Theory dilation symmetry in longitudinal dark energy, and Landau-Ginzburg models providing evidence for Type IIB string theory.
+  - Includes detailed TikZ diagrams, mathematical derivations, modular invariance calculations, and comparisons demonstrating that the results are similar to work done by Witten.
+- **Compiled PDF**: Compiled to [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf) with resolved cross-references, table of contents, diagrams, and bibliography.
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-4-argon</a>
+        [<a href='abstract_pdf/gemini-4-argon_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>66303 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I have created and compiled the paper according to the instructions in [AGENTS.md](AGENTS.md):
+
+- **LaTeX Source:** [analyzing_an_instanton.tex](analyzing_an_instanton.tex)
+- **Compiled PDF:** [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf)
+
+### Summary of Paper Structure & Internal Consistency
+
+1. **Introduction and Theoretical Framework ([Section 1](analyzing_an_instanton.tex#L63-L157)):** Introduces the Euclidean multi-instanton configuration $\mathcal{I}_k$ with moduli space $\mathfrak{M}_{k,N}$ and complexified coupling $\tau = C_0 + \mathrm{i}\mathrm{e}^{-\phi}$, outlining how the twisted Yangian, Mellin fragmentation kernels, early-universe cosmic-ray transport, M-theory longitudinal dark energy duality, and Landau--Ginzburg Planck models form a single unified mathematical pipeline.
+2. **Yangian Symmetric Harmonic Analysis and Orientifold Planes in the Interstellar Medium ([Section 2](analyzing_an_instanton.tex#L159-L300)):** Formulates the orientifold reduction of the Yangian $Y(\mathfrak{g})$ to the twisted Yangian coideal subalgebra $Y^+(\mathfrak{g},\mathfrak{h})$ via the Sklyanin reflection monodromy matrix $B(u) = T(u)K_-(u)T^t(-u)$. Decomposes the instanton-orientifold effective action on $\mathfrak{M}_{k,N}^\Omega$ into orthogonal Yangian spherical harmonics $\mathcal{Y}_{\Lambda,\ell}(X;u)$ and derives the Ramond--Ramond tadpole screening shift and dispersion relation (**Proposition 2.1**) for orientifold $\mathrm{O}p$-planes immersed in the magnetized interstellar medium plasma.
+3. **Classifying Fragmentation Functions and the $\AdS_m/S^n$ Correspondence ([Section 3](analyzing_an_instanton.tex#L302-L454)):** Connects the Mellin anomalous dimension matrix $\Gamma_{ij}(N;\tau,\bar{\tau})$ of time-like fragmentation functions $D_{i\to h}(z,\mu^2)$ to the logarithmic derivative of the twisted Yangian transfer matrix. Classifies fragmentation channels into four symmetry classes (Classes I--IV) by their Drinfeld polynomials and proves **Theorem 3.1**, showing that Weyl, momentum-sum-rule ($\Gamma_{\mathbf{1}}(N=2)=0$), and level-1 Yangian anomaly cancellation classify the admissible $(m,n)$ dimensions of the $\AdS_m/S^n$ correspondence: $(5,5)$ in Type~IIB string theory, $(4,7)$ and $(7,4)$ in M-theory, and $(3,3), (2,2)$.
+4. **Early-Universe Cosmic Rays, Planck-Scale Inflation, and Longitudinal Dark Energy in M-Theory via Dilation Symmetry ([Section 4](analyzing_an_instanton.tex#L456-L584)):** Evaluates the classified fragmentation functions in the Boltzmann--DGLAP transport equation for primordial ultra-high-energy cosmic rays in the early universe, deriving a non-perturbative check of inflation at the Planck scale ($\mu = M_{\text{Pl}}$). Formulates longitudinal models of dark energy in 11D M-theory compactified on $T^2 = S^1_{11} \times S^1_{10}$ and proves **Theorem 4.1**, showing how the dilation symmetry Ward--Takahashi identity incorporates the UV Planck-scale inflation check into the IR equation of state $w_\parallel(a)$ under the compactification of M-theory duality.
+5. **Landau--Ginzburg Models and the Leading Class of Planck Models ([Section 5](analyzing_an_instanton.tex#L586-L694)):** Analyzes the deep Planckian regime ($r \ll 0$) of the gauged linear sigma model where the theory enters a Landau--Ginzburg orbifold phase with superpotential $W_{\text{LG}}(\Phi_i;\tau)$ and BPS Morse--Witten instanton flows, opening up a leading class of Planck models $\mathfrak{P}_{\text{LG}}(d_i,w_i;\tau)$ protected against the supergravity $\eta$-problem by chiral-ring nilpotency.
+6. **Evidence for Type~IIB and Comparison with Work by Witten ([Section 6](analyzing_an_instanton.tex#L696-L776)) & Appendices ([Appendices A--B](analyzing_an_instanton.tex#L792-L875)):** Synthesizes four independent lines of evidence converging on Type~IIB superstring theory---the $SL(2,\mathbb{Z})$ Eisenstein series $E_{3/2}(\tau,\bar{\tau})$ of the Landau--Ginzburg Planck models, the $(m,n)=(5,5)$ fragmentation classification, the $A_{T^2}\to 0$ limit of M-theory longitudinal dark energy duality, and the $\mathrm{O}3/\mathrm{O}7$ orientifold reflection spectrum---and provides a systematic comparison with Witten's foundational works \cite{Witten:1993yc,Witten:1993jg,Witten:1995ex,Witten:1995gx,Witten:1996bn,Witten:1998qj,Dolan:2003uh}.
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-4-argon</a>
+        [<a href='abstract_pdf/gemini-4-argon_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>9792 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I have followed the instructions in [AGENTS.md](AGENTS.md) and produced the snarXiv-style parodic `hep-th` paper with the exact specified title and abstract:
+
+- **LaTeX source**: [analyzing_an_instanton.tex](analyzing_an_instanton.tex)
+- **Compiled PDF**: [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf)
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-4-neon</a>
+        [<a href='abstract_pdf/gemini-4-neon_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>83497 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I have written and compiled the full `hep-th` paper matching the exact title and abstract specified in [AGENTS.md](AGENTS.md):
+
+- **LaTeX source:** [analyzing_an_instanton.tex](analyzing_an_instanton.tex)
+- **Compiled PDF:** [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf) (23 pages, compiled cleanly via `latexmk -pdf` with zero errors, zero warnings, and zero overfull boxes)
+
+### Overview of the Paper
+The paper develops a unified, internally consistent analysis of a single Euclidean instanton $\mathcal{I}$ (complexified action $S_{\mathrm{inst}} = -2\pi\mathrm{i}\tau$, $\tau = C_0 + \mathrm{i}\mathrm{e}^{-\phi}$) across six sections and two technical appendices:
+
+1. **Introduction & Roadmap (Section 1):** Establishes the unified coupling and geometric framework linking all sections (summarized in Figure 1).
+2. **Yangian Symmetric Harmonic Analysis & Orientifold Planes in the ISM (Section 2, Appendix A):** Constructs the rational $\mathrm{SO}(n+1)$ Yangian $R$-matrix with $\kappa=(n-1)/2$, derives the exact twisted-Yangian Sklyanin reflection matrix $K(u) = \frac{q'-p'}{4}I + uE$ under an orientifold involution $\mathcal{O} = \Omega(-1)^{F_L}\sigma$ (Proposition 2.1), establishes the $\mathrm{O}(1)$ instanton zero-mode projection generating an axion--photon coupling $g_{a\gamma\gamma}$, and computes resonant axion--photon conversion and birefringent polarization shifts around orientifold-supported cosmic defects in a magnetized interstellar medium (ISM) plasma.
+3. **Fragmentation Function Classification & the $\mathrm{AdS}_m/S^n$ Correspondence (Section 3):** Classifies timelike fragmentation functions $D_i^h(z,Q^2)$ into four universality classes (Table 1), derives the exact Freund--Rubin curvature ratio $L_S/L_A = (n-1)/(m-1)$ (Proposition 3.1), and formulates the spectral $\mathrm{AdS}_m/S^n$ correspondence yielding the universal threshold exponent $\beta(m,n,\ell) = 2\Delta(m,n,\ell) - m$ across $(5,5)$, $(4,7)$, $(7,4)$, $(3,3)$, and $(2,2)$ geometries (Table 2, Figure 2).
+4. **Early-Universe Cosmic Rays, Planck-Scale Inflation Checks, and Duality Compactification in Longitudinal Dark Energy (Section 4, Appendix B):** Evaluates primordial ultra-high-energy cosmic ray injection from instanton decays, derives the Planck-scale inflation check $\Xi_{\mathrm{Pl}} \le 1$, performs the exact 11D M-theory Einstein-frame reduction on $\mathcal{M}_4 \times X_5 \times T^2$ isolating the longitudinal dark energy scalar $\sigma_\parallel$ (with exact dilation slope $\lambda_\parallel = \sqrt{18/7}$) and the $\mathrm{SL}(2,\mathbb{Z})$-invariant Eisenstein potential $E_{3/2}(\tau,\bar\tau)$ (Figure 3), and proves via the classical 11D trombone/dilation symmetry ($S_{11} \mapsto \Omega^9 S_{11}$) that $\Xi_{\mathrm{Pl}}$ maps covariantly into the duality-protected dark energy bound (Theorem 4.1).
+5. **Landau--Ginzburg Planck Models, Evidence for Type IIB, and Parallels with Witten (Section 5):** Passes to the sub-Planckian $r_{\mathrm{FI}}\ll 0$ Landau--Ginzburg orbifold phase of the 2D $\mathcal{N}=(2,2)$ GLSM to define a leading class of UV-complete Planck models, synthesizes five convergent diagnostics pointing uniquely to 10D Type IIB string theory (Table 3), and draws explicit technical parallels with seminal results of Witten.
+6. **Discussion & Conclusions (Section 6):** Summarizes formal extensions and phenomenological tests across ISM polarimetry, primordial cosmic rays, and dark energy.
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-4-neon</a>
+        [<a href='abstract_pdf/gemini-4-neon_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>36250 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>I have created and compiled the snarXiv-style parodic `hep-th` paper following [AGENTS.md](AGENTS.md):
+
+- **LaTeX source**: [analyzing_an_instanton.tex](analyzing_an_instanton.tex)
+- **Compiled PDF** (15 pages): [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf)
+
+### Summary of Paper Contents
+- Uses the exact title (`Analyzing an Instanton`) and verbatim abstract specified in [AGENTS.md](AGENTS.md).
+- Styled as a classic `hep-th` preprint with preprint numbers, table of contents, numbered equations, propositions/theorems, three TikZ figures, a classification table, two technical appendices, and 21 `hep-th` references:
+  1. **Introduction & Roadmap (Sec. 1)**: Frames the analysis of a single $k=1$ instanton $\mathcal{I}_1$ with a conceptual duality-web diagram (Figure 1).
+  2. **Yangian Symmetric Harmonic Analysis & ISM Orientifolds (Sec. 2)**: Develops $Y(\mathfrak{g})$ harmonic analysis on $\mathcal{M}_{k=1}$, derives $\mathrm{O}p^\pm$-planes in the interstellar medium regulated by silicate dust, and proves an interstellar tadpole cancellation proposition (Figure 2).
+  3. **Fragmentation Functions & $\mathrm{AdS}_m/S^n$ Correspondence (Sec. 3)**: Classifies timelike DGLAP/Mellin fragmentation functions into six $(m,n)$ universality classes (Table 1) and formulates the direct $\mathrm{AdS}_m/S^n$ duality.
+  4. **Early-Universe Cosmic Rays, Planck Inflation & Compactification of Duality (Sec. 4)**: Extrapolates primordial cosmic-ray transport to $z \to z_{\mathrm{Pl}}$, extracts a Planck-scale slow-roll check, and incorporates it via dilation symmetry into an M-Theory compactification of $\mathrm{SL}(2,\mathbb{Z})$ duality in longitudinal models of dark energy.
+  5. **Landau--Ginzburg Planck Models & Evidence for Type IIB (Sec. 5)**: Constructs an instanton-deformed LG superpotential for a leading class of Planck models and presents evidence for type IIB via the elliptic genus / self-dual $F_5$, the non-holomorphic Eisenstein series $E_{3/2}(\tau,\bar{\tau})$ matching the $\mathrm{D}(-1)$-instanton expansion, and 10d anomaly cancellation (Figure 3).
+  6. **Comparison with Work Done by Witten (Sec. 6) & Appendices A--B**: Details the structural parallels with classic Witten papers and provides the Yangian Plancherel measure and ISM-regulated $k=1$ instanton measure.
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-4-hydrogen</a>
+        [<a href='abstract_pdf/gemini-4-hydrogen_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>69229 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>Following the instructions in [AGENTS.md](AGENTS.md), I wrote and compiled the LaTeX paper **Analyzing an Instanton** with the exact specified title and abstract:
+
+- Source file: [analyzing_an_instanton.tex](analyzing_an_instanton.tex)
+- Compiled PDF: [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf)
+
+### Structure and Internal Consistency
+1. **Section 1 ([Introduction and Conceptual Architecture](analyzing_an_instanton.tex#L90-L163))**: Introduces the Euclidean instanton saddle $\mathcal{I}$ of action $S_{\mathrm{inst}}(\tau,\bar\tau) = 2\pi\tau_2 - 2\pi\mathrm{i}\tau_1$, sets $AdS_m \times S^n$ Freund--Rubin conventions, and summarizes the cross-section architecture in Figure 1.
+2. **Section 2 ([Yangian Symmetric Harmonic Analysis and Orientifold Planes in the Interstellar Medium](analyzing_an_instanton.tex#L166-L311))**: Constructs the twisted Yangian $Y(\mathfrak{g},\mathfrak{k})$ on the symmetric pair $(\mathfrak{so}(N), \mathfrak{so}(k)\oplus\mathfrak{so}(N-k))$ via Sklyanin's reflection matrix $S(u)$, maps its rank-1 reflection amplitude to the Harish-Chandra $c$-function of zonal spherical functions $\Phi_\lambda(r)$ (Proposition 2.1), and derives the $Op^\pm$-plane RR charge $Q_{Op^\pm} = \mp 2^{p-5}Q_{Dp}$ and plasma/magnetic ISM scattering phase shift $\delta(\lambda)$ (Theorem 2.2).
+3. **Section 3 ([Classification of Fragmentation Functions and the $AdS_m/S^n$ Correspondence](analyzing_an_instanton.tex#L314-L426))**: Classifies instanton fragmentation functions $D_i^h(z,Q^2)$ into Logarithmic/Sudakov (Class I), Compact Spherical/KK (Class II), and Reciprocal/Self-Dual Yangian (Class III) sectors; derives $L_{\mathrm{AdS}}/R_S = (m-1)/(n-1)$ and $R_{\mathrm{tot}} = \frac{f^2(m-n)}{2(m+n-2)}$ from the Einstein equations (Proposition 3.1); and establishes the Casimir and Mellin-continuation correspondence under $m \leftrightarrow n$, $L_{\mathrm{AdS}}^2 \leftrightarrow -R_S^2$, $\Delta \leftrightarrow -\ell$ (Theorem 3.2).
+4. **Section 4 ([Early-Universe Cosmic Rays, Planck-Scale Inflation, and M-Theory Duality in Longitudinal Dark Energy](analyzing_an_instanton.tex#L429-L535))**: Evaluates the early-universe cosmic-ray flux $\Phi_{\mathrm{CR}}^h(E)$ to obtain the dimensionless Planck-scale inflation check $\mathcal{I}_{\mathrm{Pl}} \le 1$, compactifies 11D M-theory on $\mathcal{M}_4 \times T^2 \times \mathcal{Y}_5$ to isolate the longitudinal dark-energy modulus $\chi$ and $\mathrm{SL}(2,\mathbb{Z})$ Eisenstein instanton series $E_{3/2}(\tau,\bar\tau)$, and proves via the dilation Ward identity that $\mathcal{I}_{\mathrm{Pl}}$ embeds directly into $V_{\mathrm{DE}}(\chi;\tau,\bar\tau)$ (Theorem 4.1).
+5. **Section 5 ([Landau--Ginzburg Planck Models and Evidence for Type IIB](analyzing_an_instanton.tex#L538-L622))**: Couples an $\mathcal{N}=(2,2)$ Landau--Ginzburg superpotential $W_{\mathrm{LG}}$ to 4D $\mathcal{N}=1$ no-scale supergravity to realize the Planck-scale plateau ($n_s \simeq 0.9636$, $r \simeq 0.00397$ at $N_*=55$), and proves (Theorem 5.1 & Table 1) that $\hat{c}_{\mathrm{int}}=5$ ($m+n=10$), $R_{\mathrm{tot}}=0$ ($m=n$), self-dual 5-form flux $F_5 = \star_{10} F_5$, $O3^-$-plane tadpole cancellation, and $D(-1)$-instanton $\mathrm{SL}(2,\mathbb{Z})$ modularity uniquely select $(m,n)=(5,5)$ and Type IIB string theory.
+6. **Section 6 & Appendix A ([Comparison with the Work of Witten](analyzing_an_instanton.tex#L625-L689))**: Compares the framework with Witten's 1982/1988 topological/instanton works, 1993 Landau--Ginzburg/GLSM phases, 1995 M-theory $\mathrm{SL}(2,\mathbb{Z})$ uplift, and 1998 AdS/CFT duality, with full Freund--Rubin Ricci derivations in Appendix A.
+
+### Compilation Verification
+Compiled cleanly with two passes of `pdflatex -interaction=nonstopmode -halt-on-error analyzing_an_instanton.tex` (exit code 0), producing a 15-page PDF (`analyzing_an_instanton.pdf`, 715,053 bytes) with zero warnings, errors, or overfull/underfull box diagnostics in `analyzing_an_instanton.log`.
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+    <dt>
+        <a>gemini-4-hydrogen</a>
+        [<a href='abstract_pdf/gemini-4-hydrogen_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+    </dt>
+    <dd>
+        <div class='meta'>
+            <details>
+            <summary>18466 tokens. Click to show/hide final model text response summary.</summary>
+            <pre><code>Created the snarXiv-style parodic `hep-th` LaTeX paper in [analyzing_an_instanton.tex](analyzing_an_instanton.tex) and compiled it to [analyzing_an_instanton.pdf](analyzing_an_instanton.pdf) following [AGENTS.md](AGENTS.md).
+
+### Summary of Output
+- **Title & Abstract**: Uses the exact title (`Analyzing an Instanton`) and verbatim abstract specified in [AGENTS.md](AGENTS.md).
+- **Structure (9 pages)**:
+  - **Section 1**: Introduction outlining the four stages of the instanton analysis.
+  - **Section 2**: Yangian symmetric harmonic analysis (`Y(\mathfrak{g})`, Plancherel decomposition, reflection equation) and localization of orientifold planes ($Op^\epsilon$) in the interstellar medium.
+  - **Section 3**: Classification of instanton-induced fragmentation functions (Table 1) and their dictionary to the $\AdS_m/S^n$ correspondence (Figure 1, TikZ diagram).
+  - **Section 4**: Early-universe cosmic-ray transport, Planck-scale inflation consistency check, dilation symmetry, and M-Theory compactification of duality in longitudinal dark energy models.
+  - **Section 5**: Weighted homogeneous Landau--Ginzburg superpotential defining the leading class of Planck models (Table 2) and three signatures providing evidence for type IIB.
+  - **Section 6, Acknowledgments, Appendix A, & Bibliography**: Comparison with work by Witten, one-loop determinant cancellation in a dusty plasma, and references.
+- **Verification**: Compiled cleanly with `latexmk -pdf -interaction=nonstopmode analyzing_an_instanton.tex` (exit code 0, zero warnings/errors, 9 pages verified via `pdfinfo`), followed by `latexmk -c` to remove auxiliary build files.
+</code></pre>
+            </details>
+        </div>
+    </dd>
+
+
+
+
+    </dl>
+
+    </div>
+    </div>
+    </main>
+    <footer>
+    <p>Thanks to Claude for telling me to do the CSS myself</p>
+    </footer> 
+
+</body>
+</html>
