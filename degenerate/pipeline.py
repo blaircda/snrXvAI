@@ -121,7 +121,7 @@ def run_processes(jobs):
             job["error"] = str(e)
             failures.append(job)
             #failures.append( (job, str(e)) )
-       except Exception as e: # anything unanticipated
+        except Exception as e: # anything unanticipated
             job["error"] = f"Unexpected {type(e).__name__}: {e}"
             job["traceback"] = traceback.format_exc()
             print(f"Unexpected error in {job['job_id']}: {type(e).__name__}")
