@@ -30,8 +30,8 @@ def main(timestamp, paper_struct, Ntitles, models):
 
     jobs = create_jobs(timestamp, models, titles, paper_struct)
 
-    print(f"Created {Npapers} jobs:")
-    print_jobs(jobs)
+    #print(f"Created {Npapers} jobs:")
+    #print_jobs(jobs)
 
     results, failures, to_retry = run_processes(jobs)
 
@@ -39,7 +39,6 @@ def main(timestamp, paper_struct, Ntitles, models):
 
     if to_retry:
         time.sleep(60) 
-        #retry = [job for job,_ in to_retry]
         retry_results, retry_failures, retry_retry =  run_processes(to_retry)
         results.extend(retry_results)
         failures.extend(retry_failures+retry_retry)
@@ -164,7 +163,7 @@ if __name__ == "__main__":
     else:
         Npapers = 3 if args.Npapers is None else args.Npapers
         Ncollabs = 0 if args.Ncollabs is None else args.Ncollabs
-        max_paper_authors =2 if args.max_paper_authors is None else args.max_paper_authors # max authors on a collaborative paper
+        max_paper_authors = 2 if args.max_paper_authors is None else args.max_paper_authors # max authors on a collaborative paper
         Npaid = 2 if args.paid is None else args.paid
         if max_paper_authors < 2:
             parser.error("--max_paper_authors must be >= 2")
