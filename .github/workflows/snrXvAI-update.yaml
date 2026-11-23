@@ -46,8 +46,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          NPAPERS: ${{ inputs.npapers || 5}}
-          NCOLLABS: ${{ inputs.ncollabs || 1}}
+          MODELS: ${{ inputs.models }}
         id: generate
         run: python -m degenerate.main -M "${MODELS:-budget}"
       - name: Upload failure logs
