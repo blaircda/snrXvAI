@@ -5,11 +5,11 @@ from degenerate.adapters.adapter_openai import call_openai
 from degenerate.adapters.adapter_openrouter import call_openrouter
 
 DEV_MODELS = [
-    {"name": "example", "provider": "dev", "display_name": "Example Author (good)", "options": {"variant": "good"} },
+    #{"name": "example", "provider": "dev", "display_name": "Example Author (good)", "options": {"variant": "good"} },
     {"name": "example", "provider": "dev", "display_name": "Example Author (invalid LaTeX)", "options": {"variant": "bad_latex"} },
     {"name": "example", "provider": "dev", "display_name": "Example Author (forbidden LaTeX)", "options": {"variant": "bad_input"} },
     {"name": "example", "provider": "dev", "display_name": "Example Author (bad compile)", "options": {"variant": "bad_compile"} },
-    {"name": "example", "provider": "dev", "display_name": "Example Author (bad markdown)", "options": {"variant": "bad_markdown"} }    
+    #{"name": "example", "provider": "dev", "display_name": "Example Author (bad markdown)", "options": {"variant": "bad_markdown"} }    
 ]
 
 GEMINI_MODELS = [
