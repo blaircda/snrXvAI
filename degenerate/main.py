@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
     parser.add_argument("-N", "--Npapers", type=int, default=None)
     parser.add_argument("-C", "--Ncollabs", type=int, default=None)
-    parser.add_argument("-K", "--max_paper_authors", type=int, default=None)
+    parser.add_argument("-A", "--max_paper_authors", type=int, default=None)
     parser.add_argument("-P", "--paid", type=int, default=None)
     parser.add_argument("-T", "--single_title", action="store_true") # set only 1 title
     parser.add_argument("-S", "--schedule", action="store_true") # apply scheduling logic, for remote automated runs

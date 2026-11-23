@@ -1,6 +1,7 @@
 # snrXvAI
 
-Bringing [snarXiv](https://snarxiv.org/) papers to artificial life as [snrXvAI](https://blaircda.github.io/snrXvAI/)
+Bringing [snarXiv](https://snarxiv.org/) papers to artificial life as [snrXvAI](https://blaircda.github.io/snrXvAI/).
+
 ## Usage
 
 **Preliminary: build the snarXiv grammar**
@@ -19,7 +20,7 @@ In `degenerate/grammar`:
 
 Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. The successes are outputted to a new directory `papers/` and their details saved in `degenerate/listing.json`. The details of the failures are saved as `failed/errors.json` along with the offending .tex and .log files if available.
 
-Other command line options (default of none ($k$) means the value $k$ is set internally):
+Other command line options (default of "none ($k$)" means the value $k$ is set internally):
 
 | Option | Long form | Type | Default | Description |
 |--------|-----------|------|---------|-------------|
