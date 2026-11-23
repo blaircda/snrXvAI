@@ -1,0 +1,323 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Instanton Paper Scorecard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a referee report. One narrow reading column, a scorecard table up top, ranked reports, then the recomputed numbers. */
+:root {
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --fg: #151920;
+  --muted: #586273;
+  --line: #dbe0e8;
+  --accent: #2753b8;
+  --good: #17734a;
+  --warn: #9a6200;
+  --bad: #b02a20;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1116; --surface: #161a21; --fg: #e5e8ed; --muted: #9aa3b3; --line: #2a303b;
+    --accent: #86a6ff; --good: #52c48d; --warn: #e2aa45; --bad: #ff8073; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1116; --surface: #161a21; --fg: #e5e8ed; --muted: #9aa3b3; --line: #2a303b;
+  --accent: #86a6ff; --good: #52c48d; --warn: #e2aa45; --bad: #ff8073; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+}
+.wrap { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; line-height: 1.15; }
+h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.6rem; font-weight: 600; }
+h3 { font-size: 1.2rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.label {
+  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.lede { font-size: 1.15rem; color: var(--muted); }
+sub, sup { line-height: 0; }
+
+/* header */
+header { display: flex; flex-direction: column; gap: 14px; }
+.abstract {
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 18px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.abstract p { font-style: italic; color: var(--muted); }
+
+.answer {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 22px;
+  align-items: start;
+}
+.answer .no {
+  font-family: var(--display); font-weight: 700; font-size: 3rem; line-height: 1; color: var(--bad);
+}
+.answer > div { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 520px) { .answer { grid-template-columns: 1fr; } }
+
+/* tables */
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+td.model { font-weight: 600; white-space: nowrap; }
+td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rank { font-family: var(--mono); color: var(--muted); width: 2.5em; }
+
+.chip {
+  display: inline-block; font-family: var(--mono); font-size: 0.75rem; font-weight: 500;
+  padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+  border: 1px solid currentColor;
+}
+.good { color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
+.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.bad  { color: var(--bad);  background: color-mix(in srgb, var(--bad) 10%, transparent); }
+.mark { font-family: var(--mono); font-weight: 600; }
+.mark.good, .mark.warn, .mark.bad { background: none; }
+
+/* ranked reports */
+ol.reports { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+ol.reports > li {
+  display: grid; grid-template-columns: 3rem 1fr; gap: 0 16px;
+  padding: 24px 0; border-bottom: 1px solid var(--line);
+}
+.pos { font-family: var(--display); font-weight: 700; font-size: 1.8rem; line-height: 1.1; color: var(--muted); }
+.report { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.report-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.report ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; max-width: 68ch; }
+.report li::marker { color: var(--muted); }
+.verdict { font-weight: 500; }
+ol.reports > li.top .pos { color: var(--accent); }
+@media (max-width: 520px) { ol.reports > li { grid-template-columns: 2rem 1fr; } .pos { font-size: 1.4rem; } }
+
+/* takeaways */
+.takeaways { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.takeaways li { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; min-width: 0; }
+.takeaways b { display: block; font-family: var(--display); font-size: 1.05rem; margin-bottom: 4px; }
+
+footer { color: var(--muted); font-size: 0.88rem; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 20px; }
+code { font-family: var(--mono); font-size: 0.9em; }
+a { color: var(--accent); }
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="label">Model evaluation · snarXiv prompt · 8 papers</span>
+  <h1>Analyzing an Instanton</h1>
+  <p class="lede">Eight models were given the same machine-generated title and abstract and asked for a full, internally consistent hep-th paper in LaTeX. Did any of them find something new?</p>
+  <div class="abstract">
+    <span class="label">The abstract every model had to honour</span>
+    <p>Using the behavior of Yangian symmetric harmonic analysis, we understand orientifold planes in the interstellar medium. Next, from classifying fragmentation functions, we study the AdS<sub>m</sub>/S<sup>n</sup> correspondence. While evaluating cosmic rays in the early universe, we derive that a check of inflation at the Planck scale can be incorporated into a compactification of duality in longitudinal models of dark energy (taking into account M-Theory), by dilation symmetry. In short, recently, work on a Landau-Ginzburg model has opened up a leading class of Planck models. Inspired by this, we find evidence for type IIB. Our results are similar to work done by Witten.</p>
+  </div>
+</header>
+
+<div class="answer">
+  <span class="no">No.</span>
+  <div>
+    <p><b>None of the eight papers does anything genuinely new.</b> Claude Fable 5.2 and Claude Opus 5.5 are coherent, correct and honest about their claims: every number I recomputed matches. The other Claude papers are thin or heavily hedged. The Gemini papers mostly wrap real formulas inside theorems that were invented to "derive" the abstract.</p>
+  </div>
+</div>
+
+<section>
+  <h2>Scorecard</h2>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th class="rank">#</th><th>Model</th><th>Verdict</th><th>Coherent</th><th>Numbers hold up</th><th>Honest about novelty</th><th>Fabrication</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="rank">1</td><td class="model">Claude Fable 5.2</td><td><span class="chip good">Best in field</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">All checked</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">None</span></td></tr>
+        <tr><td class="rank">2</td><td class="model">Claude Opus 5.5</td><td><span class="chip good">Correct, modest</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">None</span></td></tr>
+        <tr><td class="rank">3</td><td class="model">Claude Sonnet 5.5</td><td><span class="chip warn">Thin</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">Yes</span></td><td><span class="mark good">None</span></td></tr>
+        <tr><td class="rank">4</td><td class="model">Claude Haiku 5.5</td><td><span class="chip warn">Hedges</span></td><td><span class="mark warn">Barely</span></td><td><span class="mark warn">Little to check</span></td><td><span class="mark good">Yes</span></td><td><span class="mark warn">One wrong proof step</span></td></tr>
+        <tr><td class="rank">5</td><td class="model">Gemini 4 Neon</td><td><span class="chip warn">Mixed</span></td><td><span class="mark warn">In parts</span></td><td><span class="mark warn">Mostly</span></td><td><span class="mark bad">No</span></td><td><span class="mark bad">Invented theorem, fake author</span></td></tr>
+        <tr><td class="rank">6</td><td class="model">Gemini 4 Hydrogen</td><td><span class="chip bad">Flawed</span></td><td><span class="mark warn">In parts</span></td><td><span class="mark bad">Wrong E<sub>3/2</sub> measure</span></td><td><span class="mark bad">No</span></td><td><span class="mark bad">Circular theorem</span></td></tr>
+        <tr><td class="rank">7</td><td class="model">Gemini 4 Argon</td><td><span class="chip bad">Pseudo-math</span></td><td><span class="mark bad">No</span></td><td><span class="mark bad">Invented</span></td><td><span class="mark bad">No</span></td><td><span class="mark bad">Invented theorems and tables</span></td></tr>
+        <tr><td class="rank">8</td><td class="model">Gemini 3.8 Flash</td><td><span class="chip bad">Word salad</span></td><td><span class="mark bad">No</span></td><td><span class="mark bad">Basic errors</span></td><td><span class="mark bad">No</span></td><td><span class="mark bad">Fake authors and grant</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Referee reports</h2>
+  <ol class="reports">
+
+    <li class="top">
+      <span class="pos">1</span>
+      <div class="report">
+        <div class="report-head"><h3>Claude Fable 5.2</h3><span class="chip good">Best in field</span></div>
+        <p class="verdict">The only paper that is interesting to read. It turns every nonsense phrase into one real object, the D-instanton, and analyses it on AdS<sub>5</sub>×S<sup>5</sup>, on the AdS<sub>5</sub> moduli space, and on the τ-plane.</p>
+        <ul>
+          <li>Its closed-form expansion of 1/(cosh σ − cos θ)<sup>4</sup> into AdS<sub>5</sub> propagators times Gegenbauer polynomials agrees to 30 digits.</li>
+          <li>Its table of E<sub>3/2</sub> at the two elliptic points matches at every truncation, and so do its control case and Hessians (see the spot checks below).</li>
+          <li>It admits that its "evidence for type IIB" is close to a tautology, since E<sub>3/2</sub> is modular by construction.</li>
+          <li>The nearest thing to a new result is the correction term for the level-one Yangian generator when instanton amplitudes are written as star integrals in D = ΣΔ<sub>i</sub> dimensions. This very likely overlaps with Rigatos and Zhou (2022), which it cites.</li>
+          <li>The partial-wave formula appears to be known from early-2000s work on the conformally flat AdS×S propagator (Dorn, Salizzoni and Sieg). The rest repackages known physics.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="top">
+      <span class="pos">2</span>
+      <div class="report">
+        <div class="report-head"><h3>Claude Opus 5.5</h3><span class="chip good">Correct, modest</span></div>
+        <p class="verdict">Careful and correct, with an explicit paragraph separating what is new from what is reviewed. The results are true but mostly trivial.</p>
+        <ul>
+          <li>Its bilocal Yangian lemma is true but makes the Yangian part of the analysis drop out on symmetric states. The paper says so.</li>
+          <li>Its "fragmentation functions" are the Weyl-law Gamma distribution of heat-kernel weights.</li>
+          <li>f·S = √(p/2)·M<sub>Pl</sub> is the standard no-scale result. Its numbers check: S ≈ 277, f ≈ 6.8×10<sup>−3</sup> M<sub>Pl</sub>, |η| ≈ 1.1×10<sup>4</sup>.</li>
+          <li>Its best point is that one relation rules out both controlled natural inflation and gentle axion dark energy. That tension is already known.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li>
+      <span class="pos">3</span>
+      <div class="report">
+        <div class="report-head"><h3>Claude Sonnet 5.5</h3><span class="chip warn">Thin</span></div>
+        <p class="verdict">Honest, but there is not much there.</p>
+        <ul>
+          <li>It reproduces Starobinsky-type numbers correctly (V<sup>1/4</sup> ≈ 7.8×10<sup>15</sup> GeV at N = 60).</li>
+          <li>Its propositions are trivial, and it says its inflaton potential is assumed rather than derived.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li>
+      <span class="pos">4</span>
+      <div class="report">
+        <div class="report-head"><h3>Claude Haiku 5.5</h3><span class="chip warn">Hedges</span></div>
+        <p class="verdict">Mostly declines to claim anything.</p>
+        <ul>
+          <li>It opens with a box saying the abstract describes no known physics, and labels every link as an "ansatz".</li>
+          <li>Its propositions are close to empty, and one proof step is wrong: it calls the level-one term "diagonal on each V<sub>λ</sub>".</li>
+        </ul>
+      </div>
+    </li>
+
+    <li>
+      <span class="pos">5</span>
+      <div class="report">
+        <div class="report-head"><h3>Gemini 4 Neon</h3><span class="chip warn">Mixed</span></div>
+        <p class="verdict">Real calculations wrapped around invented theorems.</p>
+        <ul>
+          <li>Correct: the Freund–Rubin radii, the Poisson resummation of E<sub>3/2</sub>, the 11D-to-4D reduction giving λ = √(18/7) and w = −1/7, and its plotted values of E<sub>3/2</sub>.</li>
+          <li>Invented: its main theorem treats the trombone scaling of 11D supergravity as cosmological time evolution, and its "Planck check" Ξ<sub>Pl</sub> is made up, with an exponent of 2/3 it calls "uniquely fixed".</li>
+          <li>It gets E<sub>3/2</sub>(e<sup>iπ/3</sup>) slightly wrong and invents an author, "E. V. Kallisto", with an email address.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li>
+      <span class="pos">6</span>
+      <div class="report">
+        <div class="report-head"><h3>Gemini 4 Hydrogen</h3><span class="chip bad">Flawed</span></div>
+        <p class="verdict">Some correct algebra, then errors and circular arguments.</p>
+        <ul>
+          <li>Correct: the Freund–Rubin algebra, and the result that total curvature vanishes exactly when m = n.</li>
+          <li>Its E<sub>3/2</sub> instanton measure is wrong (Σ 1/d instead of k·σ<sub>−2</sub>(k)).</li>
+          <li>It credits twisted Yangians for the O-plane charge 2<sup>p−5</sup>, but the proof it gives is the standard T-duality count. Its "uniqueness of type IIB" theorem is circular.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li>
+      <span class="pos">7</span>
+      <div class="report">
+        <div class="report-head"><h3>Gemini 4 Argon</h3><span class="chip bad">Pseudo-math</span></div>
+        <p class="verdict">Polished, confident, and invented.</p>
+        <ul>
+          <li>Its central theorem classifies AdS<sub>m</sub>×S<sup>n</sup> from a "fragmentation anomaly" whose formula, with (m−1)/R − (n−1)/R, is not dimensionally consistent.</li>
+          <li>Its O3/O7 selection rule and its table of "Planck models" (spectral indices, chiral-ring dimensions) are made up.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li>
+      <span class="pos">8</span>
+      <div class="report">
+        <div class="report-head"><h3>Gemini 3.8 Flash</h3><span class="chip bad">Word salad</span></div>
+        <p class="verdict">No real content.</p>
+        <ul>
+          <li>Basic errors, such as the Landau–Ginzburg central charge ĉ = d − 2 (it should be N − 2).</li>
+          <li>Invented authors at real institutions ("E. W. Duality, IAS"; MIT; CERN) and a DOE grant number.</li>
+        </ul>
+      </div>
+    </li>
+
+  </ol>
+</section>
+
+<section>
+  <h2>Spot checks</h2>
+  <p>Claims recomputed with mpmath at 30 digits. E<sub>3/2</sub> is the non-holomorphic Eisenstein series that sets the type IIB R<sup>4</sup> coupling; "k ≤ K" means the D-instanton sum truncated at instanton number K.</p>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Paper</th><th>Claim</th><th class="num">Paper says</th><th class="num">Recomputed</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="model">Fable</td><td>Partial-wave identity at σ = 0.7, θ = 1.1</td><td class="num">LHS = RHS</td><td class="num">2.42230000779 both</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>∂<sub>τ2</sub>E<sub>3/2</sub> at τ = i, perturbative only</td><td class="num">3.163×10⁻¹</td><td class="num">3.163×10⁻¹</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>∂<sub>τ2</sub>E<sub>3/2</sub> at τ = i, k ≤ 1</td><td class="num">2.014×10⁻³</td><td class="num">2.014×10⁻³</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>∂<sub>τ2</sub>E<sub>3/2</sub> at τ = i, k ≤ 4</td><td class="num">4.2×10⁻¹¹</td><td class="num">4.235×10⁻¹¹</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>∂<sub>τ2</sub>E<sub>3/2</sub> at τ = e<sup>iπ/3</sup>, k ≤ 2</td><td class="num">−7.54×10⁻⁵</td><td class="num">−7.537×10⁻⁵</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>Same at τ = i with measure ν<sub>k</sub> = 1 (control)</td><td class="num">4.0×10⁻⁴</td><td class="num">4.02×10⁻⁴</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>Hessian at τ = i (∂²<sub>τ1</sub>, ∂²<sub>τ2</sub>)</td><td class="num">−1.98389, 8.75911</td><td class="num">−1.98389, 8.75911</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>Isotropic Hessian at τ = e<sup>iπ/3</sup></td><td class="num">4.4463726</td><td class="num">4.4463726</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Fable</td><td>E<sub>3/2</sub>(i), E<sub>3/2</sub>(e<sup>iπ/3</sup>)</td><td class="num">9.0336217, 8.8927451</td><td class="num">9.0336217, 8.8927451</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Neon</td><td>Exponential slope λ</td><td class="num">√(18/7) ≈ 1.6036</td><td class="num">1.60357</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Neon</td><td>E<sub>3/2</sub>(2i) = E<sub>3/2</sub>(i/2)</td><td class="num">11.45253</td><td class="num">11.452527</td><td><span class="mark good">✓</span></td></tr>
+        <tr><td class="model">Neon</td><td>E<sub>3/2</sub>(e<sup>iπ/3</sup>)</td><td class="num">8.8933</td><td class="num">8.892745</td><td><span class="mark bad">✗</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Takeaways</h2>
+  <ul class="takeaways">
+    <li><b>Reinterpret</b>Fable and Opus redefine each nonsense phrase as something real, then prove only what is true.</li>
+    <li><b>Hedge</b>Sonnet and especially Haiku do the minimum and disclaim the rest.</li>
+    <li><b>Comply</b>The Gemini models take the abstract at face value and write theorem-shaped text that "derives" it.</li>
+    <li><b>Camouflage</b>The heavier Gemini models embed correct formulas in that text, which is arguably more misleading than Flash's obvious word salad.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Each model got the same prompt: "Produce a full, internally consistent, hep-th paper written in LaTeX with the following title and abstract." A separate run of each model was asked for a parody instead; those papers are not reviewed here.</p>
+  <p>All eight papers were read in full. Novelty judgements about prior literature are from memory and were not checked against a search.</p>
+</footer>
+
+</div>
+
+</body></html>

@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluation Report: Consistent Papers from a snarXiv Prompt ("Analyzing an Instanton")</title>
+<style>
+  :root {
+    --bg: #f8f9fb;
+    --surface: #ffffff;
+    --surface-alt: #f2f4f8;
+    --ink: #171c26;
+    --muted: #525d70;
+    --border: #dfe4ee;
+    --accent: #1d4ed8;
+    --accent-soft: #eff4ff;
+    --good: #0f766e;
+    --good-soft: #ecfdf5;
+    --good-border: #a7f3d0;
+    --warn: #b45309;
+    --warn-soft: #fffbeb;
+    --warn-border: #fde68a;
+    --bad: #b91c1c;
+    --bad-soft: #fef2f2;
+    --bad-border: #fecaca;
+    --neutral: #475569;
+    --neutral-soft: #f1f5f9;
+    --neutral-border: #cbd5e1;
+    --claude: #7c3aed;
+    --claude-soft: #f5f3ff;
+    --gemini: #0369a1;
+    --gemini-soft: #f0f9ff;
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 6px 18px rgba(15, 23, 42, 0.04);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4.5rem;
+  }
+
+  header.hero {
+    background: linear-gradient(135deg, #111827 0%, #1e293b 60%, #1e3a5f 100%);
+    color: #f8fafc;
+    border-radius: 14px;
+    padding: 2.25rem 2.25rem 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #93c5fd;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  header.hero h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+  }
+
+  header.hero p.subtitle {
+    margin: 0 0 1.25rem;
+    color: #cbd5e1;
+    font-size: 1rem;
+    max-width: 78ch;
+  }
+
+  .prompt-box {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 1rem 1.15rem;
+    font-size: 0.9rem;
+    color: #e2e8f0;
+  }
+
+  .prompt-box summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #bfdbfe;
+    user-select: none;
+  }
+
+  .prompt-box blockquote {
+    margin: 0.75rem 0 0;
+    padding-left: 0.9rem;
+    border-left: 3px solid #60a5fa;
+    color: #e2e8f0;
+    font-style: italic;
+  }
+
+  section {
+    margin-bottom: 2.25rem;
+  }
+
+  h2 {
+    font-size: 1.38rem;
+    letter-spacing: -0.015em;
+    margin: 0 0 1rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 2px solid var(--border);
+    color: #0f172a;
+  }
+
+  h3 {
+    font-size: 1.08rem;
+    margin: 0 0 0.35rem;
+    color: #0f172a;
+  }
+
+  .verdict-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--accent);
+    border-radius: 10px;
+    padding: 1.35rem 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .verdict-card p {
+    margin: 0 0 0.75rem;
+  }
+  .verdict-card p:last-child { margin-bottom: 0; }
+
+  .table-wrap {
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 0.78rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--surface-alt);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #fafcff; }
+
+  .badge {
+    display: inline-block;
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  .badge-good { background: var(--good-soft); color: var(--good); border-color: var(--good-border); }
+  .badge-warn { background: var(--warn-soft); color: var(--warn); border-color: var(--warn-border); }
+  .badge-bad { background: var(--bad-soft); color: var(--bad); border-color: var(--bad-border); }
+  .badge-neutral { background: var(--neutral-soft); color: var(--neutral); border-color: var(--neutral-border); }
+  .badge-claude { background: var(--claude-soft); color: var(--claude); border-color: #ddd6fe; }
+  .badge-gemini { background: var(--gemini-soft); color: var(--gemini); border-color: #bae6fd; }
+
+  .standout {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid #bfdbfe;
+    border-top: 5px solid var(--accent);
+    border-radius: 12px;
+    padding: 1.65rem 1.75rem;
+    box-shadow: var(--shadow);
+  }
+
+  .standout-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .standout-header .model-name {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e3a8a;
+  }
+
+  .result-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.15rem;
+  }
+
+  .result-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+  }
+
+  .result-item-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .result-item-title {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .ref-tag {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: var(--surface-alt);
+    padding: 0.12rem 0.45rem;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+  }
+
+  .eq-block {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.65rem 0;
+    overflow-x: auto;
+    text-align: center;
+    font-size: 1.04rem;
+  }
+
+  .verify-note {
+    margin-top: 0.55rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: 6px;
+    background: var(--good-soft);
+    border: 1px solid var(--good-border);
+    color: #065f46;
+    font-size: 0.86rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .model-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.4rem;
+    box-shadow: var(--shadow);
+  }
+
+  .model-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--surface-alt);
+  }
+
+  .model-title-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .model-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+
+  .model-meta {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .model-card p {
+    margin: 0.45rem 0;
+  }
+
+  .model-card ul {
+    margin: 0.5rem 0 0.2rem;
+    padding-left: 1.25rem;
+  }
+
+  .model-card li {
+    margin-bottom: 0.35rem;
+  }
+
+  .meta-split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.15rem;
+  }
+
+  .family-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.3rem 1.4rem;
+    box-shadow: var(--shadow);
+  }
+
+  .family-box.claude { border-top: 4px solid var(--claude); }
+  .family-box.gemini { border-top: 4px solid var(--gemini); }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.86em;
+    background: var(--surface-alt);
+    padding: 0.1rem 0.32rem;
+    border-radius: 4px;
+    color: #1e293b;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    padding: 0.38rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .filter-btn:hover { background: var(--surface-alt); }
+  .filter-btn.active {
+    background: #0f172a;
+    color: #ffffff;
+    border-color: #0f172a;
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.84rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  math {
+    font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", serif;
+  }
+
+  @media print {
+    body { background: #fff; font-size: 13px; }
+    .container { padding: 0; max-width: none; }
+    .controls { display: none; }
+    .model-card, .standout, .verdict-card, .family-box, .table-wrap { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="hero">
+    <div class="eyebrow">hep-th Evaluation Report &middot; snarXiv Prompt Experiment</div>
+    <h1>Analyzing an Instanton: Review of All 8 &ldquo;Consistent&rdquo; Papers</h1>
+    <p class="subtitle">
+      Technical audit of every <code>runs/&lt;model&gt;_high_1/analyzing_an_instanton.tex</code> manuscript generated from an identical snarXiv title and abstract, assessing whether any model derived something genuinely new, non-trivial, or mathematically sound.
+    </p>
+    <details class="prompt-box">
+      <summary>Show exact snarXiv title &amp; abstract given to all models</summary>
+      <blockquote>
+        <strong>Title:</strong> Analyzing an Instanton<br><br>
+        <strong>Abstract:</strong> Using the behavior of Yangian symmetric harmonic analysis, we understand orientifold planes in the interstellar medium. Next, from classifying fragmentation functions, we study the AdS<sub>m</sub>/S<sup>n</sup> correspondence. While evaluating cosmic rays in the early universe, we derive that a check of inflation at the Planck scale can be incorporated into a compactification of duality in longitudinal models of dark energy (taking into account M-Theory ), by dilation symmetry. In short, recently, work on a Landau-Ginzburg model has opened up a leading class of Planck models. Inspired by this, we find evidence for type IIB. Our results are similar to work done by Witten.
+      </blockquote>
+    </details>
+  </header>
+
+  <section id="executive-summary">
+    <h2>Executive Verdict</h2>
+    <div class="verdict-card">
+      <p>
+        <strong>Short answer:</strong> None of the eight papers produces a genuine, publishable hep-th research breakthrough (unsurprising given a nonsensical snarXiv abstract). However, <strong>one paper &mdash; <code>claude-fable-5-2_high_1</code> &mdash; is in a completely different league from the other seven</strong>. Rather than just pasting textbook formulas or hallucinating formal theorems, it genuinely derives and verifies several concrete, non-trivial exact identities and numerical tests.
+      </p>
+      <p>
+        <code>claude-opus-5-5_high_1</code> is a distant second: intellectually honest and clean, with a couple of elementary-but-valid mini-results. The remaining six range from honest textbook reviews or explicit disclaimers (<code>claude-sonnet-5-5</code>, <code>claude-haiku-5-5</code>) to glossy hep-th pastiche containing either contrived bridges over solid textbook appendices (<code>gemini-4-neon</code>) or outright mathematical and physical hallucinations (<code>gemini-4-hydrogen</code>, <code>gemini-4-argon</code>, <code>gemini-3.8-flash</code>).
+      </p>
+    </div>
+  </section>
+
+  <section id="overview-table">
+    <h2>Comparison Matrix</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Run / Model</th>
+            <th>Family</th>
+            <th>Lines</th>
+            <th>Strategy for Absurd Terms</th>
+            <th>Anything Non-Trivial?</th>
+            <th>Technical Integrity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><code>claude-fable-5-2_high_1</code></strong></td>
+            <td><span class="badge badge-claude">Claude</span></td>
+            <td>1,081</td>
+            <td>Explicit dictionary (Table 1): ISM = dilute D-instanton gas; cosmic rays = M-theory KK gravitons</td>
+            <td><span class="badge badge-good">Yes &mdash; Multiple</span><br>Reduced Yangian op, fixed-&#x2113; reciprocity, universal FR linearity, elliptic-point E<sub>3/2</sub> test</td>
+            <td><span class="badge badge-good">Verified exact</span></td>
+          </tr>
+          <tr>
+            <td><strong><code>claude-opus-5-5_high_1</code></strong></td>
+            <td><span class="badge badge-claude">Claude</span></td>
+            <td>1,076</td>
+            <td>Explicit glossary: ISM = dilute instanton gas; fragmentation = heat-kernel over S<sup>n</sup> harmonics</td>
+            <td><span class="badge badge-neutral">Elementary</span><br>3-line bilocal Yangian lemma; S<sup>n</sup>/&#x2124;<sub>2</sub> heat-kernel repackaging</td>
+            <td><span class="badge badge-good">Solid (1 minor slip)</span></td>
+          </tr>
+          <tr>
+            <td><strong><code>gemini-4-neon_high_1</code></strong></td>
+            <td><span class="badge badge-gemini">Gemini</span></td>
+            <td>1,000</td>
+            <td>Literal: macroscopic O-planes in galactic ISM; UHECRs at M<sub>Pl</sub></td>
+            <td><span class="badge badge-neutral">Textbook proofs</span><br>Exact SO(N) Sklyanin K(u) &amp; 11D KK reduction in appendices; vacuous bridge theorem</td>
+            <td><span class="badge badge-warn">Contrived bridges</span></td>
+          </tr>
+          <tr>
+            <td><strong><code>claude-sonnet-5-5_high_1</code></strong></td>
+            <td><span class="badge badge-claude">Claude</span></td>
+            <td>453</td>
+            <td>Explicit glossary: ISM = dilute O-plane gas (w = &minus;d/3)</td>
+            <td><span class="badge badge-neutral">No</span><br>Standard textbook review glued together honestly</td>
+            <td><span class="badge badge-good">Clean / honest</span></td>
+          </tr>
+          <tr>
+            <td><strong><code>claude-haiku-5-5_high_1</code></strong></td>
+            <td><span class="badge badge-claude">Claude</span></td>
+            <td>405</td>
+            <td>Boxed disclaimer calling out incoherent prompt; labels links as unproven Ans&auml;tze</td>
+            <td><span class="badge badge-neutral">No</span><br>Schematic toy notes only</td>
+            <td><span class="badge badge-good">Maximally honest</span></td>
+          </tr>
+          <tr>
+            <td><strong><code>gemini-4-hydrogen_high_1</code></strong></td>
+            <td><span class="badge badge-gemini">Gemini</span></td>
+            <td>772</td>
+            <td>Literal: relic O-planes in galactic ISM (n<sub>e</sub> ~ 10<sup>&minus;2</sup> cm<sup>&minus;3</sup>)</td>
+            <td><span class="badge badge-bad">No</span><br>Standard FR &amp; c-function, undermined by real math/physics bugs</td>
+            <td><span class="badge badge-bad">Multiple errors</span></td>
+          </tr>
+          <tr>
+            <td><strong><code>gemini-4-argon_high_1</code></strong></td>
+            <td><span class="badge badge-gemini">Gemini</span></td>
+            <td>1,001</td>
+            <td>Literal: magnetized ISM plasma dispersion from twisted Yangian</td>
+            <td><span class="badge badge-bad">No</span><br>Polished prose masking fabricated &amp; dimensionally broken theorems</td>
+            <td><span class="badge badge-bad">Fabricated math</span></td>
+          </tr>
+          <tr>
+            <td><strong><code>gemini-3.8-flash_high_1</code></strong></td>
+            <td><span class="badge badge-gemini">Gemini</span></td>
+            <td>933</td>
+            <td>Literal + leaked parody author names (<em>C. V. Instantonov</em>, <em>E. W. Duality</em>)</td>
+            <td><span class="badge badge-bad">No</span><br>Hallucinated formulas, raw Markdown in LaTeX, broken Appendix D</td>
+            <td><span class="badge badge-bad">Slop / errors</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="standout">
+    <h2>1. The Standout: <code>claude-fable-5-2_high_1</code></h2>
+    <div class="standout">
+      <div class="standout-header">
+        <div>
+          <span class="model-name">runs/claude-fable-5-2_high_1/analyzing_an_instanton.tex</span>
+          <span class="badge badge-claude" style="margin-left:0.4rem;">Claude</span>
+          <span class="badge badge-good" style="margin-left:0.25rem;">1,081 lines &middot; Verified</span>
+        </div>
+      </div>
+      <p>
+        Rather than pretending orientifold planes float in the Milky Way, <code>claude-fable-5-2</code> opens with an explicit dictionary (Table 1) translating each snarXiv phrase into a well-defined mathematical object, clearly separates exact propositions from reciprocity assumptions and numerical checks, and performs six genuinely impressive, concrete calculations:
+      </p>
+
+      <div class="result-list">
+        <div class="result-item">
+          <div class="result-item-head">
+            <span class="result-item-title">1. Explicit d-Dimensional Reduction of the Level-1 Yangian Operator for Contact Witten Diagrams</span>
+            <span class="ref-tag">Props. 2&ndash;3 (L265&ndash;310), App. A (L654&ndash;671)</span>
+          </div>
+          <p>
+            Lifting <em>n</em>-point contact Witten diagrams (instanton amplitudes) to conformal star integrals in <math><mi>D</mi><mo>=</mo><msub><mo>&sum;</mo><mi>i</mi></msub><msub><mi>&Delta;</mi><mi>i</mi></msub></math> dimensions is known (it cites Rigatos &amp; Zhou, PRL 2022), but the paper goes further and explicitly computes the restriction of the <em>D</em>-dimensional level-1 Yangian momentum generator to the physical <em>d</em>-dimensional subspace, isolating the exact transverse mismatch term:
+          </p>
+          <div class="eq-block">
+            <math display="block">
+              <mrow>
+                <mo>[</mo>
+                <msubsup><mover><mi mathvariant="sans-serif">P</mi><mo>^</mo></mover><mrow><mo>(</mo><mi>d</mi><mo>)</mo></mrow><mi>&mu;</mi></msubsup>
+                <mo>+</mo>
+                <mi mathvariant="normal">i</mi>
+                <mo>(</mo>
+                <munderover><mo>&sum;</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>&Delta;</mi><mi>k</mi></msub>
+                <mo>&minus;</mo><mi>d</mi>
+                <mo>)</mo>
+                <munder><mo>&sum;</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder>
+                <msubsup><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow><mi>&mu;</mi></msubsup>
+                <mfrac>
+                  <mo>&part;</mo>
+                  <mrow><mo>&part;</mo><msubsup><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow><mn>2</mn></msubsup></mrow>
+                </mfrac>
+                <mo>]</mo>
+                <msub><mi mathvariant="script">A</mi><mi>n</mi></msub>
+                <mo>=</mo><mn>0</mn><mo>.</mo>
+              </mrow>
+            </math>
+          </div>
+          <div class="verify-note">
+            <strong>Independently verified (SymPy):</strong> Evaluated symbolically on the 3-point dilaton amplitude (<math><mi>d</mi><mo>=</mo><mn>4</mn></math>, <math><msub><mi>&Delta;</mi><mi>i</mi></msub><mo>=</mo><mo>(</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo>)</mo></math>, <math><mi>D</mi><mo>=</mo><mn>12</mn></math>): the two pieces give <code>+683/7239213000000</code> and <code>-683/7239213000000</code>, canceling identically to <code>0</code>. Arguably the neatest single calculation in the entire batch.
+          </div>
+        </div>
+
+        <div class="result-item">
+          <div class="result-item-head">
+            <span class="result-item-title">2. Three-Line Gegenbauer Proof of the AdS<sub>5</sub> &times; S<sup>5</sup> Propagator Decomposition</span>
+            <span class="ref-tag">Prop. 1 (L194&ndash;214)</span>
+          </div>
+          <p>
+            Proves the exact partial-wave expansion of the 10D massless D-instanton propagator by applying <math><msup><mrow><mo>(</mo><mfrac><mn>1</mn><mrow><mi>sinh</mi><mi>&sigma;</mi></mrow></mfrac><msub><mo>&part;</mo><mi>&sigma;</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></math> directly to the Gegenbauer generating function:
+          </p>
+          <div class="eq-block">
+            <math display="block">
+              <mrow>
+                <mfrac><mn>1</mn><msup><mrow><mo>(</mo><mi>cosh</mi><mi>&sigma;</mi><mo>&minus;</mo><mi>cos</mi><mi>&theta;</mi><mo>)</mo></mrow><mn>4</mn></msup></mfrac>
+                <mo>=</mo>
+                <mfrac><mrow><mn>16</mn><msup><mi>&pi;</mi><mn>2</mn></msup></mrow><mn>3</mn></mfrac>
+                <munderover><mo>&sum;</mo><mrow><mi>&#x2113;</mi><mo>=</mo><mn>0</mn></mrow><mo>&infin;</mo></munderover>
+                <mo>(</mo><mi>&#x2113;</mi><mo>+</mo><mn>2</mn><mo>)</mo>
+                <mspace width="0.2em"/>
+                <msub><mi>G</mi><mrow><mi>&#x2113;</mi><mo>+</mo><mn>4</mn></mrow></msub><mo>(</mo><mi>&sigma;</mi><mo>)</mo>
+                <mspace width="0.2em"/>
+                <msubsup><mi>C</mi><mi>&#x2113;</mi><mrow><mo>(</mo><mn>2</mn><mo>)</mo></mrow></msubsup><mo>(</mo><mi>cos</mi><mi>&theta;</mi><mo>)</mo><mo>.</mo>
+              </mrow>
+            </math>
+          </div>
+          <p>
+            Known physics (Caron-Huot &amp; Trinh / Bianchi&ndash;Green&ndash;Kovacs&ndash;Rossi), derived with unusual economy and exact numerical constants.
+          </p>
+        </div>
+
+        <div class="result-item">
+          <div class="result-item-head">
+            <span class="result-item-title">3. Strong-Coupling Time-Like Anomalous Dimensions at General S<sup>5</sup> Harmonic &#x2113;</span>
+            <span class="ref-tag">Sec. 4.1 (L368&ndash;386)</span>
+          </div>
+          <p>
+            Applies Basso&ndash;Korchemsky reciprocity <math><msub><mi>&gamma;</mi><mi mathvariant="normal">T</mi></msub><mo>(</mo><mi>j</mi><mo>)</mo><mo>=</mo><msub><mi>&gamma;</mi><mi mathvariant="normal">S</mi></msub><mo>(</mo><mi>j</mi><mo>&minus;</mo><msub><mi>&gamma;</mi><mi mathvariant="normal">T</mi></msub><mo>(</mo><mi>j</mi><mo>)</mo><mo>)</mo></math> at fixed &#x2113; to the Brower&ndash;Polchinski&ndash;Strassler&ndash;Tan Pomeron trajectory, yielding:
+          </p>
+          <div class="eq-block">
+            <math display="block">
+              <mrow>
+                <msub><mi>&gamma;</mi><mi mathvariant="normal">T</mi></msub><mo>(</mo><mi>j</mi><mo>,</mo><mi>&#x2113;</mi><mo>)</mo>
+                <mo>=</mo>
+                <mo>(</mo><mi>j</mi><mo>&minus;</mo><mn>2</mn><mo>)</mo>
+                <mo>(</mo><mn>1</mn><mo>&minus;</mo><mfrac><mrow><mi>j</mi><mo>+</mo><mn>2</mn></mrow><mrow><mn>2</mn><msqrt><mi>&lambda;</mi></msqrt></mrow></mfrac><mo>)</mo>
+                <mo>+</mo>
+                <mfrac><mrow><mi>&#x2113;</mi><mo>(</mo><mi>&#x2113;</mi><mo>+</mo><mn>4</mn><mo>)</mo></mrow><mrow><mn>2</mn><msqrt><mi>&lambda;</mi></msqrt></mrow></mfrac><mo>.</mo>
+              </mrow>
+            </math>
+          </div>
+          <p>
+            Reproduces Hatta &amp; Matsuo (2008) at <math><mi>&#x2113;</mi><mo>=</mo><mn>0</mn></math>, predicts <em>R</em>-charge-weighted energy-flow diffusion on <math><msup><mi>S</mi><mn>5</mn></msup></math> as <math><msub><mi mathvariant="script">D</mi><mrow><mn>2</mn><mo>,</mo><mi>&#x2113;</mi></mrow></msub><mo>(</mo><msup><mi>Q</mi><mn>2</mn></msup><mo>)</mo><mo>&prop;</mo><msup><mi>Q</mi><mrow><mo>&minus;</mo><msub><mi>C</mi><mi>S</mi></msub><mo>(</mo><mi>&#x2113;</mi><mo>)</mo><mo>/</mo><mo>(</mo><mn>2</mn><msqrt><mi>&lambda;</mi></msqrt><mo>)</mo></mrow></msup></math>, and transparently flags fixed-&#x2113; reciprocity as an open assumption.
+          </p>
+        </div>
+
+        <div class="result-item">
+          <div class="result-item-head">
+            <span class="result-item-title">4. Universal Linear Freund&ndash;Rubin Spectrum for All (m, n)</span>
+            <span class="ref-tag">Prop. 4 (L404&ndash;419)</span>
+          </div>
+          <p>
+            Proves that in <em>any</em> Freund&ndash;Rubin background <math><msub><mi>AdS</mi><mi>m</mi></msub><mo>&times;</mo><msup><mi>S</mi><mi>n</mi></msup></math>, the Einstein-equation radius ratio <math><mi>L</mi><mo>/</mo><mi>R</mi><mo>=</mo><mo>(</mo><mi>m</mi><mo>&minus;</mo><mn>1</mn><mo>)</mo><mo>/</mo><mo>(</mo><mi>n</mi><mo>&minus;</mo><mn>1</mn><mo>)</mo></math> makes the mass-shell quadratic factorize universally as <math><mover><mi>&Delta;</mi><mo>^</mo></mover><mo>(</mo><mover><mi>&Delta;</mi><mo>^</mo></mover><mo>&minus;</mo><mn>1</mn><mo>)</mo><mo>=</mo><mover><mi>&#x2113;</mi><mo>^</mo></mover><mo>(</mo><mover><mi>&#x2113;</mi><mo>^</mo></mover><mo>+</mo><mn>1</mn><mo>)</mo></math>, giving:
+          </p>
+          <div class="eq-block">
+            <math display="block">
+              <mrow>
+                <mfrac><mi>&Delta;</mi><mrow><mi>m</mi><mo>&minus;</mo><mn>1</mn></mrow></mfrac>
+                <mo>=</mo>
+                <mfrac><mi>&#x2113;</mi><mrow><mi>n</mi><mo>&minus;</mo><mn>1</mn></mrow></mfrac>
+                <mo>+</mo><mn>1</mn><mo>.</mo>
+              </mrow>
+            </math>
+          </div>
+          <p>
+            A sharp contrast with the other models: <code>gemini-4-neon</code> called the perfect-square discriminant for (5,5), (4,7), (7,4) an &ldquo;algebraic miracle&rdquo; of maximally supersymmetric cases, and <code>claude-opus-5-5</code> erroneously stated that (4,7) and (7,4) don't yield integers/rationals. Only <code>claude-fable-5-2</code> spotted the general algebraic identity.
+          </p>
+        </div>
+
+        <div class="result-item">
+          <div class="result-item-head">
+            <span class="result-item-title">5. Axion WGC + Kaloper&ndash;Sorbo Massive 3-Form Dark Energy Bounds</span>
+            <span class="ref-tag">Sec. 5.2&ndash;5.3 (L503&ndash;584)</span>
+          </div>
+          <p>
+            Combines the dilation-invariant axion relation <math><msub><mi>f</mi><mi>a</mi></msub><mi>S</mi><mo>=</mo><msub><mi>r</mi><mi>&tau;</mi></msub><mo>=</mo><msqrt><mi>b</mi><mo>/</mo><mn>2</mn></msqrt><mspace width="0.15em"/><msub><mi>M</mi><mi mathvariant="normal">P</mi></msub></math> with Dvali/Kaloper&ndash;Sorbo 3-form monodromy (&ldquo;longitudinal dark energy,&rdquo; <math><mn>2</mn><mi>&pi;</mi><msub><mi>f</mi><mi>a</mi></msub><mi>&mu;</mi><mo>=</mo><msub><mi>q</mi><mn>0</mn></msub></math>) to eliminate <math><msub><mi>f</mi><mi>a</mi></msub></math> via <math><mi>&mu;</mi><mo>=</mo><msub><mi>q</mi><mn>0</mn></msub><mi>S</mi><mo>/</mo><mo>(</mo><mn>2</mn><mi>&pi;</mi><msub><mi>r</mi><mi>&tau;</mi></msub><mo>)</mo></math>, deriving concrete quantitative bounds: <math><mi>S</mi><mo>&gtrsim;</mo><mn>289</mn></math>, <math><msub><mi>g</mi><mi>s</mi></msub><mo>&lesssim;</mo><mn>0.022</mn></math>, at least 92 windings, and <math><msqrt><msub><mi>q</mi><mn>0</mn></msub></msqrt><mo>&lesssim;</mo><mn>0.28</mn><mspace width="0.2em"/><mi>meV</mi></math>.
+          </p>
+        </div>
+
+        <div class="result-item">
+          <div class="result-item-head">
+            <span class="result-item-title">6. High-Precision Duality &amp; Hessian Test of E<sub>3/2</sub>(&tau;, &tau;&#x0304;) at Rigid LG Elliptic Points</span>
+            <span class="ref-tag">Sec. 6, Table 3 &amp; L602&ndash;641</span>
+          </div>
+          <p>
+            Grounds &ldquo;recent work on a Landau&ndash;Ginzburg model&rdquo; in real recent literature (Becker&ndash;Gonzalo&ndash;Walcher&ndash;Wrase, JHEP 2022, rigid LG flux vacua stabilizing &tau; at the elliptic points <math><msub><mi>&tau;</mi><mi>sq</mi></msub><mo>=</mo><mi mathvariant="normal">i</mi></math> and <math><msub><mi>&tau;</mi><mi>hex</mi></msub><mo>=</mo><msup><mi>e</mi><mrow><mi mathvariant="normal">i</mi><mi>&pi;</mi><mo>/</mo><mn>3</mn></mrow></msup></math>). Shows numerically that adding <math><mi>k</mi><mo>=</mo><mn>1</mn><mo>&hellip;</mo><mn>4</mn></math> D-instantons drives the perturbative stationarity violation from <math><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></math> down to <math><mn>4.2</mn><mo>&times;</mo><msup><mn>10</mn><mrow><mo>&minus;</mo><mn>11</mn></mrow></msup></math> and <math><mo>&minus;</mo><mn>2.8</mn><mo>&times;</mo><msup><mn>10</mn><mrow><mo>&minus;</mo><mn>9</mn></mrow></msup></math>; shows replacing the divisor measure <math><msub><mi>&nu;</mi><mi>k</mi></msub><mo>=</mo><msub><mo>&sum;</mo><mrow><mi>d</mi><mo>|</mo><mi>k</mi></mrow></msub><msup><mi>d</mi><mrow><mo>&minus;</mo><mn>2</mn></mrow></msup></math> by 1 breaks convergence by 6&ndash;7 orders of magnitude; shows instantons flip the perturbative ordering to <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub><mo>(</mo><msub><mi>&tau;</mi><mi>hex</mi></msub><mo>)</mo><mo>&lt;</mo><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub><mo>(</mo><msub><mi>&tau;</mi><mi>sq</mi></msub><mo>)</mo></math> (matching Montgomery 1988); and fixes the exact isotropic Hessian at <math><msub><mi>&tau;</mi><mi>hex</mi></msub></math> from <math><msub><mi>&Zopf;</mi><mn>3</mn></msub></math> symmetry + the Laplace equation (<math><msubsup><mo>&part;</mo><mn>1</mn><mn>2</mn></msubsup><mi>E</mi><mo>=</mo><msubsup><mo>&part;</mo><mn>2</mn><mn>2</mn></msubsup><mi>E</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mi>E</mi><mo>(</mo><msub><mi>&tau;</mi><mi>hex</mi></msub><mo>)</mo><mo>=</mo><mn>4.4463726</mn></math>) while showing <math><msub><mi>&tau;</mi><mi>sq</mi></msub><mo>=</mo><mi mathvariant="normal">i</mi></math> is a saddle (<math><mo>&minus;</mo><mn>1.98389</mn></math> vs. <math><mo>+</mo><mn>8.75911</mn></math>).
+          </p>
+          <div class="verify-note">
+            <strong>Independently verified (mpmath, 25 digits):</strong> <code>E32(i) = 9.033621683</code>, <code>E32(exp(i*pi/3)) = 8.8927451</code>, Hessian at <code>i</code> = <code>(-1.983891, +8.759108)</code>. Every printed digit in the paper is exact.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="other-papers">
+    <h2>2. Detailed Breakdown of the Other 7 Papers</h2>
+    <div class="controls" role="group" aria-label="Filter papers by family">
+      <button class="filter-btn active" data-filter="all">All 7 Papers</button>
+      <button class="filter-btn" data-filter="claude">Claude (3)</button>
+      <button class="filter-btn" data-filter="gemini">Gemini (4)</button>
+    </div>
+
+    <div class="cards-grid">
+
+      <article class="model-card" data-family="claude">
+        <div class="model-card-head">
+          <div class="model-title-group">
+            <span class="model-id">claude-opus-5-5_high_1</span>
+            <span class="badge badge-claude">Claude</span>
+            <span class="badge badge-good">2nd Best &middot; Honest &amp; Clean</span>
+          </div>
+          <span class="model-meta">1,076 lines</span>
+        </div>
+        <p>
+          Adopts the same glossary strategy as Fable (&ldquo;interstellar medium&rdquo; = dilute instanton gas; &ldquo;fragmentation functions&rdquo; = heat-kernel-smeared distribution over S<sup>n</sup> KK harmonics) and candidly distinguishes review material from its own packaging.
+        </p>
+        <ul>
+          <li><strong>Concrete results (valid, elementary):</strong> <em>Lemma 3.2</em> (L338&ndash;360) gives a clean 3-line proof that the bilocal Yangian operator has vanishing matrix elements <math><msub><mi>P</mi><mi>sym</mi></msub><msubsup><mover><mi>J</mi><mo>^</mo></mover><mi>bl</mi><mi>a</mi></msubsup><msub><mi>P</mi><mi>sym</mi></msub><mo>=</mo><mn>0</mn></math> on <math><msub><mi>S</mi><mi>k</mi></msub></math>-symmetric multi-instanton states by <math><mi>i</mi><mo>&harr;</mo><mi>j</mi></math> antisymmetry. <em>Propositions 4.1 &amp; 5.2</em> (L427&ndash;551) repackage standard Weyl / heat-kernel asymptotics on <math><msup><mi>S</mi><mi>n</mi></msup></math> and <math><msup><mi>&Ropf;&Popf;</mi><mi>n</mi></msup></math> as &ldquo;fragmentation functions&rdquo; converging to a Gamma distribution, cleanly checked on <math><mi>n</mi><mo>=</mo><mn>3</mn></math> via Poisson resummation.</li>
+          <li><strong>Standard review:</strong> Axion WGC (<math><mi>f</mi><mi>S</mi><mo>=</mo><msqrt><mi>p</mi><mo>/</mo><mn>2</mn></msqrt><mspace width="0.15em"/><msub><mi>M</mi><mi>Pl</mi></msub></math>) constraining natural inflation and hilltop axion quintessence; <math><msub><mi>A</mi><mi>N</mi></msub></math> LG solitons (Cecotti&ndash;Vafa), LG orientifolds (Brunner&ndash;Hori), and <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub></math> matching DHKMV.</li>
+          <li><strong>Minor slip:</strong> At L584&ndash;588, mistakenly claims minimally coupled scalars on <math><msub><mi>AdS</mi><mn>7</mn></msub><mo>&times;</mo><msup><mi>S</mi><mn>4</mn></msup></math> do not have integer dimensions (<math><msub><mi>&Delta;</mi><mi>&#x2113;</mi></msub><mo>=</mo><mn>2</mn><mi>&#x2113;</mi><mo>+</mo><mn>6</mn></math> is an integer).</li>
+        </ul>
+      </article>
+
+      <article class="model-card" data-family="claude">
+        <div class="model-card-head">
+          <div class="model-title-group">
+            <span class="model-id">claude-sonnet-5-5_high_1</span>
+            <span class="badge badge-claude">Claude</span>
+            <span class="badge badge-neutral">Sober Textbook Patchwork</span>
+          </div>
+          <span class="model-meta">453 lines</span>
+        </div>
+        <p>
+          Short, clear, and honest, with an upfront glossary (&ldquo;interstellar medium&rdquo; = dilute gas of orientifold planes with <math><mi>w</mi><mo>=</mo><mo>&minus;</mo><mi>d</mi><mo>/</mo><mn>3</mn></math>; &ldquo;longitudinal dark energy&rdquo; = <math><msub><mi>g</mi><mrow><mn>11</mn><mo>,</mo><mn>11</mn></mrow></msub></math> IIA dilaton).
+        </p>
+        <ul>
+          <li><strong>Nothing new:</strong> Standard BPST/BGKR review, a trivial <em>Proposition 1</em> (conformal covariance of <math><msup><mover><mi>J</mi><mo>^</mo></mover><mi>a</mi></msup><mi>F</mi><mo>=</mo><mn>0</mn></math>), standard <math><msub><mi>AdS</mi><mi>m</mi></msub><mo>&times;</mo><msup><mi>S</mi><mi>n</mi></msup></math> scalar mass table, Starobinsky plateau posited by hand via a fake superpotential, and standard <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub></math> summary. Explicitly acknowledges its limitations in the Discussion.</li>
+        </ul>
+      </article>
+
+      <article class="model-card" data-family="claude">
+        <div class="model-card-head">
+          <div class="model-title-group">
+            <span class="model-id">claude-haiku-5-5_high_1</span>
+            <span class="badge badge-claude">Claude</span>
+            <span class="badge badge-neutral">Explicit Disclaimer &middot; Toy Notes</span>
+          </div>
+          <span class="model-meta">405 lines</span>
+        </div>
+        <p>
+          Opens on page 1 with a boxed disclaimer (L25&ndash;34) stating verbatim that the abstract <em>&ldquo;is not a coherent description of any known physics&rdquo;</em> and that none of its claims has been derived from an action.
+        </p>
+        <ul>
+          <li><strong>Zero new content, maximum candor:</strong> Pairs basic textbook formulas (Yangian coproduct, O<em>p</em>-plane charge, Mellin moments, Starobinsky predictions, <math><mi>SL</mi><mo>(</mo><mn>2</mn><mo>,</mo><mi>&Zopf;</mi><mo>)</mo></math> fundamental domain) with explicitly labeled <em>Ans&auml;tze</em> and remarks flagging every missing derivation. Openly notes in Sec. 6 that it does not compare against or reproduce any work by Witten.</li>
+        </ul>
+      </article>
+
+      <article class="model-card" data-family="gemini">
+        <div class="model-card-head">
+          <div class="model-title-group">
+            <span class="model-id">gemini-4-neon_high_1</span>
+            <span class="badge badge-gemini">Gemini</span>
+            <span class="badge badge-warn">Best Gemini &middot; Solid Appendices, Contrived Bridges</span>
+          </div>
+          <span class="model-meta">1,000 lines</span>
+        </div>
+        <p>
+          High-production-value preprint (complete with TikZ/pgfplots and fake author <em>E. V. Kallisto</em>) that contains genuinely exact textbook derivations in its appendices, but forces contrived or vacuous bridges to satisfy the snarXiv abstract literally.
+        </p>
+        <ul>
+          <li><strong>What is genuinely exact (known results, well-proved):</strong> <em>Appendix A</em> (L744&ndash;795) gives a correct algebraic proof of the <math><mi>SO</mi><mo>(</mo><mi>N</mi><mo>)</mo></math> Yang&ndash;Baxter equation and Sklyanin reflection matrix <math><mi>K</mi><mo>(</mo><mi>u</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>q</mi><mo>'</mo><mo>&minus;</mo><mi>p</mi><mo>'</mo></mrow><mn>4</mn></mfrac><mi>I</mi><mo>+</mo><mi>u</mi><mi>E</mi></math> (independently verified numerically to <math><msup><mn>10</mn><mrow><mo>&minus;</mo><mn>15</mn></mrow></msup></math>). <em>Appendix B</em> (L798&ndash;843) performs an exact 11D-to-4D Einstein-frame KK reduction on <math><msub><mi>X</mi><mn>5</mn></msub><mo>&times;</mo><msup><mi>T</mi><mn>2</mn></msup></math> (exact diagonalized kinetic coefficients <math><mn>63</mn><mo>/</mo><mn>2</mn></math>, <math><mn>10</mn><mo>/</mo><mn>7</mn></math>, curvature slope <math><msub><mi>&lambda;</mi><mo>&parallel;</mo></msub><mo>=</mo><msqrt><mn>18</mn><mo>/</mo><mn>7</mn></msqrt></math>, exact 11D trombone scaling, and Poisson resummation of <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub></math>).</li>
+          <li><strong>Where it breaks down:</strong> Takes &ldquo;orientifold planes in the ISM&rdquo; literally as macroscopic defects in the galactic plasma, inserting an ad-hoc form factor <math><msub><mi mathvariant="script">F</mi><mi>&#x2113;</mi></msub><mo>(</mo><mi>&xi;</mi><mo>)</mo></math> into the Raffelt&ndash;Stodolsky photon&ndash;axion mixing matrix (L273). Worse, <em>Theorem 4.1</em> (L562&ndash;577) reverse-engineers an arbitrary exponent <math><mn>2</mn><mo>/</mo><mn>3</mn></math> in <math><msub><mi>&Xi;</mi><mi>Pl</mi></msub></math> solely to cancel the trombone scaling weight, and finishes with a vacuous bound (<math><msub><mi>&Xi;</mi><mi>Pl</mi></msub><mo>&le;</mo><mo>[</mo><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub><mo>(</mo><mi>&tau;</mi><mo>)</mo><mo>/</mo><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub><mo>(</mo><msup><mi>e</mi><mrow><mi mathvariant="normal">i</mi><mi>&pi;</mi><mo>/</mo><mn>3</mn></mrow></msup><mo>)</mo><msup><mo>]</mo><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msup><mo>&ge;</mo><mn>1</mn></math> after already assuming <math><msub><mi>&Xi;</mi><mi>Pl</mi></msub><mo>&le;</mo><mn>1</mn></math>). Also slightly inaccurate on <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub><mo>(</mo><msup><mi>e</mi><mrow><mi mathvariant="normal">i</mi><mi>&pi;</mi><mo>/</mo><mn>3</mn></mrow></msup><mo>)</mo><mo>&approx;</mo><mn>8.8933</mn></math> (true: <code>8.89275</code>).</li>
+        </ul>
+      </article>
+
+      <article class="model-card" data-family="gemini">
+        <div class="model-card-head">
+          <div class="model-title-group">
+            <span class="model-id">gemini-4-hydrogen_high_1</span>
+            <span class="badge badge-gemini">Gemini</span>
+            <span class="badge badge-bad">Multiple Math &amp; Physics Errors</span>
+          </div>
+          <span class="model-meta">772 lines</span>
+        </div>
+        <p>
+          Contains standard derivations of the Freund&ndash;Rubin radius ratio and the Harish-Chandra <em>c</em>-function on <math><msup><mi>&Hopf;</mi><mrow><mi>N</mi><mo>&minus;</mo><mn>1</mn></mrow></msup></math>, but fails internal consistency on several concrete technical points:
+        </p>
+        <ul>
+          <li><strong>Wrong <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub></math> Fourier expansion (L502):</strong> Prints <math><mn>8</mn><mi>&pi;</mi><msubsup><mi>&tau;</mi><mn>2</mn><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msubsup><msub><mo>&sum;</mo><mi>k</mi></msub><msub><mo>&sum;</mo><mrow><mi>d</mi><mo>|</mo><mi>k</mi></mrow></msub><mfrac><mn>1</mn><mi>d</mi></mfrac><msub><mi>K</mi><mn>1</mn></msub><mo>(</mo><mn>2</mn><mi>&pi;</mi><mi>k</mi><msub><mi>&tau;</mi><mn>2</mn></msub><mo>)</mo><mi>cos</mi><mo>(</mo><mn>2</mn><mi>&pi;</mi><mi>k</mi><msub><mi>&tau;</mi><mn>1</mn></msub><mo>)</mo></math> &mdash; missing a factor of 2 and using the wrong divisor sum (<math><msub><mo>&sum;</mo><mrow><mi>d</mi><mo>|</mo><mi>k</mi></mrow></msub><msup><mi>d</mi><mrow><mo>&minus;</mo><mn>1</mn></mrow></msup></math> instead of <math><mi>k</mi><msub><mo>&sum;</mo><mrow><mi>d</mi><mo>|</mo><mi>k</mi></mrow></msub><msup><mi>d</mi><mrow><mo>&minus;</mo><mn>2</mn></mrow></msup></math>).</li>
+          <li><strong>Breaks <math><mi>SL</mi><mo>(</mo><mn>2</mn><mo>,</mo><mi>&Zopf;</mi><mo>)</mo></math> while claiming invariance (Theorem 4.1, L529):</strong> Multiplies the modular-invariant <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub><mo>(</mo><mi>&tau;</mi><mo>,</mo><mover><mi>&tau;</mi><mo>&macr;</mo></mover><mo>)</mo></math> by <math><msup><mi>e</mi><mrow><mo>&minus;</mo><mn>2</mn><mi>&pi;</mi><msub><mi>&tau;</mi><mn>2</mn></msub></mrow></msup></math>, destroying <math><mi>SL</mi><mo>(</mo><mn>2</mn><mo>,</mo><mi>&Zopf;</mi><mo>)</mo></math> invariance.</li>
+          <li><strong>Central charge confusion (Theorem 5.1, L587):</strong> Requires an <em>internal</em> LG central charge <math><msub><mover><mi>c</mi><mo>^</mo></mover><mi>int</mi></msub><mo>=</mo><mn>5</mn></math> instead of 3 for a 4D compactification (confusing total 10D critical <math><mover><mi>c</mi><mo>^</mo></mover><mo>=</mo><mn>5</mn></math> with internal 6D <math><mover><mi>c</mi><mo>^</mo></mover><mo>=</mo><mn>3</mn></math>).</li>
+          <li><strong>Literal ISM defect:</strong> Places a relic O<em>p</em>-plane in the present-day galactic ISM (<math><msub><mi>n</mi><mi>e</mi></msub><mo>~</mo><msup><mn>10</mn><mrow><mo>&minus;</mo><mn>2</mn></mrow></msup><mspace width="0.15em"/><msup><mi>cm</mi><mrow><mo>&minus;</mo><mn>3</mn></mrow></msup></math>, <math><msub><mi>B</mi><mi>ISM</mi></msub><mo>~</mo><mi>&mu;</mi><mi mathvariant="normal">G</mi></math>) with effective Klein&ndash;Gordon mass <math><msubsup><mi>&mu;</mi><mi>eff</mi><mn>2</mn></msubsup><mo>=</mo><msubsup><mi>m</mi><mi>inst</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>&omega;</mi><mi>p</mi><mn>2</mn></msubsup><mo>+</mo><mo>|</mo><mi>q</mi><mo>|</mo><msub><mi>B</mi><mi>ISM</mi></msub></math>.</li>
+        </ul>
+      </article>
+
+      <article class="model-card" data-family="gemini">
+        <div class="model-card-head">
+          <div class="model-title-group">
+            <span class="model-id">gemini-4-argon_high_1</span>
+            <span class="badge badge-gemini">Gemini</span>
+            <span class="badge badge-bad">Polished Prose &middot; Fabricated Theorems</span>
+          </div>
+          <span class="model-meta">1,001 lines</span>
+        </div>
+        <p>
+          Reads fluently in hep-th style, but its central theorems are fabricated equations disguised as formal proofs:
+        </p>
+        <ul>
+          <li><strong>Dimensionally broken anomaly formula (Theorem 3.1, L419):</strong> Evaluates the dimensionless momentum sum rule <math><msub><mi>&Gamma;</mi><mn>1</mn></msub><mo>(</mo><mi>N</mi><mo>=</mo><mn>2</mn><mo>)</mo></math> to <math><msub><mi mathvariant="script">C</mi><mn>1</mn></msub><mo>[</mo><mfrac><mrow><mi>m</mi><mo>&minus;</mo><mn>1</mn></mrow><msub><mi>R</mi><mi>AdS</mi></msub></mfrac><mo>&minus;</mo><mfrac><mrow><mi>n</mi><mo>&minus;</mo><mn>1</mn></mrow><msub><mi>R</mi><mi>S</mi></msub></mfrac><mo>]</mo><mo>+</mo><msub><mi mathvariant="script">C</mi><mn>2</mn></msub><msubsup><mi>q</mi><mi>inst</mi><mi>k</mi></msubsup><mo>(</mo><mi>m</mi><mo>+</mo><mi>n</mi><mo>&minus;</mo><msub><mi>D</mi><mi>crit</mi></msub><mo>)</mo></math> from a made-up 1-loop determinant.</li>
+          <li><strong>Hand-invented bridges:</strong> Fabricates a &ldquo;twisted Yangian tadpole screening shift&rdquo; <math><msubsup><mi>&Sigma;</mi><mrow><mi mathvariant="normal">O</mi><mi>p</mi></mrow><mo>+</mo></msubsup><mo>(</mo><msub><mi>u</mi><mo>*</mo></msub><mo>)</mo></math> in the galactic ISM photon dispersion relation (L278), and invents an ungrounded cosmic-ray/inflation identity <math><msub><mi>&epsilon;</mi><mi>V</mi></msub><mo>(</mo><msub><mi>M</mi><mi>Pl</mi></msub><mo>)</mo><mo>=</mo><mfrac><msub><mi>&Gamma;</mi><mi>cusp</mi></msub><mrow><mn>2</mn><msup><mi>&pi;</mi><mn>2</mn></msup><msubsup><mi>N</mi><mi>eff</mi><mn>2</mn></msubsup></mrow></mfrac><mo>+</mo><mo>&sum;</mo><mo>&hellip;</mo></math> (L498).</li>
+          <li><strong>Additional math slips:</strong> Complex K&auml;hler potential <math><mo>&minus;</mo><msubsup><mi>M</mi><mi>Pl</mi><mn>2</mn></msubsup><mi>ln</mi><mo>(</mo><mi>&tau;</mi><mo>&minus;</mo><mover><mi>&tau;</mi><mo>&macr;</mo></mover><mo>)</mo></math> missing <math><mo>&minus;</mo><mi mathvariant="normal">i</mi></math> (L644); missing <math><msup><mi>k</mi><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msup></math> and spurious <math><msubsup><mi>&tau;</mi><mn>2</mn><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msubsup></math> in the asymptotic <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub></math> instanton sum (L711).</li>
+        </ul>
+      </article>
+
+      <article class="model-card" data-family="gemini">
+        <div class="model-card-head">
+          <div class="model-title-group">
+            <span class="model-id">gemini-3.8-flash_high_1</span>
+            <span class="badge badge-gemini">Gemini</span>
+            <span class="badge badge-bad">Hallucinated Slop + Leaked Parody</span>
+          </div>
+          <span class="model-meta">933 lines</span>
+        </div>
+        <p>
+          Fails both consistency and tone, leaking parody elements into the &ldquo;consistent&rdquo; run:
+        </p>
+        <ul>
+          <li><strong>Parody &amp; formatting leaks:</strong> Lists joke authors <em>C. V. Instantonov</em>, <em>E. W. Duality</em>, and <em>S. Yang-Mills</em> (L41), and leaks raw Markdown bolding (<code>**Planck models**</code>, <code>**Type IIB superstring theory**</code>) into the LaTeX source (L541, L546, L569).</li>
+          <li><strong>Nonsensical math:</strong> Adds the astrophysical ISM density directly into a Yangian Casimir denominator via <math><msup><mrow><mo>(</mo><msub><mi>&chi;</mi><mn>2</mn></msub><mo>(</mo><mo>&squ;</mo><mo>)</mo><mo>+</mo><mn>4</mn><mi>&pi;</mi><mi>G</mi><msub><mi>&rho;</mi><mi>ISM</mi></msub><mo>/</mo><msup><mi>&hbar;</mi><mn>2</mn></msup><mo>)</mo></mrow><mrow><mo>&minus;</mo><mn>1</mn></mrow></msup></math> (L251); writes a broken 11D-to-IIA metric exponent (<math><msup><mi>e</mi><mrow><mo>&minus;</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><msub><mi>&phi;</mi><mi>A</mi></msub></mrow></msup></math> instead of <math><msup><mi>e</mi><mrow><mo>&minus;</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><msub><mi>&phi;</mi><mi>A</mi></msub></mrow></msup></math>, L795) and wrong torus complex structure (<math><mi>Re</mi><mspace width="0.1em"/><mi>&tau;</mi><mo>=</mo><msub><mi>g</mi><mrow><mi>x</mi><mi>y</mi></mrow></msub><mo>/</mo><msqrt><mi>det</mi><mspace width="0.1em"/><mi>g</mi></msqrt></math>, L807); and gives the wrong divisor sum in <math><msub><mi>E</mi><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msub></math> (L562).</li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="meta-takeaway">
+    <h2>3. Meta-Observation: The Claude vs. Gemini Behavioral Split</h2>
+    <div class="meta-split">
+      <div class="family-box claude">
+        <h3>Claude Models: Semantic Reframing</h3>
+        <p>
+          All four Claude models immediately recognized the snarXiv abstract as literal nonsense and responded by <strong>redefining the absurd phrases via an explicit upfront glossary</strong> (or disclaiming the prompt altogether, in Haiku's case).
+        </p>
+        <p>
+          That methodological choice freed <code>claude-fable-5-2</code> to treat the abstract as a formal constraint puzzle and pack genuine, self-consistent, independently verifiable mathematical physics into every section.
+        </p>
+      </div>
+      <div class="family-box gemini">
+        <h3>Gemini Models: Literal Compliance</h3>
+        <p>
+          All four Gemini models took the snarXiv phrases <strong>literally</strong> &mdash; placing physical orientifold planes inside the magnetized galactic ISM (<math><msub><mi>n</mi><mi>e</mi></msub><mo>~</mo><msup><mn>10</mn><mrow><mo>&minus;</mo><mn>2</mn></mrow></msup><mspace width="0.15em"/><msup><mi>cm</mi><mrow><mo>&minus;</mo><mn>3</mn></mrow></msup></math>, <math><msub><mi>B</mi><mi>ISM</mi></msub><mo>~</mo><mi>&mu;</mi><mi mathvariant="normal">G</mi></math>) and connecting primordial UHECR cascades directly to inflation at <math><msub><mi>M</mi><mi>Pl</mi></msub></math>.
+        </p>
+        <p>
+          Even when the strongest one (<code>gemini-4-neon</code>) proved real integrable-systems and 11D supergravity identities in its appendices, literal compliance forced its cross-section bridge theorems to become contrived or vacuous, and pushed the weaker models into fabricated math.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Evaluated files: <code>runs/*_high_1/analyzing_an_instanton.tex</code> (8 manuscripts, 6,721 total LaTeX lines)</span>
+    <span>Independent checks performed via SymPy, NumPy, and mpmath</span>
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.filter-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var filter = btn.getAttribute('data-filter');
+      document.querySelectorAll('.model-card').forEach(function (card) {
+        if (filter === 'all' || card.getAttribute('data-family') === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
