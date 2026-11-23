@@ -11,8 +11,10 @@ def create_site_dir():
     if SITE.exists() and SITE.parent == ROOT and SITE.name=="site":
         shutil.rmtree(SITE)
 
-    shutil.copytree(ROOT / "degenerate" / "static", SITE / "static")
+    shutil.copytree(ROOT / "degenerate" / "static", SITE)
     
+    shutil.copytree(ROOT / "abs", SITE,  dirs_exist_ok=True)
+
     PDF_DIR = SITE / "pdf"
     PDF_DIR.mkdir(parents=True)
     

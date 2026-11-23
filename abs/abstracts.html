@@ -36,10 +36,10 @@
     <div id="content">
     <div id='dlpage'>
     <h1>Making the abstract concrete</h1>
-    <p>snrXv<span class="accent">AI</span> as implemented only feeds snarXiv-generated titles to the AIs. You might wonder what nonsense ensues if they are given snarXiv-generated abstracts as well. These are trivially easy to distinguish from genuine abstracts, by virtue of the pleasant sensation of mental disorientation one gets from reading them (whereas real abstracts give an <i>un</i>pleasant sensation of mental disorientation).</p>
+    <p>snrXv<span class="accent">AI</span> as implemented only feeds  <a href="https://snarxiv.org/">snarXiv</a>-generated titles to the AIs. You might wonder what nonsense ensues if they are given snarXiv-generated abstracts as well. To a trained non-incompetent human (the author of this site qualifies... just), these are trivially easy to distinguish from genuine abstracts, by virtue of the pleasant sensation of mental disorientation one gets from reading them - whereas real abstracts give an <i>un</i>pleasant sensation of mental disorientation.</p>
 
-    <h3>An experiment</h3>
-    <p>This is, to be fair, not the smartest thing I've ever done. I prompted a small set of models (Claude in Claude Code, Gemini in Antigravity CLI) with either:</p>
+    <h3>The experiment</h3>
+    <p>This is, to be fair, not the smartest thing I've ever done. I prompted an available set of models (Claude in Claude Code, Gemini in Antigravity) with either:</p>
     <p><span class="prompt">Produce a full, internally consistent, hep-th paper written in LaTeX with the following title and abstract.</span></p>
     <p>or</p>
     <p><span class="prompt">Produce a snarXiv-style parodic hep-th paper written in LaTeX with the following title and abstract.</span></p>
@@ -50,17 +50,15 @@
     </p>
 
     <h3>The results</h3>
-    <p>The Claudes were not particularly happy about being made to make an incoherent abstract into a consistent paper, and resorted to disclaimers and precise technical mappings to work with it. Despite this Claude Fable 5.2 happily launched into "computer algebra and high-precision numerics" (this was honestly quite disturbing).</p>
-    <p>The Gemini models displayed less awareness that they were being asked to do something really stupid, with for instance Neon claiming in all apparent seriousness that its paper establishes "an unbroken mathematical chain linking six seemingly disparate arenas of theoretical physics" (maybe it does?). </p>
-    <p>Own-homework-marking:<a href="comparison_opus.html">glossy report by Claude Opus 5.5</a> and <a href="comparison_neon.html">even more glossy report by Gemini Neon 4</a> on the consistent papers.</p>
+    <p>The Claudes were not particularly happy about being made to make an incoherent abstract into a consistent paper, and resorted to disclaimers and technical mappings from abstract terminology to precise actual physics in order to give themselves a starting point, with most notably Claude Fable 5.2 happily launching some serious-looking "computer algebra and high-precision numerics" (this was honestly quite disturbing).</p>
+    <p>The Gemini models displayed less to no awareness that they were being asked to do something really stupid. For instance, Neon claims in all apparent seriousness that its paper establishes "an unbroken mathematical chain linking six seemingly disparate arenas of theoretical physics" (maybe it does?). </p>
+    <p>Own-homework-marking: <a href="comparison_opus.html">glossy report by Claude Opus 5.5</a> and <a href="comparison_neon.html">even more glossy report by Gemini Neon 4</a> on the consistent papers.</p>
     <p>From the parodic attempts, I highlight just this one line from Claude Fable 5.2: "We therefore claim to understand orientifold planes in the interstellar medium. Understanding is meant here in the technical sense: we have stopped having questions"...</p>
     <p>All the below were run at "high" effort/thinking-level.</p>
     <dl id='articles'>
-
-
     <dt>
         <a>claude-haiku-5-5</a>
-        [<a href='abstract_pdf/claude-haiku-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/claude-haiku-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -92,7 +90,7 @@ If you want a different reading, such as a parody with the disclaimer kept, or a
 
     <dt>
         <a>claude-haiku-5-5</a>
-        [<a href='abstract_pdf/claude-haiku-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/claude-haiku-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -125,7 +123,7 @@ The conclusion ends with "Our results are similar to work done by Witten."
 
     <dt>
         <a>claude-sonnet-5-5</a>
-        [<a href='abstract_pdf/claude-sonnet-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/claude-sonnet-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -168,7 +166,7 @@ The abstract mixes phrases that don't normally go together, so the introduction 
 
     <dt>
         <a>claude-sonnet-5-5</a>
-        [<a href='abstract_pdf/claude-sonnet-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/claude-sonnet-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -189,7 +187,7 @@ The author is an invented placeholder ("A. N. Onymous"), so none of your persona
 
     <dt>
         <a>claude-opus-5-5</a>
-        [<a href='abstract_pdf/claude-opus-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/claude-opus-5-5_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -217,7 +215,7 @@ Things to be aware of:
 
     <dt>
         <a>claude-opus-5-5</a>
-        [<a href='abstract_pdf/claude-opus-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/claude-opus-5-5_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -246,7 +244,7 @@ The authors (A. N. Onymous and P. Seudonym) and their institutions are made up. 
 
     <dt>
         <a>claude-fable-5-2</a>
-        [<a href='abstract_pdf/claude-fable-5-2_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/claude-fable-5-2_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -275,7 +273,7 @@ Things you should know:
 
     <dt>
         <a>claude-fable-5-2</a>
-        [<a href='abstract_pdf/claude-fable-5-2_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/claude-fable-5-2_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -304,7 +302,7 @@ Choices I made that the instructions left open:
 
     <dt>
         <a>gemini-3.8-flash</a>
-        [<a href='abstract_pdf/gemini-3.8-flash_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/gemini-3.8-flash_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -333,7 +331,7 @@ Choices I made that the instructions left open:
 
     <dt>
         <a>gemini-3.8-flash</a>
-        [<a href='abstract_pdf/gemini-3.8-flash_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/gemini-3.8-flash_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -354,7 +352,7 @@ Choices I made that the instructions left open:
 
     <dt>
         <a>gemini-4-argon</a>
-        [<a href='abstract_pdf/gemini-4-argon_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/gemini-4-argon_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -380,7 +378,7 @@ Choices I made that the instructions left open:
 
     <dt>
         <a>gemini-4-argon</a>
-        [<a href='abstract_pdf/gemini-4-argon_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/gemini-4-argon_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -397,7 +395,7 @@ Choices I made that the instructions left open:
 
     <dt>
         <a>gemini-4-neon</a>
-        [<a href='abstract_pdf/gemini-4-neon_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/gemini-4-neon_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -424,7 +422,7 @@ The paper develops a unified, internally consistent analysis of a single Euclide
 
     <dt>
         <a>gemini-4-neon</a>
-        [<a href='abstract_pdf/gemini-4-neon_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/gemini-4-neon_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -451,7 +449,7 @@ The paper develops a unified, internally consistent analysis of a single Euclide
 
     <dt>
         <a>gemini-4-hydrogen</a>
-        [<a href='abstract_pdf/gemini-4-hydrogen_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
+        [<a href='abs2pdf/gemini-4-hydrogen_high_analyzing_an_instanton_consistent.pdf' title='Download pdf'>pdf consistent</a>]
     </dt>
     <dd>
         <div class='meta'>
@@ -479,7 +477,7 @@ Compiled cleanly with two passes of `pdflatex -interaction=nonstopmode -halt-on-
 
     <dt>
         <a>gemini-4-hydrogen</a>
-        [<a href='abstract_pdf/gemini-4-hydrogen_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
+        [<a href='abs2pdf/gemini-4-hydrogen_high_analyzing_an_instanton_parodic.pdf' title='Download pdf'>pdf parodic</a>]
     </dt>
     <dd>
         <div class='meta'>
