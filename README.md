@@ -32,15 +32,15 @@ Other command line options:
 | `-P` | `--paid` | int | 2 | Number of paid models to use (only applies with `budget` model choice) |
 | `-S` | `--schedule` | flag | off | Apply scheduling logic, for remote automated runs. Cannot be used with other options |
 
-Preliminary scheduling is:
+Example preliminary scheduling (subject to revision):
 
 | Day | Papers | Collaborations | Max authors per paper | Distinct titles | Models  |  Paid models |
 |-----|---------------|----------------|--------------------|--------|---------------|-------------|
-| Mon | 6 | 1 | 2 | 6 | budget | 1 |
-| Tue | 4 | 1 | 2 | 4 | free | - |
-| Wed | 4 | 1 | 2 | 1 | budget | 2 |
-| Thu | 4 | 1 | 2 | 4 | free | - |
-| Fri | 4 | 1 | 2 | 4 | budget | 2 |
+| Mon | 5 | 1 | 2 | 5 | budget | 1 |
+| Tue | 5 | 1 | 2 | 5 | free | - |
+| Wed | 5 | 1 | 2 | 1 | budget | 3 |
+| Thu | 5 | 1 | 2 | 5 | free | - |
+| Fri | 5 | 1 | 2 | 5 | budget | 2 |
 | Sat/Sun | have a good weekend! | | | | | |
 
 **Export the paper listing to HTML** 
