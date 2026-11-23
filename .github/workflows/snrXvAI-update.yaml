@@ -1,5 +1,7 @@
 name: snrXvAI-update
-  
+concurrency:
+  group: snrxvai
+  cancel-in-progress: false
 # Controls when the workflow will run
 on:
   workflow_dispatch: # manual
@@ -12,14 +14,17 @@ on:
           - free
           - budget
           - all
+          - schedule
         default: dev
+  schedule:
+    - cron: '17 1 * * 1-5' # 01:17 UTC Mon-Fri 
 
 permissions:
   contents: read   
 
 # jobs
 jobs:
-  build:
+  build: # Build 
     runs-on: ubuntu-26.04
     timeout-minutes: 45
     steps:
@@ -48,7 +53,12 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           MODELS: ${{ inputs.models }}
         id: generate
-        run: python -m degenerate.main -M "${MODELS:-budget}"
+        run: |
+          if [ "${MODELS:-schedule}" = schedule ]; then
+            python -m degenerate.main -S
+          else
+            python -m degenerate.main -M "$MODELS"
+          fi
       - name: Upload failure logs
         if: ${{ !cancelled() && hashFiles('failed/errors.json') != '' }}
         uses: actions/upload-artifact@v4
@@ -63,8 +73,7 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: site/
-  # Deploy job
-  deploy:
+  deploy: # Deploy site if build finished
     needs: build
     if: github.event_name == 'schedule' || inputs.models != 'dev'
     permissions:

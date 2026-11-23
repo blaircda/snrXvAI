@@ -1,62 +1,59 @@
-import time, random
+import time, random, traceback
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 from degenerate.registry import PROVIDERS
 from degenerate.compile import make_paper, make_full_source, check_source
 from degenerate.prompts import make_user_prompt, SYS_PROMPT
 
-def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_paper_authors=2):
+def create_jobs(timestamp, list_of_models, list_of_titles, paper_struct):
     """
     Assigns titles to models
 
     Parameters
     ------
+    timestamp used to get YYMM part of paper id
     list_of_models list of dict
     list_of_titles list of str
-    Npapers number of papers to build
-    Ncollab number of collaborative papers
-    max_paper_authors max number of models on a single paper
+    list paper_struct list of ints specifying number of authors per paper
     
     Returns
     ------
     list of dicts
         where each dict has keys
-        author_model, title, job_id
-    """
-    # restrict max_paper_authors to the number of available models
-    if max_paper_authors > len(list_of_models):
-        max_paper_authors = len(list_of_models)
-        
-    # get the titles we'll use
-    # if passing only 1 title, then all will be given the same title
-    if Npapers > len(list_of_titles):
-        titles = random.choices(list_of_titles, k=Npapers)
+        job_id, title, stages
+        and stages is a list of dicts with keys model, version for collaborative papers
+    """    
+    # if less titles than papers, make the title list longer by resampling from the original enough times
+    if len(list_of_titles) < len(paper_struct):
+        titles = list_of_titles + random.choices(list_of_titles, k = len(paper_struct) - len(list_of_titles))
     else:
-        titles = random.sample(list_of_titles, Npapers)
-
-    # assign flags to say which papers are collaborative
-    if Ncollab < Npapers:
-        flags = [True]*Ncollab + [False]*(Npapers - Ncollab)
-        random.shuffle(flags)
-    else:
-        flags= [True]*Ncollab
-    # if Ncollab > Npapers just take them all to be collaborative without raising
-
+        titles = list(list_of_titles)
+    
     # record jobs as a list
     jobs = []
-
     # generate paper ids
-    YYMM = time.strftime("%y%m", time.localtime())
+    YYMM = time.strftime("%y%m", timestamp)
     XXXXX = random.randint(60000, 90000) # arXiv ids are up to ~40000 as of 2610 so start higher than that
 
     def format_id(X): # format to 5 digits if allowing any ids
         return "0"*(5-len(str(X)))+str(X)
 
-    for title, is_collab in zip(titles, flags): 
-        if is_collab:
-            n_collabs = random.randint(2, max_collabs)
-        else:
-            n_collabs = 1
-        models = random.sample(list_of_models, n_collabs)
+    # assign models to papers
+    # try to avoid having the same model twice on a collaboration
+    for N in range(20):
+        pool = list(list_of_models) 
+        random.shuffle(pool)
+        paper_authors = []
+        for nauthors in paper_struct:
+            models = []
+            for k in range(nauthors):
+                models.append(pool.pop())
+            paper_authors.append(models)
+        if all( len({m["name"] for m in p}) == len(p) for p in paper_authors):
+            break
+    else:
+        print("Unable to assign models to collaborations without duplicates - keeping last attempt")
+        
+    for models, title in zip(paper_authors, titles):
         stages = [ {"model": models[0], "version": "initial"} ] + [{"model":m, "version": "revision"} for m in models[1:]]
         papername = YYMM+"."+format_id(XXXXX)
         job_info = {
