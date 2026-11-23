@@ -18,7 +18,7 @@ In `degenerate/grammar`:
 
 `python3 -m degenerate.main -N 5 -C 1`
 
-Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. The successes are outputted to a new directory `papers/` and their details saved in `degenerate/listing.json`. The details of the failures are saved as `failed/errors.json` along with the offending .tex and .log files if available.
+Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. The successes are outputted to a new directory `papers/` and their details saved in `degenerate/listing.json`. Failure details go in `failed/`: this is a file `errors.json` along with the offending .tex and .log files if available.
 
 Other command line options:
 
@@ -48,7 +48,7 @@ Example preliminary scheduling (subject to revision):
 `python3 -m degenerate.publish`
 
 This creates `site/index.html` with associated `site/style.css` and `site/about.html`, with the pdf files in `site/pdf`.
-The export also publishes the results of an experiment using snarXiv title AND abstract to the website - these are the files in the directory `abs`.
+It also copies over the results of a static experiment degenerating papers based on a snarXiv title AND abstract - these are the files in the directory `abs`.
 
 **Publish the website using GitHub Pages**
 
