@@ -20,17 +20,28 @@ In `degenerate/grammar`:
 
 Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. The successes are outputted to a new directory `papers/` and their details saved in `degenerate/listing.json`. The details of the failures are saved as `failed/errors.json` along with the offending .tex and .log files if available.
 
-Other command line options (default of "none ($k$)" means the value $k$ is set internally):
+Other command line options:
 
 | Option | Long form | Type | Default | Description |
 |--------|-----------|------|---------|-------------|
-| `-N` | `--Npapers` | int | none (3) | Number of papers to generate |
-| `-C` | `--Ncollabs` | int | none (0) | Number of collaborative papers to generate|
-| `-A` | `--max_paper_authors` | int | none (2) | Maximum number of "authors" per paper |
+| `-N` | `--Npapers` | int | 3 | Number of papers to generate |
+| `-C` | `--Ncollabs` | int | 0 |Number of collaborative papers to generate|
+| `-A` | `--max_paper_authors` | int | 2 | Maximum number of "authors" per paper |
 | `-T` | `--single_title` | flag | off | Generate only one title, shared by all papers |
-| `-M` | `--models` | choice | none (2) | Model set to use: `all`, `dev`, `free` or `budget` |
-| `-P` | `--paid` | int | none | Number of paid models to use (with `budget` model choice) |
+| `-M` | `--models` | choice | `budget` | Model set to use: `all`, `dev`, `free` or `budget` |
+| `-P` | `--paid` | int | 2 | Number of paid models to use (only applies with `budget` model choice) |
 | `-S` | `--schedule` | flag | off | Apply scheduling logic, for remote automated runs. Cannot be used with other options |
+
+Preliminary scheduling is:
+
+| Day | Papers | Collaborations | Max authors per paper | Distinct titles | Models  |  Paid models |
+|-----|---------------|----------------|--------------------|--------|---------------|-------------|
+| Mon | 6 | 1 | 2 | 6 | budget | 1 |
+| Tue | 4 | 1 | 2 | 4 | free | - |
+| Wed | 4 | 1 | 2 | 1 | budget | 2 |
+| Thu | 4 | 1 | 2 | 4 | free | - |
+| Fri | 4 | 1 | 2 | 4 | budget | 2 |
+| Sat/Sun | have a good weekend! | | | | | |
 
 **Export the paper listing to HTML** 
 
