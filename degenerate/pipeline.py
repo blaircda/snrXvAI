@@ -4,7 +4,7 @@ from degenerate.registry import PROVIDERS
 from degenerate.compile import make_paper, make_full_source, check_source
 from degenerate.prompts import make_user_prompt, SYS_PROMPT
 
-def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_collabs=2):
+def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_paper_authors=2):
     """
     Assigns titles to models
 
@@ -14,7 +14,7 @@ def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_collabs=2)
     list_of_titles list of str
     Npapers number of papers to build
     Ncollab number of collaborative papers
-    max_collabs max number of models on a single paper
+    max_paper_authors max number of models on a single paper
     
     Returns
     ------
@@ -22,9 +22,9 @@ def create_jobs(list_of_models, list_of_titles, Npapers, Ncollab, max_collabs=2)
         where each dict has keys
         author_model, title, job_id
     """
-    # restrict max_collabs to the number of available models
-    if max_collabs > len(list_of_models):
-        max_collabs = len(list_of_models)
+    # restrict max_paper_authors to the number of available models
+    if max_paper_authors > len(list_of_models):
+        max_paper_authors = len(list_of_models)
         
     # get the titles we'll use
     # if passing only 1 title, then all will be given the same title
@@ -86,7 +86,7 @@ def process_paper(job):
         r = adapter(model, SYS_PROMPT, prompt)
         if not (r["output"] or "").strip():
             raise OutputError(f"Empty output for {job['job_id']} with model {model['name']}")
-        source = check_source(r["output"])
+        source = check_source(r["output"], job['job_id'])
         output_tokens += r.get("output_tokens",0)
         thought_tokens += r.get("thought_tokens",0) 
         paper_authors.append(model["display_name"])
@@ -121,6 +121,11 @@ def run_processes(jobs):
             job["error"] = str(e)
             failures.append(job)
             #failures.append( (job, str(e)) )
+       except Exception as e: # anything unanticipated
+            job["error"] = f"Unexpected {type(e).__name__}: {e}"
+            job["traceback"] = traceback.format_exc()
+            print(f"Unexpected error in {job['job_id']}: {type(e).__name__}")
+            failures.append(job)
         else:
             result.pop("error", None)
             results.append(result)

@@ -2,15 +2,17 @@ name: snrXvAI-update
   
 # Controls when the workflow will run
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  workflow_dispatch: # manual
     inputs:
-      Npapers:
-        type: number
-        default: 1
-      Ncollabs: 
-        type: number
-        default: 0
+      models:
+        description: Which models to use
+        type: choice
+        options:
+          - dev
+          - free
+          - budget
+          - all
+        default: dev
 
 permissions:
   contents: read   
@@ -46,15 +48,26 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           NPAPERS: ${{ inputs.npapers || 5}}
           NCOLLABS: ${{ inputs.ncollabs || 1}}
-        run: |
-          python -m degenerate.main -N "$NPAPERS" -C "$NCOLLABS"
-          python -m degenerate.publish
-      - uses: actions/upload-pages-artifact@v5
+        id: generate
+        run: run: python -m degenerate.main -M "${MODELS:-budget}"
+      - name: Upload failure logs
+        if: ${{ !cancelled() && hashFiles('failed/errors.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-logs
+          path: |
+            failed/
+          retention-days: 7
+      - name: Publish listings
+        run: python -m degenerate.publish
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v5
         with:
           path: site/
   # Deploy job
   deploy:
     needs: build
+    if: github.event_name == 'schedule' || inputs.models != 'dev'
     permissions:
       pages: write      
       id-token: write   

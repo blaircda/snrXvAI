@@ -3,6 +3,11 @@ tex/
 papers/
 log.txt
 degenerate/*.json
+degenerate/grammar/*.ml
+degenerate/grammar/*.cmi
+degenerate/grammar/*.cmo
+degenerate/grammar/title_generator
+failed/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
