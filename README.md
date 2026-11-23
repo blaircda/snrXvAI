@@ -53,3 +53,7 @@ It also copies over the results of a static experiment degenerating papers based
 **Publish the website using GitHub Pages**
 
 Using a GitHub workflow, the resulting site is exported to [snrXvAI](https://blaircda.github.io/snrXvAI/)
+
+## Acknowledgements
+
+The snarXiv is of course the original and far more creative, correct and useful work of David Simmons-Duffin.
