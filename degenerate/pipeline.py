@@ -39,20 +39,22 @@ def create_jobs(timestamp, list_of_models, list_of_titles, paper_struct):
 
     # assign models to papers
     # try to avoid having the same model twice on a collaboration
-    for N in range(20):
-        pool = list(list_of_models) 
-        random.shuffle(pool)
-        paper_authors = []
-        for nauthors in paper_struct:
-            models = []
-            for k in range(nauthors):
-                models.append(pool.pop())
-            paper_authors.append(models)
-        if all( len({m["name"] for m in p}) == len(p) for p in paper_authors):
-            break
-    else:
-        print("Unable to assign models to collaborations without duplicates - keeping last attempt")
+    pool = list(list_of_models) 
+    paper_authors = []
+    for nauthors in paper_struct:
+        authors = []
+        for k in range(nauthors):
+            cands = [x for x in pool if x not in authors]
+            if cands:
+                pick = random.choice(cands)
+                authors.append(pick)
+            else:
+                print("Unable to avoid duplicate models on a collaboration")
+                pick = random.choice(pool)
+            pool.remove(pick) 
+        paper_authors.append(authors)
         
+    random.shuffle(paper_authors)
     for models, title in zip(paper_authors, titles):
         stages = [ {"model": models[0], "version": "initial"} ] + [{"model":m, "version": "revision"} for m in models[1:]]
         papername = YYMM+"."+format_id(XXXXX)

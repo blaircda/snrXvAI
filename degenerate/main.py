@@ -97,16 +97,9 @@ def plan_papers(Npapers, Ncollabs, max_paper_authors):
 
     returns a list whose length is Npapers and whose sum is the total number of authors
     """
-    # assign flags to say which papers are collaborative
-    if Ncollabs < Npapers:
-        flags = [True]*Ncollabs + [False]*(Npapers - Ncollabs)
-        random.shuffle(flags)
-    else:
-        flags= [True]*Ncollabs
-
     paper_authors = []
     for k in range(Npapers):
-        if flags[k]:
+        if k < Ncollabs:
             paper_authors.append(random.randint(2, max_paper_authors))
         else:
             paper_authors.append(1)
