@@ -76,7 +76,7 @@ def schedule_settings(timestamp):
         model_choice = "budget"
         Npaid = 1
     elif day == 1 or day == 3: # Tuesdays and Thursdays
-        Npapers, Ncollabs, max_paper_authors, Ntitles = 5, 1, 2, 5
+        Npapers, Ncollabs, max_paper_authors, Ntitles = 6, 1, 2, 6
         model_choice = "free"
     elif day == 2: # Wednesdays
         Npapers, Ncollabs, max_paper_authors, Ntitles = 5, 1, 2, 5
