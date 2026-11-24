@@ -17,7 +17,7 @@ on:
           - schedule
         default: dev
   schedule:
-    - cron: '17 1 * * 1-5' # 01:17 UTC Mon-Fri 
+    - cron: '23 1 * * 1-5' # 01:17 UTC Mon-Fri 
 
 permissions:
   contents: read   

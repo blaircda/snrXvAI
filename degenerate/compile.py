@@ -1,46 +1,109 @@
-import shutil, subprocess, tempfile, os, signal, re
+import shutil, subprocess, tempfile, os, signal, re, random
 from pathlib import Path
 from degenerate.errors import OutputError
 
-PREAMBLE = """
-\\documentclass[11pt]{article}
-\\usepackage[a4paper,top=2cm,left=2.5cm,right=2.5cm,bottom=2cm]{geometry}
-\\usepackage[dvipsnames]{xcolor}
-\\usepackage{amssymb,amsfonts,amsmath,amsthm}
-\\usepackage{cite}
-\\usepackage{hyperref}
-\\usepackage{microtype}
-\\usepackage{setspace}
-\\onehalfspacing
-\\numberwithin{equation}{section}
-\\usepackage{tikz}
-\\usetikzlibrary{positioning, calc, arrows.meta}
-\\theoremstyle{plain}
-\\newtheorem{theorem}{Theorem}[section]
-\\newtheorem{lemma}[theorem]{Lemma}
-\\newtheorem{proposition}[theorem]{Proposition}
-\\newtheorem{corollary}[theorem]{Corollary}
-\\newtheorem{conjecture}[theorem]{Conjecture}
-\\theoremstyle{definition}
-\\newtheorem{definition}[theorem]{Definition}
-\\newtheorem{example}[theorem]{Example}
-\\theoremstyle{remark}
-\\newtheorem{remark}[theorem]{Remark}
-\\newcommand\\customtitle[4]{\\begin{center}
-\\baselineskip=2em
-\\vspace{-5cm}
-\\hfill {\\ttfamily snrXvAI:#3}
-\\vskip 0.5em
-{\\LARGE \\bf  
+PREAMBLE_A = r"""
+\documentclass[11pt]{article}
+\usepackage[a4paper,top=2cm,left=2.5cm,right=2.5cm,bottom=2cm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{setspace}
+\onehalfspacing
+\numberwithin{equation}{section}
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc, arrows.meta}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand\customtitle[4]{\begin{center}
+\baselineskip=2em
+\vspace{-5cm}
+\hfill {\ttfamily snrXvAI:#3}
+\vskip 0.5em
+{\LARGE \bf  
 #1
 }
-\\vskip 2em
-{\\large \\bf #2}
-\\vskip 0.5em
-{\\it #4}
-\\vskip 0.5em 
-\\end{center}
+\vskip 2em
+{\large \bf #2}
+\vskip 0.5em
+{\it #4}
+\vskip 0.5em 
+\end{center}
 }
+"""
+
+PREAMBLE_B = r"""\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{cite, hyperref}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{setspace}
+\numberwithin{equation}{section}
+\onehalfspacing
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc, arrows.meta}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\customtitle}[4]{%
+  \begin{center}
+    {\small \hfill \ttfamily snrXvAI:#3}\\[0.4em]
+    \hrule\vspace{1.2em}
+    {\LARGE\bfseries #1\par}\vspace{1em}
+    {\large #2\par}\vspace{1em}
+    {\large #4\par}\vspace{1em}
+    \hrule\vspace{1.5em}
+  \end{center}}
+"""
+
+PREAMBLE_C = r"""\documentclass[12pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{cite, hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc, arrows.meta}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\customtitle}[4]{%
+\hfill {\ttfamily snrXvAI:#3}
+  \begin{center}
+    {\Large\sffamily\bfseries #1\par}\vspace{0.8em}
+    {\normalsize #2\par}\vspace{0.4em}
+    {\footnotesize\itshape #4\par}\vspace{1em}
+  \end{center}}
 """
 
 def save_failure(source, papername, reason):
@@ -48,7 +111,6 @@ def save_failure(source, papername, reason):
     failures_dir.mkdir(parents=True, exist_ok=True)
     with open(failures_dir / f"{papername}_{reason}.tex","w", encoding="utf-8") as f:
         f.write(source) 
-
 
 def check_source(source, papername):
     """
@@ -80,13 +142,14 @@ def check_source(source, papername):
 
 def make_full_source(source, title, paper_authors, job_id):
 
+    PREAMBLE = random.choice([PREAMBLE_A, PREAMBLE_B, PREAMBLE_C])
     source = check_source(source, job_id)
-
+    
     full_source = PREAMBLE
 
     authors = ', '.join(paper_authors)
     #full_source = PREAMBLE+f"\n\\title{{\\bf {title}}}\n\\author{{{authors}}}"+"\n\\begin{document}\n\\maketitle"+source+"\n\\end{document}"
-    full_source = PREAMBLE+"\n\\begin{document}\n"+f"\n\\customtitle{{{title}}}{{{authors}}}{{{job_id}}}"+"{snrXv\\color{red}AI\\color{black}}"+source+"\n\\end{document}"
+    full_source = PREAMBLE+"\n\\begin{document}\n"+f"\n\\customtitle{{{title}}}{{{authors}}}{{{job_id}}}"+"{snrXv\\color{red}AI\\color{black}}\n\n\n"+source+"\n\\end{document}"
     # extract abstract
     start_abs = "\\begin{abstract}"
     end_abs = "\\end{abstract}"

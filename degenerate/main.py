@@ -38,7 +38,7 @@ def main(timestamp, paper_struct, Ntitles, models):
     parse_timestamp = time.strftime("%Y-%m-%d %H:%M:%S", timestamp)
 
     if to_retry:
-        time.sleep(60) 
+        time.sleep(120) 
         retry_results, retry_failures, retry_retry =  run_processes(to_retry)
         results.extend(retry_results)
         failures.extend(retry_failures+retry_retry)

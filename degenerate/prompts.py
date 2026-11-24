@@ -15,7 +15,7 @@ The preamble imports the following packages:
 The preamble also defines these environments: theorem, lemma, proposition, corollary, conjecture, definition, example, remark (and proof from amsthm).
 Do not use other theorem-like environments unless you first declare them with \newtheorem.
 Do not write any further packages into the file, and do not use \input, \include, \includegraphics, or \write to add content. 
-Begin your output with an abstract enclosed by `\begin{abstract}` and `\end{abstract}`, followed by the body of the paper.
+Begin your output with an abstract enclosed by `\begin{abstract}` and `\end{abstract}`, optionally followed by \tableofcontents, followed by the main text of the paper.
 Use an inline bibliography enclosed by `\begin{thebibliography}` and `\end{thebibliography}'.
 Output only LaTeX source and nothing else. Do not enclose the LaTeX source in any markdown.
 """
