@@ -89,7 +89,7 @@ def process_paper(job):
         output_tokens += r.get("output_tokens",0)
         thought_tokens += r.get("thought_tokens",0)
         display_name = model["display_name"]
-        if model["options"]["effort"] is not None:
+        if model["options"].get("effort") is not None:
             display_name += " ("+model["options"]["effort"]+")"
         paper_authors.append(display_name)
 
