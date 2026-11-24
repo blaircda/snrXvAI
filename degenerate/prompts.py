@@ -14,8 +14,9 @@ The preamble imports the following packages:
     xcolor (with dvipsnames), amssymb, amsfonts, amsmath, amsthm, cite, hyperref, tikz (with these libraries: positioning, calc, arrows.meta)
 The preamble also defines these environments: theorem, lemma, proposition, corollary, conjecture, definition, example, remark (and proof from amsthm).
 Do not use other theorem-like environments unless you first declare them with \newtheorem.
-Do not write any further packages into the file, and do not use \input, \include, \includegraphics, or \write to add content. 
+This means that you should NOT use \documentclass or \begin{document} or define a preamble.
 Begin your output with an abstract enclosed by `\begin{abstract}` and `\end{abstract}`, optionally followed by \tableofcontents, followed by the main text of the paper.
+Do not write any further packages into the file, and do not use \input, \include, \includegraphics, or \write to add content. 
 Use an inline bibliography enclosed by `\begin{thebibliography}` and `\end{thebibliography}'.
 Output only LaTeX source and nothing else. Do not enclose the LaTeX source in any markdown.
 """

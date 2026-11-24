@@ -2,10 +2,7 @@ import shutil, subprocess, tempfile, os, signal, re, random
 from pathlib import Path
 from degenerate.errors import OutputError
 
-PREAMBLE_A = r"""
-\documentclass[11pt]{article}
-\usepackage[a4paper,top=2cm,left=2.5cm,right=2.5cm,bottom=2cm]{geometry}
-\usepackage[dvipsnames]{xcolor}
+common_packages = r"""\usepackage[dvipsnames]{xcolor}
 \usepackage{amssymb,amsfonts,amsmath,amsthm}
 \usepackage{cite}
 \usepackage{hyperref}
@@ -26,7 +23,11 @@ PREAMBLE_A = r"""
 \newtheorem{example}[theorem]{Example}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
-\newcommand\customtitle[4]{\begin{center}
+"""
+
+PREAMBLE_A = r"""
+\documentclass[11pt]{article}
+\usepackage[a4paper,top=2cm,left=2.5cm,right=2.5cm,bottom=2cm]{geometry}""" + common_packages + r"""\newcommand\customtitle[4]{\begin{center}
 \baselineskip=2em
 \vspace{-5cm}
 \hfill {\ttfamily snrXvAI:#3}
@@ -37,35 +38,14 @@ PREAMBLE_A = r"""
 \vskip 2em
 {\large \bf #2}
 \vskip 0.5em
-{\it #4}
+{#4}
 \vskip 0.5em 
 \end{center}
 }
 """
 
 PREAMBLE_B = r"""\documentclass[11pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage{amssymb,amsfonts,amsmath,amsthm}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{cite, hyperref}
-\usepackage[margin=1.25in]{geometry}
-\usepackage{setspace}
-\numberwithin{equation}{section}
-\onehalfspacing
-\usepackage{tikz}
-\usetikzlibrary{positioning, calc, arrows.meta}
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-\newcommand{\customtitle}[4]{%
+\usepackage[margin=1.25in]{geometry}""" +common_packages +r"""\newcommand{\customtitle}[4]{%
   \begin{center}
     {\small \hfill \ttfamily snrXvAI:#3}\\[0.4em]
     \hrule\vspace{1.2em}
@@ -77,27 +57,9 @@ PREAMBLE_B = r"""\documentclass[11pt,a4paper]{article}
 """
 
 PREAMBLE_C = r"""\documentclass[12pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage[dvipsnames]{xcolor}
 \usepackage[margin=1in]{geometry}
-\usepackage{cite, hyperref}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{1em}
-\usepackage{tikz}
-\usetikzlibrary{positioning, calc, arrows.meta}
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-\newcommand{\customtitle}[4]{%
+\setlength{\parskip}{1em}""" + common_packages + r"""\newcommand{\customtitle}[4]{%
 \hfill {\ttfamily snrXvAI:#3}
   \begin{center}
     {\Large\sffamily\bfseries #1\par}\vspace{0.8em}

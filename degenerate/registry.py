@@ -38,9 +38,8 @@ OPENROUTER_FREE_MODELS = [
     {"name": "google/gemma-4-31b-it:free", "provider": "openrouter", "display_name": "Google Gemma 4 31B (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
     {"name": "nvidia/nemotron-3.5-super-vl:free", "provider": "openrouter", "display_name": "NVIDIA Nemotron 3.5 Super VL (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
     {"name": "nvidia/nemotron-3-ultra-550b-a55b:free", "provider": "openrouter", "display_name": "NVIDIA Nemotron 3 Ultra (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "inclusionai/ling-3.2-flash:free", "provider": "openrouter", "display_name": "inclusionAI Ling 3.2 Flash (free)", "options": {"effort": "low", "max_output_tokens": 100000}},
+    {"name": "inclusionai/ling-3.2-flash:free", "provider": "openrouter", "display_name": "inclusionAI Ling 3.2 Flash (free)", "options": {"effort": "low", "max_output_tokens": 262144}},
     {"name": "recursive/flint-v1.0:free", "provider": "openrouter", "display_name": "Recursive Flint (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "liquid/lfm-3-1.7b:free", "provider": "openrouter", "display_name": "LiquidAI LFM3-1.7B (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},      
 ]
 
 OPENROUTER_PAID_MODELS = [
@@ -50,6 +49,7 @@ OPENROUTER_PAID_MODELS = [
     {"name": "qwen/qwen4-max", "provider": "openrouter", "display_name": "Qwen4 Max (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
     {"name": "deepseek/deepseek-v4-pro-0813", "provider": "openrouter", "display_name": "DeepSeek V4 Pro 0813 (low)", "options": {"effort": "high", "max_output_tokens": 40000}},
     {"name": "deepseek/deepseek-v4-pro-0813", "provider": "openrouter", "display_name": "DeepSeek V4 Pro 0813 (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
+    {"name": "z-ai/glm-5.3", "provider": "openrouter", "display_name": "Zai GLM 5.3 (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
 ]
 
 FREE_MODELS = OPENROUTER_FREE_MODELS

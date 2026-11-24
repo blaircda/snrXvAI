@@ -64,7 +64,7 @@ generalspacetype ::= surface | line | hyperplane | hypersurface
 properspacename ::= Anti de Sitter Space | de Sitter Space | Taub-NUT Space | superspace
 
 mathspace ::= $AdS_<n>$ | $S^<n>$ | $R^<n>$ | $CY_<n>$ | $C^<n>$
-            | $dS_<n> | $T^<n>$ | $<mathspace_bare> \times <mathspace_bare>$ | $P^<n>$
+            | $dS_<n>$ | $T^<n>$ | $<mathspace_bare> \times <mathspace_bare>$ | $P^<n>$
             
 mathspace_bare ::= AdS_<n> | S^<n> | R^<n> | CY_<n> | C^<n>
             | dS_<n> | T^<n> | <mathspace_bare> \times <mathspace_bare> | P^<n>
