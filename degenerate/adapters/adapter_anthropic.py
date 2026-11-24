@@ -1,7 +1,8 @@
 import anthropic, os
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
+from degenerate.paths import FAILED_DIR
 
-def call_anthropic(model, sys_input, txt_input):
+def call_anthropic(model, sys_input, txt_input, call_id=None):
     """
     Wraps a simple prompt of an Anthropic model
     """
@@ -42,9 +43,13 @@ def call_anthropic(model, sys_input, txt_input):
     output_tokens = response.usage.output_tokens
 
     if status != "end_turn":
-        # to do: log failure interactions
-        # interaction.to_dict()
-        #print(interaction.to_json())
+        
+        FAILED_DIR.mkdir(exist_ok=True)
+        (FAILED_DIR / f"{call_id}_response.json").write_text(
+            response.model_dump_json(indent=2, exclude_none=True),
+            encoding="utf-8",
+        )
+        
         raise OutputError(f"Anthropic stop reason {status}, total output tokens {output_tokens}")
 
     output = ""

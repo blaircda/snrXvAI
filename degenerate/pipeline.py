@@ -82,7 +82,7 @@ def process_paper(job):
         model = stage["model"]
         adapter = PROVIDERS[model["provider"]]
         prompt = make_user_prompt(stage["version"], title, source)
-        r = adapter(model, SYS_PROMPT, prompt)
+        r = adapter(model, SYS_PROMPT, prompt, call_id = job['job_id'])
         if not (r["output"] or "").strip():
             raise OutputError(f"Empty output for {job['job_id']} with model {model['name']}")
         source = check_source(r["output"], job['job_id'])

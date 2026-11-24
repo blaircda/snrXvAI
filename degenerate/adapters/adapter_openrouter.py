@@ -1,7 +1,8 @@
 import openai, os
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
+from degenerate.paths import FAILED_DIR
 
-def call_openrouter(model, sys_input, txt_input):
+def call_openrouter(model, sys_input, txt_input, call_id=None):
     """
     Wraps a simple prompt of a model delivered via OpenRouter
     Uses the openai SDK
@@ -46,6 +47,13 @@ def call_openrouter(model, sys_input, txt_input):
     output_tokens = response.usage.output_tokens
 
     if status != "completed":
+
+        FAILED_DIR.mkdir(exist_ok=True)
+        (FAILED_DIR / f"{call_id}_response.json").write_text(
+            response.model_dump_json(indent=2, exclude_none=True),
+            encoding="utf-8",
+        )
+
         if response.incomplete_details:
             reason = response.incomplete_details.reason
         elif response.error:

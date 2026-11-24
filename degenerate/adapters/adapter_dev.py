@@ -1,6 +1,6 @@
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 
-def call_example(model, sys_input, txt_input, max_output_tokens=20000):
+def call_example(model, sys_input, txt_input,  call_id=None):
     """
     For development purposes
     """

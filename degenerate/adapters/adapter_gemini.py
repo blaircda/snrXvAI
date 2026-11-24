@@ -2,8 +2,9 @@ import os
 from google import genai
 from google.genai import _interactions_errors as gerr
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
+from degenerate.paths import FAILED_DIR
 
-def call_gemini(model, sys_input, txt_input):
+def call_gemini(model, sys_input, txt_input, call_id=None):
     """
     Wraps a simple prompt of a Gemini model
     """    
@@ -47,9 +48,11 @@ def call_gemini(model, sys_input, txt_input):
     output_tokens = interaction.usage.total_output_tokens
 
     if status != "completed":
-        # to do: log failure interactions
-        # interaction.to_dict()
-        #print(interaction.to_json())
+        FAILED_DIR.mkdir(exist_ok=True)
+        (FAILED_DIR / f"{call_id}_response.json").write_text(
+            interaction.model_dump_json(indent=2, exclude_none=True),
+            encoding="utf-8",
+        )
         raise OutputError(f"Gemini status {status}, thought tokens {thought_tokens}, total tokens {output_tokens}")
         
     response = {
