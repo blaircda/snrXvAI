@@ -10,7 +10,7 @@ def call_openrouter(model, sys_input, txt_input):
         raise ConfigError("OPENROUTER_API_KEY not set")
 
     options = model.get("options", {}) 
-    effort = options.get("effort", "medium")
+    effort = options.get("effort")
     max_output_tokens = options.get("max_output_tokens", 20000)
     
     # gets API Key from environment variable OPENROUTER_API_KEY
@@ -18,15 +18,19 @@ def call_openrouter(model, sys_input, txt_input):
       base_url="https://openrouter.ai/api/v1",
       api_key=os.getenv("OPENROUTER_API_KEY"),
     )
-    
+
+    kwargs = {
+        "model": model["name"],
+        "input": txt_input,
+        "instructions": sys_input,
+        "max_output_tokens": max_output_tokens,
+    }
+
+    if effort is not None:
+        kwargs["reasoning"] ={"effort": effort}
+
     try:
-        response = client.responses.create(
-            model = model["name"],
-            input = txt_input,
-            instructions = sys_input,
-            max_output_tokens = max_output_tokens,
-            reasoning={"effort": effort}
-        )
+        response = client.responses.create(**kwargs )
     except (openai.BadRequestError, openai.AuthenticationError, openai.PermissionDeniedError, openai.NotFoundError) as e:
         # 400, 401, 403, 404
         raise ConfigError(f"OpenAI {type(e).__name__}: {e}") from e

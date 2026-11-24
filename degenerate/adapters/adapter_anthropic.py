@@ -9,18 +9,22 @@ def call_anthropic(model, sys_input, txt_input):
         raise ConfigError("ANTHROPIC_API_KEY not set")
 
     options = model.get("options", {}) 
-    effort = options.get("effort", "medium")
+    effort = options.get("effort")
     max_output_tokens = options.get("max_output_tokens", 20000)
     
     client = anthropic.Anthropic()
+
+    kwargs = {
+        "model":  model["name"],
+        "system": sys_input,
+        "max_tokens": max_output_tokens,
+        "messages":[{"role": "user", "content": txt_input}],
+    }
+    if effort is not None:
+        kwargs["output_config"] = {"effort": effort}
+
     try:
-        with client.messages.stream(
-            model = model["name"],
-            system = sys_input,
-            max_tokens=max_output_tokens,
-            messages=[{"role": "user", "content": txt_input}],
-            output_config = { "effort": effort}
-        ) as stream:
+        with client.messages.stream(**kwargs) as stream:
             response = stream.get_final_message()
     except (anthropic.BadRequestError, anthropic.AuthenticationError, anthropic.NotFoundError, anthropic.PermissionDeniedError) as e:
         # 400, 401, 403, 404

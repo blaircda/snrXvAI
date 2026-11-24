@@ -11,20 +11,25 @@ def call_gemini(model, sys_input, txt_input):
         raise ConfigError("GEMINI_API_KEY not set")
 
     options = model.get("options", {}) 
-    thinking_level = options.get("thinking_level", "medium")
+    thinking_level = options.get("effort")
     max_output_tokens = options.get("max_output_tokens", 20000)
 
     client = genai.Client()
+
+    config = {
+                "thinking_summaries": None,
+                "max_output_tokens": max_output_tokens,
+    }
+    
+    if thinking_level is not None:
+        config["thinking_level"] = thinking_level
+
     try:
         interaction = client.interactions.create(
             model=model["name"],
             system_instruction = sys_input,
             input=txt_input,
-            generation_config={
-                "thinking_level": thinking_level,
-                "thinking_summaries": None,
-                "max_output_tokens": max_output_tokens,
-            },
+            generation_config=config,
             stream=False
         )
     except (gerr.BadRequestError, gerr.AuthenticationError, gerr.NotFoundError, gerr.PermissionDeniedError) as e:

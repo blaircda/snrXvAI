@@ -23,7 +23,7 @@ Output only LaTeX source and nothing else. Do not enclose the LaTeX source in an
 
 def make_user_prompt(stage, title, draft):
     if stage == "initial": # add more details later
-        return f"Your job is to write a hep-th article with the following title: {title}. The paper should be fully internally consistent and less than about 20 pages."
+        return f"Your job is to write a hep-th article with the following title: {title}. The paper should be fully internally consistent and no more than 15-20 pages."
     elif stage == "revision": # add more details later
         return f"Your job is to revise a hep-th article, titled {title}. This title cannot be changed. Revise the draft: tighten the arguments, fix inconsistencies, keep the length and the format. The current draft of the paper is below.\n\nCURRENT DRAFT:\n{draft}"
     else:

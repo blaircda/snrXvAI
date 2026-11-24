@@ -12,12 +12,13 @@ on:
         options:
           - dev
           - free
-          - budget
+          - cheap
           - all
+          - balanced
           - schedule
         default: dev
   schedule:
-    - cron: '23 1 * * 1-5' # 01:17 UTC Mon-Fri 
+    - cron: '23 1 * * 1' # 01:23 Mondays
 
 permissions:
   contents: read   

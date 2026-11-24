@@ -1,3 +1,4 @@
+import csv
 from degenerate.adapters.adapter_dev import call_example
 from degenerate.adapters.adapter_anthropic import call_anthropic
 from degenerate.adapters.adapter_gemini import call_gemini
@@ -12,49 +13,41 @@ DEV_MODELS = [
     #{"name": "example", "provider": "dev", "display_name": "Example Author (bad markdown)", "options": {"variant": "bad_markdown"} }    
 ]
 
-GEMINI_MODELS = [
-    {"name": "gemini-3.5-flash-lite", "provider": "gemini", "display_name": "Gemini 3.5 Flash Lite (low)", "options": {"thinking_level": "low", "max_output_tokens": 40000} },
-    {"name": "gemini-3.8-flash", "provider": "gemini", "display_name": "Gemini 3.8 Flash (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 40000} },
-    {"name": "gemini-3.6-flash", "provider": "gemini", "display_name": "Gemini 3.6 Flash (medium)", "options": {"thinking_level": "medium", "max_output_tokens": 40000} },
-    {"name": "gemini-4-argon", "provider": "gemini", "display_name": "Gemini 4 Argon (high)", "options": {"thinking_level": "high", "max_output_tokens": 40000} },
-]
+def get_model_registry(file, cost_cutoff):
+    registry = []
+    primary_fields = ["name", "provider", "display_name"]
+    input_tokens = 500
+    mil = 1000000.0
+    with open(file, "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            input_cost = float(row["input_cost"])
+            output_cost = float(row["output_cost"])
+            max_out = int(row["max_output_tokens"])
+            cost = input_tokens*input_cost/mil + max_out*output_cost/mil
+            if cost < cost_cutoff:
+                if row["efforts"] != "":
+                    efforts = row["efforts"].split(",")
+                else:
+                    efforts = [None]
+                for effort in efforts:   
+                    primary = {k:v for k,v in row.items() if k in primary_fields}
+                    secondary = { "options": { "effort":effort, "max_output_tokens": max_out} }
+                    registry.append(  primary | secondary | {"run_cost": cost} )
+    return registry
 
-ANTHROPIC_MODELS = [
-    {"name": "claude-haiku-5-5", "provider": "anthropic", "display_name": "Claude Haiku 5.5 (low)", "options": {"effort": "low",  "max_output_tokens": 25000} },
-    {"name": "claude-haiku-5-5", "provider": "anthropic", "display_name": "Claude Haiku 5.5 (medium)", "options": {"effort": "medium",  "max_output_tokens": 25000} },
-    {"name": "claude-opus-5-5", "provider": "anthropic", "display_name": "Claude Opus 5.5 (high)", "options": {"effort": "high",  "max_output_tokens": 40000} },
-]
+def filter_by_cost(registry, lower, upper):
+    return [m for m in registry if (m["run_cost"]>=lower) & (m["run_cost"]<upper)]
+    
+def filter_by_provider(provider, lower, upper):
+    return [m for m in registry if (m["provider"]==provider)]
 
-OPEN_API_MODELS = [
-    {"name": "gpt-6-luna", "provider": "openai", "display_name": "GPT 6 Luna (low)", "options": {"effort": "low", "max_output_tokens": 25000} },
-    {"name": "gpt-6-luna", "provider": "openai", "display_name": "GPT 6 Luna (high)", "options": {"effort": "high", "max_output_tokens": 25000} },
-    {"name": "gpt-6.1-terra", "provider": "openai", "display_name": "GPT 6.1 Terra (medium)", "options": {"effort": "medium", "max_output_tokens": 25000} },
-]
-
-OPENROUTER_FREE_MODELS = [
-    {"name": "particle-ai/particle-1:free", "provider": "openrouter", "display_name": "Particle 1 (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "baidu/ernie-5.5-flash-preview:free", "provider": "openrouter", "display_name": "Ernie 5.5 (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "google/gemma-4-26b-a4b-it:free", "provider": "openrouter", "display_name": "Google Gemma 4 26B A4B (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "google/gemma-4-31b-it:free", "provider": "openrouter", "display_name": "Google Gemma 4 31B (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "nvidia/nemotron-3.5-super-vl:free", "provider": "openrouter", "display_name": "NVIDIA Nemotron 3.5 Super VL (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "nvidia/nemotron-3-ultra-550b-a55b:free", "provider": "openrouter", "display_name": "NVIDIA Nemotron 3 Ultra (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-    {"name": "inclusionai/ling-3.2-flash:free", "provider": "openrouter", "display_name": "inclusionAI Ling 3.2 Flash (free)", "options": {"effort": "low", "max_output_tokens": 262144}},
-    {"name": "recursive/flint-v1.0:free", "provider": "openrouter", "display_name": "Recursive Flint (free)", "options": {"effort": "medium", "max_output_tokens": 100000}},
-]
-
-OPENROUTER_PAID_MODELS = [
- #   {"name": "", "provider": "openrouter", "display_name": "", "options": {"effort": "high", "max_output_tokens": 50000}},
-    {"name": "mistralai/mistral-large-4-0", "provider": "openrouter", "display_name": "Mistral Large 4 (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
-    {"name": "mistralai/mistral-small-2603", "provider": "openrouter", "display_name": "Mistral Small 4 (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
-    {"name": "qwen/qwen4-max", "provider": "openrouter", "display_name": "Qwen4 Max (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
-    {"name": "deepseek/deepseek-v4-pro-0813", "provider": "openrouter", "display_name": "DeepSeek V4 Pro 0813 (low)", "options": {"effort": "high", "max_output_tokens": 40000}},
-    {"name": "deepseek/deepseek-v4-pro-0813", "provider": "openrouter", "display_name": "DeepSeek V4 Pro 0813 (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
-    {"name": "z-ai/glm-5.3", "provider": "openrouter", "display_name": "Zai GLM 5.3 (high)", "options": {"effort": "high", "max_output_tokens": 40000}},
-]
-
-FREE_MODELS = OPENROUTER_FREE_MODELS
-PAID_MODELS = OPEN_API_MODELS + ANTHROPIC_MODELS + GEMINI_MODELS + OPENROUTER_PAID_MODELS
-
+def split_models_by_cost(registry, split):
+    free = [m for m in registry if (m["run_cost"]==0.0)]
+    cheap = [m for m in registry if (m["run_cost"]>=0.0) & (m["run_cost"]<split)]
+    dear = [m for m in registry if (m["run_cost"]>=split)]
+    return free, cheap, dear
+    
 PROVIDERS = {
     "dev": call_example,
     "anthropic": call_anthropic,
