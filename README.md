@@ -32,8 +32,9 @@ Other command line options:
 | `-D` | `--max_dear_models` | int | 2 | Number of "expensive" models to use (only applies with `balanced` model choice) |
 | `-S` | `--schedule` | flag | off | Apply scheduling logic, for remote automated runs. Cannot be used with other options |
 
-Schedule sets `Npapers = 10`, `Ncollabs=3`, `max_paper_authors=5`, `models="balanced"`,  `max_dear_models=5`.
-The schedule is set in the GitHub Actions workflow to currently run once a week. 
+Schedule sets `Npapers = 10`, `Ncollabs=3`, `max_paper_authors=2`, `models="balanced"`,  `max_dear_models=5`.
+The schedule is set in the GitHub Actions workflow to currently run once a week.
+Subject to change.
 
 **Export the paper listing to HTML** 
 

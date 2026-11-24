@@ -2,18 +2,18 @@ name,provider,display_name,efforts,max_output_tokens,input_cost,output_cost,comm
 gemini-3.5-flash-lite,gemini,Gemini 3.5 Flash Lite,medium,50000,0.3,2.5,
 gemini-3.6-flash,gemini,Gemini 3.6 Flash,medium,50000,0.75,3.75,price doubles from Jan 1
 gemini-3.8-flash,gemini,Gemini 3.8 Flash,medium,50000,0.75,3.75,price doubles from Jan 1
-gemini-4-hydrogen,gemini,Gemini 4 Hydrogen,"medium,high",50000,1.5,7.5,
-gemini-4-neon,gemini,Gemini 4 Neon,"medium,high",50000,3,15,
-gemini-4-carbon,gemini,Gemini 4 Carbon,medium,50000,2,10,price doubles from Dec 1
-gemini-4-argon,gemini,Gemini 4 Argon,medium,50000,2,10,price doubles from Dec 1
+gemini-4-hydrogen,gemini,Gemini 4 Hydrogen,"medium,high",60000,1.5,7.5,
+gemini-4-neon,gemini,Gemini 4 Neon,"medium,high",60000,3,15,
+gemini-4-carbon,gemini,Gemini 4 Carbon,medium,60000,2,10,price doubles from Dec 1
+gemini-4-argon,gemini,Gemini 4 Argon,medium,60000,2,10,price doubles from Dec 1
 claude-haiku-5-5,anthropic,Claude Haiku 5.5,"low,medium,high",50000,0.1,0.5,price x5 if prompt > 100k tokens
 claude-sonnet-5-5,anthropic,Claude Sonnet 5.5,medium,50000,2,10,
-claude-opus-5-5,anthropic,Claude Opus 5.5,"medium,high",50000,4,20,
+claude-opus-5-5,anthropic,Claude Opus 5.5,"medium,high",60000,4,20,
 claude-fable-5-2,anthropic,Claude Fable 5.2,medium,50000,8,40,
 gpt-6-luna,openai,GPT 6 Luna,"low,medium,high",50000,0.1,0.5,
-gpt-6.1-terra,openai,GPT 6.1 Terra,medium,50000,1,5,
-gpt-6.2-sol,openai,GPT 6.2 Sol,"medium,high",50000,2,10,
-gpt-6.2-astra,openai,GPT 6.2 Astra ,medium,50000,8,40,
+gpt-6.1-terra,openai,GPT 6.1 Terra,medium,60000,1,5,
+gpt-6.2-sol,openai,GPT 6.2 Sol,"medium,high",60000,2,10,
+gpt-6.2-astra,openai,GPT 6.2 Astra ,medium,60000,8,40,
 mistralai/mistral-large-4-0,openrouter,Mistral Large 4,high,50000,0.7,2.1,
 mistralai/mistral-small-2603,openrouter,Mistral Small 4,high,50000,0.15,0.6,
 qwen/qwen4-max,openrouter,Qwen4 Max,high,50000,1.5,4.5,
@@ -25,8 +25,6 @@ z-ai/glm-5.3-flash,openrouter,Z-ai GLM 5.3 flash,high,50000,0.0356,0.0815,
 moonshotai/kimi-k3.1-pro,openrouter,Moonshot AI Kimi K3.1 Pro,high,50000,0.24036,8.402,
 particle-ai/particle-1:free,openrouter,Particle 1,"medium,high",100000,0,0,
 baidu/ernie-5.5-flash-preview:free,openrouter,Ernie 5.5,,100000,0,0,
-google/gemma-4-26b-a4b-it:free,openrouter,Google Gemma 4 26B A4B,,100000,0,0,
-google/gemma-4-31b-it:free,openrouter,Google Gemma 4 31B,,100000,0,0,
 nvidia/nemotron-3.5-super-vl:free,openrouter,NVIDIA Nemotron 3.5 Super VL,,100000,0,0,
 nvidia/nemotron-3-ultra-550b-a55b:free,openrouter,NVIDIA Nemotron 3 Ultra,"medium,high",100000,0,0,
 inclusionai/ling-3.2-flash:free,openrouter,inclusionAI Ling 3.2 Flash,,200000,0,0,

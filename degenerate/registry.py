@@ -34,19 +34,19 @@ def get_model_registry(file, cost_cutoff):
                 for effort in efforts:   
                     primary = {k:v for k,v in row.items() if k in primary_fields}
                     secondary = { "options": { "effort":effort, "max_output_tokens": max_out} }
-                    registry.append(  primary | secondary | {"run_cost": cost} )
+                    registry.append(  primary | secondary | {"expected_cost": cost} )
     return registry
 
 def filter_by_cost(registry, lower, upper):
-    return [m for m in registry if (m["run_cost"]>=lower) and (m["run_cost"]<upper)]
+    return [m for m in registry if (m["expected_cost"]>=lower) and (m["expected_cost"]<upper)]
     
 def filter_by_provider(registry, provider):
     return [m for m in registry if (m["provider"]==provider)]
 
 def split_models_by_cost(registry, split):
-    free = [m for m in registry if (m["run_cost"]==0.0)]
-    cheap = [m for m in registry if (m["run_cost"]>0.0) & (m["run_cost"]<split)]
-    dear = [m for m in registry if (m["run_cost"]>=split)]
+    free = [m for m in registry if (m["expected_cost"]==0.0)]
+    cheap = [m for m in registry if (m["expected_cost"]>0.0) & (m["expected_cost"]<split)]
+    dear = [m for m in registry if (m["expected_cost"]>=split)]
     return free, cheap, dear
     
 PROVIDERS = {
