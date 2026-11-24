@@ -31,7 +31,7 @@ def main(timestamp, paper_struct, Ntitles, models):
 
     jobs = create_jobs(timestamp, models, titles, paper_struct)
 
-    # uncoment for debugging job creation
+    # uncomment for debugging job creation
     #print(f"Created {Npapers} jobs:")
     #print_jobs(jobs)
     #return jobs
@@ -108,7 +108,7 @@ def get_models(paper_struct, mode, Ndear):
         else:
             return random.choices(family, k=k)
 
-    registry = get_model_registry("degenerate/models.csv", 2.0)
+    registry = get_model_registry(PACKAGE_DIR / "models.csv", 2.0)
     models_free, models_cheap, models_dear = split_models_by_cost(registry, 0.2)
             
     if mode == "all": # all models 
@@ -165,6 +165,6 @@ if __name__ == "__main__":
     #for m in MODELS:
     #    print(m)
     #    print()
-    #print("Expected cost:", sum([m["run_cost"] for m in MODELS]))
+    #print("Expected cost:", sum([m["expected_cost"] for m in MODELS]))
     if main(timestamp, paper_struct, Ntitles, MODELS): # main returns 1 if no papers produced
         sys.exit("No papers produced")
