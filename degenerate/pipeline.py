@@ -87,8 +87,11 @@ def process_paper(job):
             raise OutputError(f"Empty output for {job['job_id']} with model {model['name']}")
         source = check_source(r["output"], job['job_id'])
         output_tokens += r.get("output_tokens",0)
-        thought_tokens += r.get("thought_tokens",0) 
-        paper_authors.append(model["display_name"])
+        thought_tokens += r.get("thought_tokens",0)
+        display_name = model["display_name"]
+        if model["options"]["effort"] is not None:
+            display_name += " ("+model["options"]["effort"]+")"
+        paper_authors.append(display_name)
 
     # here could try except to send a source with invalid commands back to the model
     full_source, abstract = make_full_source(source, title, paper_authors, job_id)

@@ -30,8 +30,10 @@ def main(timestamp, paper_struct, Ntitles, models):
 
     jobs = create_jobs(timestamp, models, titles, paper_struct)
 
+    # uncoment for debugging job creation
     #print(f"Created {Npapers} jobs:")
     #print_jobs(jobs)
+    #return jobs
 
     results, failures, to_retry = run_processes(jobs)
 
@@ -161,9 +163,9 @@ if __name__ == "__main__":
     
     paper_struct = plan_papers(Npapers, Ncollabs, max_paper_authors)
     MODELS = get_models(paper_struct, model_choice, Ndear) 
-    for m in MODELS:
-        print(m)
-        print()
-    print("Expected cost:", sum([m["run_cost"] for m in MODELS]))
-    #if main(timestamp, paper_struct, Ntitles, MODELS): # main returns 1 if no papers produced
-    #    sys.exit("No papers produced")
+    #for m in MODELS:
+    #    print(m)
+    #    print()
+    #print("Expected cost:", sum([m["run_cost"] for m in MODELS]))
+    if main(timestamp, paper_struct, Ntitles, MODELS): # main returns 1 if no papers produced
+        sys.exit("No papers produced")

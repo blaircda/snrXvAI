@@ -6,7 +6,7 @@ gemini-4-hydrogen,gemini,Gemini 4 Hydrogen,"medium,high",50000,1.5,7.5,
 gemini-4-neon,gemini,Gemini 4 Neon,"medium,high",50000,3,15,
 gemini-4-carbon,gemini,Gemini 4 Carbon,medium,50000,2,10,price doubles from Dec 1
 gemini-4-argon,gemini,Gemini 4 Argon,medium,50000,2,10,price doubles from Dec 1
-claude-haiku-5-5,anthropic,Claude Haiku 5.5,"low, medium, high",50000,0.1,0.5,price x5 if prompt > 100k tokens
+claude-haiku-5-5,anthropic,Claude Haiku 5.5,"low,medium,high",50000,0.1,0.5,price x5 if prompt > 100k tokens
 claude-sonnet-5-5,anthropic,Claude Sonnet 5.5,medium,50000,2,10,
 claude-opus-5-5,anthropic,Claude Opus 5.5,"medium,high",50000,4,20,
 claude-fable-5-2,anthropic,Claude Fable 5.2,medium,50000,8,40,
@@ -23,7 +23,7 @@ deepseek/deepseek-v4-pro-0813,openrouter,DeepSeek V4 Pro 0813,high,50000,0.0999,
 z-ai/glm-5.3,openrouter,Z-ai GLM 5.3,high,50000,1.4,4.4,
 z-ai/glm-5.3-flash,openrouter,Z-ai GLM 5.3 flash,high,50000,0.0356,0.0815,
 moonshotai/kimi-k3.1-pro,openrouter,Moonshot AI Kimi K3.1 Pro,high,50000,0.24036,8.402,
-particle-ai/particle-1:free,openrouter,Ernie 5.5,"medium,high",100000,0,0,
+particle-ai/particle-1:free,openrouter,Particle 1,"medium,high",100000,0,0,
 baidu/ernie-5.5-flash-preview:free,openrouter,Ernie 5.5,,100000,0,0,
 google/gemma-4-26b-a4b-it:free,openrouter,Google Gemma 4 26B A4B,,100000,0,0,
 google/gemma-4-31b-it:free,openrouter,Google Gemma 4 31B,,100000,0,0,

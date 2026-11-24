@@ -28,6 +28,7 @@ def get_model_registry(file, cost_cutoff):
             if cost < cost_cutoff:
                 if row["efforts"] != "":
                     efforts = row["efforts"].split(",")
+                    efforts = [e.strip() for e in efforts]
                 else:
                     efforts = [None]
                 for effort in efforts:   
@@ -37,14 +38,14 @@ def get_model_registry(file, cost_cutoff):
     return registry
 
 def filter_by_cost(registry, lower, upper):
-    return [m for m in registry if (m["run_cost"]>=lower) & (m["run_cost"]<upper)]
+    return [m for m in registry if (m["run_cost"]>=lower) and (m["run_cost"]<upper)]
     
-def filter_by_provider(provider, lower, upper):
+def filter_by_provider(registry, provider):
     return [m for m in registry if (m["provider"]==provider)]
 
 def split_models_by_cost(registry, split):
     free = [m for m in registry if (m["run_cost"]==0.0)]
-    cheap = [m for m in registry if (m["run_cost"]>=0.0) & (m["run_cost"]<split)]
+    cheap = [m for m in registry if (m["run_cost"]>0.0) & (m["run_cost"]<split)]
     dear = [m for m in registry if (m["run_cost"]>=split)]
     return free, cheap, dear
     
