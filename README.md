@@ -28,20 +28,12 @@ Other command line options:
 | `-C` | `--Ncollabs` | int | 0 |Number of collaborative papers to generate|
 | `-A` | `--max_paper_authors` | int | 2 | Maximum number of "authors" per paper |
 | `-T` | `--single_title` | flag | off | Generate only one title, shared by all papers |
-| `-M` | `--models` | choice | `budget` | Model set to use: `all`, `dev`, `free` or `budget` |
-| `-P` | `--paid` | int | 2 | Number of paid models to use (only applies with `budget` model choice) |
+| `-M` | `--models` | choice | `budget` | Model set to use: `all`, `dev`, `free`, `cheap`, or `balanced` |
+| `-D` | `--max_dear_models` | int | 2 | Number of "expensive" models to use (only applies with `balanced` model choice) |
 | `-S` | `--schedule` | flag | off | Apply scheduling logic, for remote automated runs. Cannot be used with other options |
 
-Example preliminary scheduling (subject to revision):
-
-| Day | Papers | Collaborations | Max authors per paper | Distinct titles | Models  |  Paid models |
-|-----|---------------|----------------|--------------------|--------|---------------|-------------|
-| Mon | 5 | 1 | 2 | 5 | budget | 1 |
-| Tue | 5 | 1 | 2 | 5 | free | - |
-| Wed | 5 | 1 | 2 | 1 | budget | 3 |
-| Thu | 5 | 1 | 2 | 5 | free | - |
-| Fri | 5 | 1 | 2 | 5 | budget | 2 |
-| Sat/Sun | have a good weekend! | | | | | |
+Schedule sets `Npapers = 10`, `Ncollabs=3`, `max_paper_authors=5`, `models="balanced"`,  `max_dear_models=5`.
+The schedule is set in the GitHub Actions workflow to currently run once a week. 
 
 **Export the paper listing to HTML** 
 
