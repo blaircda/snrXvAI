@@ -1,6 +1,7 @@
 import shutil, subprocess, tempfile, os, signal, re, random
 from pathlib import Path
 from degenerate.errors import OutputError
+from degenerate.paths import PAPERS_DIR, FAILED_DIR
 
 common_packages = r"""\usepackage[dvipsnames]{xcolor}
 \usepackage{amssymb,amsfonts,amsmath,amsthm}
@@ -27,7 +28,7 @@ common_packages = r"""\usepackage[dvipsnames]{xcolor}
 
 PREAMBLE_A = r"""
 \documentclass[11pt]{article}
-\usepackage[a4paper,top=2cm,left=2.5cm,right=2.5cm,bottom=2cm]{geometry}""" + common_packages + r"""\newcommand\customtitle[4]{\begin{center}
+\usepackage[a4paper,top=2cm,left=2.5cm,right=2.5cm,bottom=2cm]{geometry}""" + common_packages + r"""\newcommand\customtitle[5]{\begin{center}
 \baselineskip=2em
 \vspace{-5cm}
 \hfill {\ttfamily snrXvAI:#3}
@@ -40,12 +41,14 @@ PREAMBLE_A = r"""
 \vskip 0.5em
 {#4}
 \vskip 0.5em 
-\end{center}
+\end{center}\begin{abstract}
+#5
+\end{abstract}
 }
 """
 
 PREAMBLE_B = r"""\documentclass[11pt,a4paper]{article}
-\usepackage[margin=1.25in]{geometry}""" +common_packages +r"""\newcommand{\customtitle}[4]{%
+\usepackage[margin=1.25in]{geometry}""" +common_packages +r"""\newcommand{\customtitle}[5]{%
   \begin{center}
     {\small \hfill \ttfamily snrXvAI:#3}\\[0.4em]
     \hrule\vspace{1.2em}
@@ -53,25 +56,53 @@ PREAMBLE_B = r"""\documentclass[11pt,a4paper]{article}
     {\large #2\par}\vspace{1em}
     {\large #4\par}\vspace{1em}
     \hrule\vspace{1.5em}
-  \end{center}}
+  \end{center}\begin{abstract}
+#5
+\end{abstract}}
 """
 
 PREAMBLE_C = r"""\documentclass[12pt,a4paper]{article}
 \usepackage[margin=1in]{geometry}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{1em}""" + common_packages + r"""\newcommand{\customtitle}[4]{%
+\setlength{\parskip}{1em}""" + common_packages + r"""\newcommand{\customtitle}[5]{%
 \hfill {\ttfamily snrXvAI:#3}
   \begin{center}
     {\Large\sffamily\bfseries #1\par}\vspace{0.8em}
     {\normalsize #2\par}\vspace{0.4em}
     {\footnotesize\itshape #4\par}\vspace{1em}
-  \end{center}}
+  \end{center}\begin{abstract}
+#5
+\end{abstract}}
+"""
+PREAMBLE_D = r"""\documentclass[12pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}""" + common_packages + r"""\newcommand{\customtitle}[5]{%
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{flushright}
+\ttfamily snrXvAI:#3
+\end{flushright}
+\vspace{2.5em}
+\begin{center}
+{\LARGE \bfseries #1 \par}
+\vspace{2em}
+{\large #2 \par}
+\vspace{1em}
+{\small #4 \par}
+\vspace{1.5em}
+{\small \today \par}
+\end{center}
+\vspace{2em}
+\begin{abstract}
+#5
+\end{abstract}
+\end{titlepage}}
 """
 
 def save_failure(source, papername, reason):
-    failures_dir = Path("failed")
-    failures_dir.mkdir(parents=True, exist_ok=True)
-    with open(failures_dir / f"{papername}_{reason}.tex","w", encoding="utf-8") as f:
+    FAILED_DIR.mkdir(exist_ok=True)
+    with open(FAILED_DIR / f"{papername}_{reason}.tex","w", encoding="utf-8") as f:
         f.write(source) 
 
 def check_source(source, papername):
@@ -104,14 +135,13 @@ def check_source(source, papername):
 
 def make_full_source(source, title, paper_authors, job_id):
 
-    PREAMBLE = random.choice([PREAMBLE_A, PREAMBLE_B, PREAMBLE_C])
+    PREAMBLE = random.choice([PREAMBLE_A, PREAMBLE_B, PREAMBLE_C, PREAMBLE_D])
     source = check_source(source, job_id)
     
     full_source = PREAMBLE
 
     authors = ', '.join(paper_authors)
-    #full_source = PREAMBLE+f"\n\\title{{\\bf {title}}}\n\\author{{{authors}}}"+"\n\\begin{document}\n\\maketitle"+source+"\n\\end{document}"
-    full_source = PREAMBLE+"\n\\begin{document}\n"+f"\n\\customtitle{{{title}}}{{{authors}}}{{{job_id}}}"+"{snrXv\\color{red}AI\\color{black}}\n\n\n"+source+"\n\\end{document}"
+
     # extract abstract
     start_abs = "\\begin{abstract}"
     end_abs = "\\end{abstract}"
@@ -123,14 +153,19 @@ def make_full_source(source, title, paper_authors, job_id):
     else:
         abstract= "No abstract provided"
 
+    source = source[idx2+len(end_abs):]
+
+
+    #full_source = PREAMBLE+f"\n\\title{{\\bf {title}}}\n\\author{{{authors}}}"+"\n\\begin{document}\n\\maketitle"+source+"\n\\end{document}"
+    full_source = PREAMBLE+"\n\\begin{document}\n"+f"\n\\customtitle{{{title}}}{{{authors}}}{{{job_id}}}"+"{snrXv\\color{red}AI\\color{black}}"+f"{{{abstract}}}"+"\n\n\n"+source+"\n\\end{document}"
+
     return full_source, abstract
         
 def make_paper(source, papername):
     """
     Creates LaTeX file from `source` and builds pdf
     """
-    paper_dir = Path("papers")
-    paper_dir.mkdir(parents=True, exist_ok=True)
+    PAPERS_DIR.mkdir(exist_ok=True)
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -166,18 +201,17 @@ def make_paper(source, papername):
             raise OutputError("Building pdf failed: timed out after 60s") from e
 
         if proc.returncode != 0:
-            failures_dir = Path("failed")
-            failures_dir.mkdir(parents=True, exist_ok=True)
+            FAILED_DIR.mkdir(exist_ok=True)
 
             log_file = tmp / f"{papername}.log"
             if log_file.is_file():
-                shutil.copy(log_file, failures_dir)
+                shutil.copy(log_file, FAILED_DIR)
             save_failure(source, papername, "build_failed")
             raise OutputError(f"Building pdf failed (latexmk exit code {proc.returncode})")
         else:
             print(f"Building paper {papername} succeeded")
             for f in [ f"{papername}.tex", f"{papername}.pdf"]:
-                shutil.copy(tmp / f, paper_dir)
+                shutil.copy(tmp / f, PAPERS_DIR)
 
 if __name__ == "__main__":
     pass

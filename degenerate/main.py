@@ -4,6 +4,7 @@ from pathlib import Path
 from degenerate.registry import DEV_MODELS, get_model_registry, split_models_by_cost
 from degenerate.generate_titles import generate_titles
 from degenerate.pipeline import create_jobs, run_processes
+from degenerate.paths import FAILED_DIR, PACKAGE_DIR
 
 load_dotenv()
 
@@ -48,20 +49,18 @@ def main(timestamp, paper_struct, Ntitles, models):
     if failures: # write failures to JSON
         print (f"Failed jobs ({len(failures)}/{Npapers}):\n")
         failures_save = { "date": parse_timestamp, "papers": failures}
-        failures_dir = Path("failed")
-        failures_dir.mkdir(parents=True, exist_ok=True)
-        with open(failures_dir / 'errors.json', 'w', encoding='utf-8') as f:
+        FAILED_DIR.mkdir(exist_ok=True)
+        with open(FAILED_DIR / 'errors.json', 'w', encoding='utf-8') as f:
             json.dump(failures_save, f, ensure_ascii=False, indent=2)
-        print(f"Failed job listings saved to {failures_dir}/errors.json")
+        print(f"Failed job listings saved to {FAILED_DIR}/errors.json")
         #print_failed_jobs(failures)
         
     if results: # write successful jobs to JSON
         print(f"Successful jobs: ({len(results)}/{Npapers})")
         results_save = { "date": parse_timestamp, "papers": results}
-        wdir = Path("degenerate")
-        with open(wdir / 'listing.json', 'w', encoding='utf-8') as f:
+        with open(PACKAGE_DIR / 'listing.json', 'w', encoding='utf-8') as f:
             json.dump(results_save, f, ensure_ascii=False, indent=2)
-        print(f"Successful job listing saved to {wdir}/listing.json")
+        print(f"Successful job listing saved to {PACKAGE_DIR}/listing.json")
         #print_jobs(results)
         return 0
     else:

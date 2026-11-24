@@ -1,9 +1,7 @@
 import subprocess
 from titlecase import titlecase
 from pathlib import Path
-
-DIR = Path(__file__).resolve().parent  # this file parent directory
-GRAMMAR_DIR = DIR / "grammar"
+from degenerate.paths import GRAMMAR_DIR
 
 def invariant_commands(word, **kwargs):
     if word and (word[0] in "$\\" or "\\" in word):
