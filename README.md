@@ -28,7 +28,7 @@ Other command line options:
 | `-C` | `--Ncollabs` | int | 0 |Number of collaborative papers to generate|
 | `-A` | `--max_paper_authors` | int | 2 | Maximum number of "authors" per paper |
 | `-T` | `--single_title` | flag | off | Generate only one title, shared by all papers |
-| `-M` | `--models` | choice | `budget` | Model set to use: `all`, `dev`, `free`, `cheap`, or `balanced` |
+| `-M` | `--models` | choice | `balanced` | Model set to use: `all`, `dev`, `free`, `cheap`, or `balanced` |
 | `-D` | `--max_dear_models` | int | 2 | Number of "expensive" models to use (only applies with `balanced` model choice) |
 | `-S` | `--schedule` | flag | off | Apply scheduling logic, for remote automated runs. Cannot be used with other options |
 
