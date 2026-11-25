@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
-import time, json, argparse, sys, random
+import time, json, argparse, sys, random, re
+from datetime import date
 from pathlib import Path
 from degenerate.registry import DEV_MODELS, get_model_registry, split_models_by_cost
 from degenerate.generate_titles import generate_titles
@@ -38,7 +39,7 @@ def main(timestamp, paper_struct, Ntitles, models):
 
     results, failures, to_retry = run_processes(jobs)
 
-    parse_timestamp = time.strftime("%Y-%m-%d %H:%M:%S", timestamp)
+    #parse_timestamp = time.strftime("%Y-%m-%d %H:%M:%S", timestamp)
 
     if to_retry:
         time.sleep(120) 
@@ -48,7 +49,7 @@ def main(timestamp, paper_struct, Ntitles, models):
 
     if failures: # write failures to JSON
         print (f"Failed jobs ({len(failures)}/{Npapers}):\n")
-        failures_save = { "date": parse_timestamp, "papers": failures}
+        failures_save = { "date": timestamp, "papers": failures}
         FAILED_DIR.mkdir(exist_ok=True)
         with open(PACKAGE_DIR / 'errors.json', 'w', encoding='utf-8') as f:
             json.dump(failures_save, f, ensure_ascii=False, indent=2)
@@ -57,7 +58,7 @@ def main(timestamp, paper_struct, Ntitles, models):
         
     if results: # write successful jobs to JSON
         print(f"Successful jobs: ({len(results)}/{Npapers})")
-        results_save = { "date": parse_timestamp, "papers": results}
+        results_save = { "date": timestamp, "papers": results}
         with open(PACKAGE_DIR / 'listing.json', 'w', encoding='utf-8') as f:
             json.dump(results_save, f, ensure_ascii=False, indent=2)
         print(f"Successful job listing saved to {PACKAGE_DIR}/listing.json")
@@ -70,7 +71,11 @@ def schedule_settings(timestamp):
     """
     define scheduled behaviour
     """
-    #day = timestamp.tm_wday
+    # assuming timestamp a time struct
+    # use: day = timestamp.tm_wday
+    # assuming timestamp a string in the form
+    # YYYY-MM-DD_HHMMSS
+    # use: day = date.fromisoformat(timestamp[:10]).weekday()
     # time invariant for now
     Npapers = 10
     Ncollabs = 3
@@ -124,7 +129,13 @@ def get_models(paper_struct, mode, Ndear):
         MODELS = populate(models_dear, Ndear) + populate(models_free+models_cheap, models_needed - Ndear)
 
     return MODELS
-    
+
+
+def run_ts_arg(value):
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}_\d{6}", value):
+        raise argparse.ArgumentTypeError(f"expected YYYY-MM-DD_HHMMSS, got {value!r}")
+    return value
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -135,15 +146,17 @@ if __name__ == "__main__":
     parser.add_argument("-T", "--single_title", action="store_true") # set only 1 title
     parser.add_argument("-S", "--schedule", action="store_true") # apply scheduling logic, for remote automated runs
     parser.add_argument("-M", "--models", choices=["all", "dev", "free", "cheap", "balanced"], default=None)
+    parser.add_argument("--run-ts", type=run_ts_arg, default=None) # run time stamp
     args = parser.parse_args()
 
     if args.schedule and (args.Npapers is not None or args.Ncollabs is not None or args.max_paper_authors is not None or args.max_dear_models is not None or args.single_title or args.models):
         parser.error("--schedule cannot be combined with other options")
 
-    timestamp = time.gmtime()
-
+    TS_FORMAT = "%Y-%m-%d_%H%M%S"
+    run_timestamp = args.run_ts or time.strftime(TS_FORMAT, time.gmtime())
+    
     if args.schedule:
-        Npapers, Ncollabs, max_paper_authors, Ntitles, model_choice, Ndear = schedule_settings(timestamp)
+        Npapers, Ncollabs, max_paper_authors, Ntitles, model_choice, Ndear = schedule_settings(run_timestamp)
         
     else:
         Npapers = 5 if args.Npapers is None else args.Npapers
@@ -166,5 +179,5 @@ if __name__ == "__main__":
     #    print(m)
     #    print()
     #print("Expected cost:", sum([m["expected_cost"] for m in MODELS]))
-    if main(timestamp, paper_struct, Ntitles, MODELS): # main returns 1 if no papers produced
+    if main(run_timestamp, paper_struct, Ntitles, MODELS): # main returns 1 if no papers produced
         sys.exit("No papers produced")

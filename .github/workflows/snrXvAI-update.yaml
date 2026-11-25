@@ -2,8 +2,8 @@ name: snrXvAI-update
 concurrency:
   group: snrxvai
   cancel-in-progress: false
-# Controls when the workflow will run
-on:
+  
+on: # Controls when the workflow will run
   workflow_dispatch: # manual
     inputs:
       models:
@@ -17,15 +17,14 @@ on:
           - balanced
           - schedule
         default: dev
-  schedule:
+  schedule: # schedule
     - cron: '23 1 * * 1' # 01:23 Mondays
 
 permissions:
   contents: read   
 
-# jobs
-jobs:
-  build: # Build 
+jobs: 
+  build: # Generate papers, run site creation, push logs to private logging repo 
     runs-on: ubuntu-26.04
     timeout-minutes: 90
     steps:
@@ -58,18 +57,18 @@ jobs:
         id: generate
         run: |
           if [ "${MODELS:-schedule}" = schedule ]; then
-            python -m degenerate.main -S
+            python -m degenerate.main -S --run-ts "$RUN_TS"
           else
-            python -m degenerate.main -M "$MODELS"
+            python -m degenerate.main -M "$MODELS" --run-ts "$RUN_TS"
           fi
-      - name: Upload local failure logs
-        if: ${{ !cancelled() && hashFiles('failed/errors.json') != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: failure-logs
-          path: |
-            failed/
-          retention-days: 7
+      #- name: Upload local failure logs
+      #  if: ${{ !cancelled() && hashFiles('failed/errors.json') != '' }}
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: failure-logs
+      #    path: |
+      #      failed/
+      #    retention-days: 7
       - name: Publish listings
         run: python -m degenerate.publish
       - name: Upload pages artifact
@@ -83,7 +82,7 @@ jobs:
           persist-credentials: true
           repository: blaircda/snrXvAI-logs
           ssh-key: ${{ secrets.LOGS_DEPLOY_KEY }}
-          path: target
+          path: target/
       - name: Copy logs
         if: ${{ !cancelled() }}
         run: |
@@ -91,9 +90,9 @@ jobs:
           mkdir "target/logs/$RUN_TS/failed"
           mkdir "target/logs/$RUN_TS/papers"
           cp degenerate/errors.json "target/logs/$RUN_TS/"
+          cp degenerate/listing.json "target/logs/$RUN_TS/"#
           cp failed/* "target/logs/$RUN_TS/failed/"
           cp papers/*.tex "target/logs/$RUN_TS/papers/"
-          cp degenerate/listing.json "target/logs/$RUN_TS/"
       - name: Push to log repo
         if: ${{ !cancelled() }}
         working-directory: target

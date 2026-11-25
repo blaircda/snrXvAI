@@ -31,7 +31,10 @@ def create_jobs(timestamp, list_of_models, list_of_titles, paper_struct):
     # record jobs as a list
     jobs = []
     # generate paper ids
-    YYMM = time.strftime("%y%m", timestamp)
+    #YYMM = time.strftime("%y%m", timestamp)
+    # assuming timestamp a string YYYY-MM-DD_HHMMSS
+    YYMM = timestamp[2:4] + timestamp[5:7]
+
     XXXXX = random.randint(60000, 90000) # arXiv ids are up to ~40000 as of 2610 so start higher than that
 
     def format_id(X): # format to 5 digits if allowing any ids
