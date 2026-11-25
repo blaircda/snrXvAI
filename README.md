@@ -18,7 +18,7 @@ In `degenerate/grammar`:
 
 `python3 -m degenerate.main -N 5 -C 1`
 
-Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. The successes are outputted to a new directory `papers/` and their details saved in `degenerate/listing.json`. Failure details go in `failed/`: this is a file `errors.json` along with the offending .tex and .log files if available.
+Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. The successes are outputted to a new directory `papers/` and their details saved in `degenerate/listing.json`. Failures are logged at `degenerate/errors.json` and logs (including offending .tex files if available) are saved in `failed/`.
 
 Other command line options:
 
@@ -31,6 +31,7 @@ Other command line options:
 | `-M` | `--models` | choice | `balanced` | Model set to use: `all`, `dev`, `free`, `cheap`, or `balanced` |
 | `-D` | `--max_dear_models` | int | 2 | Number of "expensive" models to use (only applies with `balanced` model choice) |
 | `-S` | `--schedule` | flag | off | Apply scheduling logic, for remote automated runs. Cannot be used with other options |
+| | `--run-ts` | custom timestamp YYYY-MM-DD_HHMMSS | set from time.gmtime() | Run timestamp string, can be set from command line for logging consistency |
 
 Schedule sets `Npapers = 10`, `Ncollabs=3`, `max_paper_authors=2`, `models="balanced"`,  `max_dear_models=5`.
 The schedule is set in the GitHub Actions workflow to currently run once a week.
