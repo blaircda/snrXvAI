@@ -6,12 +6,14 @@ from degenerate.adapters.adapter_openai import call_openai
 from degenerate.adapters.adapter_openrouter import call_openrouter
 
 DEV_MODELS = [
-    {"name": "example", "provider": "dev", "display_name": "Example Author (good)", "options": {"variant": "good"} },
-    {"name": "example", "provider": "dev", "display_name": "Example Author (invalid LaTeX)", "options": {"variant": "bad_latex"} },
-    {"name": "example", "provider": "dev", "display_name": "Example Author (forbidden LaTeX)", "options": {"variant": "bad_input"} },
-    {"name": "example", "provider": "dev", "display_name": "Example Author (bad compile)", "options": {"variant": "bad_compile"} },
-    {"name": "example", "provider": "dev", "display_name": "Example Author (bad markdown)", "options": {"variant": "bad_markdown"} }
-    #{"name": "gemini-3.5-flash-lite", "provider": "gemini", "display_name": "Gemini 3.5 Flash Lite 10 output tokens", "options": {"max_output_tokens": 10} },
+    #{"name": "example", "provider": "dev", "display_name": "Example Author (good)", "options": {"variant": "good"} },
+    #{"name": "example", "provider": "dev", "display_name": "Example Author (invalid LaTeX)", "options": {"variant": "bad_latex"} },
+    #{"name": "example", "provider": "dev", "display_name": "Example Author (forbidden LaTeX)", "options": {"variant": "bad_input"} },
+    #{"name": "example", "provider": "dev", "display_name": "Example Author (bad compile)", "options": {"variant": "bad_compile"} },
+    #{"name": "example", "provider": "dev", "display_name": "Example Author (bad markdown)", "options": {"variant": "bad_markdown"} }
+    #{"name": "gemini-3.5-flash-lite", "provider": "gemini", "display_name": "Gemini 3.5 Flash Lite 10 output tokens", "options": {"max_output_tokens": 10}, "input_cost":0.3,"output_cost":2.5 },
+    {"name": "gemini-3.5-flash-lite", "provider": "gemini", "display_name": "Gemini 3.5 Flash Lite 10000 output tokens", "options": {"max_output_tokens": 10000}, "input_cost":0.3, "output_cost":2.5 },
+    #{"name": "nvidia/nemotron-3.5-super-vl:free", "provider": "openrouter", "display_name": "Nvidia Nemotron 10 output tokens", "options": {"max_output_tokens": 10} },
     #{"name": "claude-haiku-5-5", "provider": "anthropic", "display_name": "Claude Haiku 10 output tokens", "options": {"max_output_tokens": 10} },
     #{"name": "claude-haiku-5-5", "provider": "anthropic", "display_name": "Claude Haiku 2000 output tokens", "options": {"max_output_tokens": 2000} },
     #{"name": "gpt-6-luna", "provider": "openai", "display_name": "GPT-6 Luna 10 output tokens", "options": {"max_output_tokens": 100} },
@@ -39,7 +41,8 @@ def get_model_registry(file, cost_cutoff):
                 for effort in efforts:   
                     primary = {k:v for k,v in row.items() if k in primary_fields}
                     secondary = { "options": { "effort":effort, "max_output_tokens": max_out} }
-                    registry.append(  primary | secondary | {"expected_cost": cost} )
+                    costs = {"input_cost": input_cost, "output_cost": output_cost, "expected_cost": cost}
+                    registry.append(  primary | secondary | costs )
     return registry
 
 def filter_by_cost(registry, lower, upper):

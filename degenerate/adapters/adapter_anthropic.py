@@ -1,6 +1,6 @@
 import anthropic, os
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
-from degenerate.paths import FAILED_DIR
+from degenerate.paths import FAILED_DIR, LOGS_DIR
 
 def call_anthropic(model, sys_input, txt_input, call_id=None):
     """
@@ -38,20 +38,25 @@ def call_anthropic(model, sys_input, txt_input, call_id=None):
         raise GenerationError(f"Anthropic {type(e).__name__}: {e}") from e
                     
     status = response.stop_reason
-    #thought_tokens = interaction.usage.total_thought_tokens
+    usage = {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens}
     #anthropic does not track thinking tokens
-    output_tokens = response.usage.output_tokens
 
+    LOGS_DIR.mkdir(exist_ok=True)
+    (LOGS_DIR / f"{call_id}_response.json").write_text(
+        response.model_dump_json(indent=2, exclude_none=True),
+        encoding="utf-8",
+    )
+    
     if status != "end_turn":
         
-        FAILED_DIR.mkdir(exist_ok=True)
-        (FAILED_DIR / f"{call_id}_response.json").write_text(
-            response.model_dump_json(indent=2, exclude_none=True),
-            encoding="utf-8",
-        )
+        #FAILED_DIR.mkdir(exist_ok=True)
+        #(FAILED_DIR / f"{call_id}_response.json").write_text(
+        #    response.model_dump_json(indent=2, exclude_none=True),
+        #    encoding="utf-8",
+        #)
         
-        raise OutputError(f"Anthropic stop reason {status}, total output tokens {output_tokens}")
-
+        raise OutputError(f"Anthropic stop reason {status}", usage = usage)
+        
     output = ""
     for block in response.content:
         if block.type == "text":
@@ -61,8 +66,7 @@ def call_anthropic(model, sys_input, txt_input, call_id=None):
         "id": response.id,
         "status": status,
         "output": output,
-        "thought_tokens": 0, # set to zero and we will just report total thinking+output for other models
-        "output_tokens": output_tokens
+        "usage": usage
     }
 
     return response

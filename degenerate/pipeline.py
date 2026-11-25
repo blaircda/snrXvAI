@@ -71,6 +71,18 @@ def create_jobs(timestamp, list_of_models, list_of_titles, paper_struct):
         
     return jobs
 
+
+def compute_cost(model, usage):
+    mil = 1000000.
+    input_cost, output_cost = model.get("input_cost"), model.get("output_cost")
+    input_tokens, output_tokens = usage["input_tokens"], usage["output_tokens"]
+    if all(x is not None for x in (input_tokens, output_tokens, input_cost, output_cost)):
+        cost = input_tokens*input_cost/mil + output_tokens*output_cost/mil
+    else:
+        cost = None
+    usage["computed_cost"] = cost
+    return usage
+
 def process_paper(job):
     """
     Process a single job
@@ -78,24 +90,31 @@ def process_paper(job):
     stages, title, job_id = job["stages"], job["title"], job["job_id"]
 
     paper_authors = []
-    output_tokens = 0
-    thought_tokens = 0
     source = ""
-    for stage in stages:
-        model = stage["model"]
-        adapter = PROVIDERS[model["provider"]]
-        prompt = make_user_prompt(stage["version"], title, source)
-        r = adapter(model, SYS_PROMPT, prompt, call_id = job['job_id'])
-        if not (r["output"] or "").strip():
-            raise OutputError(f"Empty output for {job['job_id']} with model {model['name']}")
-        source = check_source(r["output"], job['job_id'])
-        output_tokens += r.get("output_tokens",0)
-        thought_tokens += r.get("thought_tokens",0)
-        display_name = model["display_name"]
-        if model["options"].get("effort") is not None:
-            display_name += " ("+model["options"]["effort"]+")"
-        paper_authors.append(display_name)
-
+    try:
+        for i, stage in enumerate(stages):
+            model = stage["model"]
+            adapter = PROVIDERS[model["provider"]]
+            # make the prompt
+            prompt = make_user_prompt(stage["version"], title, source)
+            # send the prompt to the adapter
+            r = adapter(model, SYS_PROMPT, prompt, call_id = f"{job_id}_{i}")
+            stage["usage"] = compute_cost(model, r["usage"])
+            # check for empty output
+            if not (r["output"] or "").strip():
+                raise OutputError(f"Empty output for {job['job_id']} with model {model['name']}")
+            # check the source at this stage
+            source = check_source(r["output"], job['job_id'])
+            # get name of the model with effort for the pdf
+            display_name = model["display_name"]
+            if model["options"].get("effort") is not None:
+                display_name += " ("+model["options"]["effort"]+")"
+            paper_authors.append(display_name)
+    except GenerationError as e:
+        if e.usage is not None:
+            stage["usage"] = compute_cost(model, e.usage)
+        raise
+        
     # here could try except to send a source with invalid commands back to the model
     full_source, abstract = make_full_source(source, title, paper_authors, job_id)
 
@@ -104,8 +123,7 @@ def process_paper(job):
     
     # assuming the tex worked return the job and abstract 
     job["abstract"] = abstract
-    job["output_tokens"] = output_tokens
-    job["thought_tokens"] = thought_tokens
+
     return job
 
 def run_processes(jobs):

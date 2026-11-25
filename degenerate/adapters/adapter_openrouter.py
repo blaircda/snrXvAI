@@ -1,6 +1,6 @@
 import openai, os
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
-from degenerate.paths import FAILED_DIR
+from degenerate.paths import FAILED_DIR, LOGS_DIR
 
 def call_openrouter(model, sys_input, txt_input, call_id=None):
     """
@@ -43,16 +43,21 @@ def call_openrouter(model, sys_input, txt_input, call_id=None):
         raise GenerationError(f"OpenAI {type(e).__name__}: {e}") from e
                     
     status = response.status
-    thought_tokens = response.usage.output_tokens_details.reasoning_tokens
-    output_tokens = response.usage.output_tokens
+    usage = {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens, "reported_cost": getattr(response.usage, "cost", None)} 
 
+    LOGS_DIR.mkdir(exist_ok=True)
+    (LOGS_DIR / f"{call_id}_response.json").write_text(
+        response.model_dump_json(indent=2, exclude_none=True),
+        encoding="utf-8",
+    )
+    
     if status != "completed":
 
-        FAILED_DIR.mkdir(exist_ok=True)
-        (FAILED_DIR / f"{call_id}_response.json").write_text(
-            response.model_dump_json(indent=2, exclude_none=True),
-            encoding="utf-8",
-        )
+        #FAILED_DIR.mkdir(exist_ok=True)
+        #(FAILED_DIR / f"{call_id}_response.json").write_text(
+        #    response.model_dump_json(indent=2, exclude_none=True),
+        #    encoding="utf-8",
+        #)
 
         if response.incomplete_details:
             reason = response.incomplete_details.reason
@@ -60,14 +65,13 @@ def call_openrouter(model, sys_input, txt_input, call_id=None):
             reason = f"{response.error.code}: {response.error.message}"
         else:
             reason = "unknown"
-        raise OutputError(f"OpenRouter response not completed: status {status}, reason {reason}, total output tokens {output_tokens}")
+        raise OutputError(f"OpenRouter response not completed: status {status}, reason {reason}", usage = usage)
                             
     response = {
         "id": response.id,
         "status": status,
         "output": response.output_text,
-        "thought_tokens": thought_tokens,
-        "output_tokens": output_tokens-thought_tokens
+        "usage": usage
     }
 
     return response

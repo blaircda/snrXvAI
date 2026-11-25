@@ -5,7 +5,7 @@ from pathlib import Path
 from degenerate.registry import DEV_MODELS, get_model_registry, split_models_by_cost
 from degenerate.generate_titles import generate_titles
 from degenerate.pipeline import create_jobs, run_processes
-from degenerate.paths import FAILED_DIR, PACKAGE_DIR
+from degenerate.paths import PACKAGE_DIR
 
 load_dotenv()
 
@@ -19,7 +19,20 @@ def print_failed_jobs(jobs):
         print(json.dumps(job, indent=2))
         #print(json.dumps(error))
         print()
-        
+
+def get_cost(jobs):
+    cost = 0
+    for job in jobs:
+        for stage in job["stages"]:
+            usage = stage.get("usage")
+            if usage is not None:
+                reported_cost = usage.get("reported_cost")
+                if reported_cost is not None:
+                    cost+=reported_cost
+                else:
+                    cost+=usage.get("computed_cost",0)
+    return cost
+
 def main(timestamp, paper_struct, Ntitles, models):
     """
     Run the paper generation pipeline 
@@ -47,14 +60,15 @@ def main(timestamp, paper_struct, Ntitles, models):
         results.extend(retry_results)
         failures.extend(retry_failures+retry_retry)
 
+    total_cost = 0 
     if failures: # write failures to JSON
         print (f"Failed jobs ({len(failures)}/{Npapers}):\n")
         failures_save = { "date": timestamp, "papers": failures}
-        FAILED_DIR.mkdir(exist_ok=True)
         with open(PACKAGE_DIR / 'errors.json', 'w', encoding='utf-8') as f:
             json.dump(failures_save, f, ensure_ascii=False, indent=2)
         print(f"Failed job listings saved to {PACKAGE_DIR}/errors.json")
         #print_failed_jobs(failures)
+        total_cost += get_cost(failures)
         
     if results: # write successful jobs to JSON
         print(f"Successful jobs: ({len(results)}/{Npapers})")
@@ -63,8 +77,11 @@ def main(timestamp, paper_struct, Ntitles, models):
             json.dump(results_save, f, ensure_ascii=False, indent=2)
         print(f"Successful job listing saved to {PACKAGE_DIR}/listing.json")
         #print_jobs(results)
+        total_cost += get_cost(results)
+        print(f"Total cost of run: {total_cost:.2f}")
         return 0
     else:
+        print(f"Total cost of run: {total_cost:.2f}")
         return 1
 
 def schedule_settings(timestamp):

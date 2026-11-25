@@ -1,6 +1,6 @@
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
 
-def call_example(model, sys_input, txt_input,  call_id=None):
+def call_example(model, sys_input, txt_input, call_id=None):
     """
     For development purposes
     """
@@ -19,8 +19,7 @@ def call_example(model, sys_input, txt_input,  call_id=None):
         "id": "12345",
         "status": "completed",
         "output": output,
-        "thought_tokens": 0,
-        "output_tokens": 0
+        "usage":{ "input_tokens": 100, "output_tokens": 100 }
     }
 
     return response

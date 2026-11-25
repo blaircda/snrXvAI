@@ -39,8 +39,7 @@ def get_listings(listings_file):
         listing["title"] = p["title"]
         listing["authors"] = ', '.join([s["model"]["display_name"] for s in p["stages"]])
         listing["abstract"] = p["abstract"]
-        listing["comments"] = f"{p['thought_tokens']+p['output_tokens']} tokens"
-        #f"{p['thought_tokens']} thought tokens, {p['output_tokens']} output tokens"
+        listing["comments"] = f'{sum([s["usage"]["output_tokens"] for s in p["stages"]])} tokens'
         listings.append(listing)
 
     return listing_date, listings

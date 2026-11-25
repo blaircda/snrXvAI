@@ -2,7 +2,7 @@ import os
 from google import genai
 from google.genai import _interactions_errors as gerr
 from degenerate.errors import GenerationError, TransientError, ConfigError, OutputError 
-from degenerate.paths import FAILED_DIR
+from degenerate.paths import FAILED_DIR, LOGS_DIR
 
 def call_gemini(model, sys_input, txt_input, call_id=None):
     """
@@ -44,23 +44,34 @@ def call_gemini(model, sys_input, txt_input, call_id=None):
         raise GenerationError(f"Gemini {type(e).__name__}: {e}") from e
 
     status = interaction.status
+    input_tokens = interaction.usage.total_input_tokens
     thought_tokens = interaction.usage.total_thought_tokens
     output_tokens = interaction.usage.total_output_tokens
-
+    # toal output tokens is thought_tokens plus output_tokens
+    total_output_tokens = (thought_tokens or 0) + (output_tokens or 0)
+    usage = {"input_tokens": input_tokens, "output_tokens": total_output_tokens}
+    
+    LOGS_DIR.mkdir(exist_ok=True)
+    (LOGS_DIR / f"{call_id}_response.json").write_text(
+        interaction.model_dump_json(indent=2, exclude_none=True),
+        encoding="utf-8",
+    )
+        
     if status != "completed":
-        FAILED_DIR.mkdir(exist_ok=True)
-        (FAILED_DIR / f"{call_id}_response.json").write_text(
-            interaction.model_dump_json(indent=2, exclude_none=True),
-            encoding="utf-8",
-        )
-        raise OutputError(f"Gemini status {status}, thought tokens {thought_tokens}, total tokens {output_tokens}")
+        
+        #FAILED_DIR.mkdir(exist_ok=True)
+        #(FAILED_DIR / f"{call_id}_response.json").write_text(
+        #interaction.model_dump_json(indent=2, exclude_none=True),
+        #encoding="utf-8",
+        #)
+
+        raise OutputError(f"Gemini status {status}", usage=usage)
         
     response = {
         "id": interaction.id,
         "status": status,
         "output": interaction.output_text,
-        "thought_tokens": thought_tokens,
-        "output_tokens": output_tokens
+        "usage": usage
     }
 
     return response
