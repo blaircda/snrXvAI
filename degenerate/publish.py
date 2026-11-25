@@ -27,7 +27,7 @@ def get_listings(listings_file):
         job_results = json.load(f)
         
     datestamp = job_results["date"]
-    datestamp_time = time.strptime(datestamp, "%Y-%m-%d %H:%M:%S")
+    datestamp_time = time.strptime(datestamp, "%Y-%m-%d_%H%M%S")
     paper_details = job_results["papers"] 
     listing_date = time.strftime("%A, %-d %B %Y",datestamp_time )
     listings = []
