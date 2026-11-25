@@ -47,7 +47,7 @@ jobs:
           perl compile-grammar snarxiv_titles.gram snarxiv_titles
           ocamlc snarxiv_titles.ml -o title_generator
       - name: Compute run timestamp for logs
-          run: echo "RUN_TS=$(date -u +%F_%H%M%S)" >> "$GITHUB_ENV"
+        run: echo "RUN_TS=$(date -u +%F_%H%M%S)" >> "$GITHUB_ENV"
       - name: Generate papers              
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
