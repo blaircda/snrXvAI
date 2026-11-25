@@ -7,10 +7,10 @@ from degenerate.adapters.adapter_openrouter import call_openrouter
 
 DEV_MODELS = [
     {"name": "example", "provider": "dev", "display_name": "Example Author (good)", "options": {"variant": "good"} },
-    #{"name": "example", "provider": "dev", "display_name": "Example Author (invalid LaTeX)", "options": {"variant": "bad_latex"} },
-    #{"name": "example", "provider": "dev", "display_name": "Example Author (forbidden LaTeX)", "options": {"variant": "bad_input"} },
-    #{"name": "example", "provider": "dev", "display_name": "Example Author (bad compile)", "options": {"variant": "bad_compile"} },
-    #{"name": "example", "provider": "dev", "display_name": "Example Author (bad markdown)", "options": {"variant": "bad_markdown"} }
+    {"name": "example", "provider": "dev", "display_name": "Example Author (invalid LaTeX)", "options": {"variant": "bad_latex"} },
+    {"name": "example", "provider": "dev", "display_name": "Example Author (forbidden LaTeX)", "options": {"variant": "bad_input"} },
+    {"name": "example", "provider": "dev", "display_name": "Example Author (bad compile)", "options": {"variant": "bad_compile"} },
+    {"name": "example", "provider": "dev", "display_name": "Example Author (bad markdown)", "options": {"variant": "bad_markdown"} }
     #{"name": "gemini-3.5-flash-lite", "provider": "gemini", "display_name": "Gemini 3.5 Flash Lite 10 output tokens", "options": {"max_output_tokens": 10} },
     #{"name": "claude-haiku-5-5", "provider": "anthropic", "display_name": "Claude Haiku 10 output tokens", "options": {"max_output_tokens": 10} },
     #{"name": "claude-haiku-5-5", "provider": "anthropic", "display_name": "Claude Haiku 2000 output tokens", "options": {"max_output_tokens": 2000} },

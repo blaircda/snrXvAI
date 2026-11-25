@@ -46,6 +46,8 @@ jobs:
         run: |
           perl compile-grammar snarxiv_titles.gram snarxiv_titles
           ocamlc snarxiv_titles.ml -o title_generator
+      - name: Compute run timestamp for logs
+          run: echo "RUN_TS=$(date -u +%F_%H%M%S)" >> "$GITHUB_ENV"
       - name: Generate papers              
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -60,7 +62,7 @@ jobs:
           else
             python -m degenerate.main -M "$MODELS"
           fi
-      - name: Upload failure logs
+      - name: Upload local failure logs
         if: ${{ !cancelled() && hashFiles('failed/errors.json') != '' }}
         uses: actions/upload-artifact@v4
         with:
@@ -74,6 +76,37 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: site/
+      - name: Checkout target repo
+        if: ${{ !cancelled() }}
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          repository: blaircda/snrXvAI-logs
+          ssh-key: ${{ secrets.LOGS_DEPLOY_KEY }}
+          path: target
+      - name: Copy logs
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p "target/logs/$RUN_TS/"
+          mkdir "target/logs/$RUN_TS/failed"
+          mkdir "target/logs/$RUN_TS/papers"
+          cp degenerate/errors.json "target/logs/$RUN_TS/"
+          cp failed/* "target/logs/$RUN_TS/failed/"
+          cp papers/*.tex "target/logs/$RUN_TS/papers/"
+          cp degenerate/listing.json "target/logs/$RUN_TS/"
+      - name: Push to log repo
+        if: ${{ !cancelled() }}
+        working-directory: target
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "logs/$RUN_TS" 
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+          else
+            git commit -m "Update generated files"
+            git push
+          fi   
   deploy: # Deploy site if build finished
     needs: build
     if: github.event_name == 'schedule' || inputs.models != 'dev'
