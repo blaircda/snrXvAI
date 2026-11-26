@@ -87,12 +87,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           mkdir -p "target/logs/$RUN_TS/"
-          mkdir "target/logs/$RUN_TS/failed"
-          mkdir "target/logs/$RUN_TS/papers"
-          cp degenerate/errors.json "target/logs/$RUN_TS/errors.json"
-          cp degenerate/listing.json "target/logs/$RUN_TS/listing.json"
-          cp failed/* "target/logs/$RUN_TS/failed/"
-          cp papers/*.tex "target/logs/$RUN_TS/papers/"
+          cp -r output/* "target/logs/$RUN_TS/"
       - name: Push to log repo
         if: ${{ !cancelled() }}
         working-directory: target
