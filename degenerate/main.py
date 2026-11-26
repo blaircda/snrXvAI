@@ -237,8 +237,8 @@ if __name__ == "__main__":
         Npapers, Ncollabs, max_paper_authors, Ntitles, model_choice, Ndear = schedule_settings(run_timestamp)
         
     else:
-        Npapers = 5 if args.Npapers is None else args.Npapers
-        Ncollabs = 0 if args.Ncollabs is None else args.Ncollabs
+        Npapers = 3 if args.Npapers is None else args.Npapers
+        Ncollabs = 1 if args.Ncollabs is None else args.Ncollabs
         max_paper_authors = 2 if args.max_paper_authors is None else args.max_paper_authors # max authors on a collaborative paper
         Ndear = 2 if args.max_dear_models is None else args.max_dear_models
         if max_paper_authors < 2:
