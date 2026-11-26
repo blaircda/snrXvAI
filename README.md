@@ -18,7 +18,9 @@ In `degenerate/grammar`:
 
 `python3 -m degenerate.main -N 5 -C 1`
 
-Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. The successes are outputted to a new directory `papers/` and their details saved in `degenerate/listing.json`. Failures are logged at `degenerate/errors.json` and logs (including offending .tex files if available) are saved in `failed/`.
+Due to the potential to hit API errors, token limits and misguided LaTeX commands, it is possible that fewer than the specified number of papers are produced. 
+
+The results of the run are saved to a new directory `output/`. Successfully created papers are logged as `output/listing.json` and the .tex and .pdf files are saved to `output/papers/`. Failures are logged as `output/errors.json` and explicit logs (and offending .tex files if available) are saved in `output/failed/`.
 
 Other command line options:
 
