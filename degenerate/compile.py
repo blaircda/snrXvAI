@@ -7,7 +7,6 @@ common_packages = r"""\usepackage[dvipsnames]{xcolor}
 \usepackage{amssymb,amsfonts,amsmath,amsthm}
 \usepackage{cite}
 \usepackage{hyperref}
-\usepackage{microtype}
 \usepackage{setspace}
 \onehalfspacing
 \numberwithin{equation}{section}
