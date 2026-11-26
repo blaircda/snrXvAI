@@ -26,7 +26,7 @@ permissions:
 jobs: 
   build: # Generate papers, run site creation, push logs to private logging repo 
     runs-on: ubuntu-26.04
-    timeout-minutes: 90
+    timeout-minutes: 110
     steps:
       - uses: actions/checkout@v4
         with:
@@ -103,7 +103,7 @@ jobs:
           fi   
   deploy: # Deploy site if build finished
     needs: build
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'schedule'  || inputs.models == 'schedule'
     permissions:
       pages: write      
       id-token: write   
