@@ -1,12 +1,12 @@
 from dotenv import load_dotenv
-import time, json, argparse, sys, random, re
+import time, json, argparse, sys, random, re, os
 from datetime import date
 from pathlib import Path
 from degenerate.registry import DEV_MODELS, get_model_registry, split_models_by_cost
 from degenerate.generate_titles import generate_titles
 from degenerate.pipeline import create_jobs, run_processes
-from degenerate.paths import PACKAGE_DIR
-
+from degenerate.paths import OUTPUT_DIR, PACKAGE_DIR
+        
 load_dotenv()
 
 def print_jobs(jobs):
@@ -20,19 +20,72 @@ def print_failed_jobs(jobs):
         #print(json.dumps(error))
         print()
 
-def get_cost(jobs):
-    cost = 0
-    for job in jobs:
-        for stage in job["stages"]:
-            usage = stage.get("usage")
-            if usage is not None:
-                reported_cost = usage.get("reported_cost")
-                if reported_cost is not None:
-                    cost+=reported_cost
-                else:
-                    cost+=usage.get("computed_cost",0)
-    return cost
+def stage_cost(stage):
+    usage = stage.get("usage") or {}
+    reported = usage.get("reported_cost")
+    return usage.get("computed_cost", 0) if reported is None else reported
 
+def stage_tokens(stage):
+    usage = stage.get("usage") or {}
+    return usage.get("output_tokens", 0)
+
+def get_cost(jobs):
+    return sum(stage_cost(stage) for job in jobs for stage in job["stages"])
+
+def get_tokens(jobs):
+    return sum(stage_tokens(stage) for job in jobs for stage in job["stages"])
+
+def summarise(results, failures):
+    """
+    Make a headline summary of successes, failures, cost
+    """
+    Npapers = len(results)
+    Nfailed = len(failures)
+    Ntotal = Npapers + Nfailed
+    cost_papers = get_cost(results)
+    cost_failures = get_cost(failures)
+    total_cost = cost_papers + cost_failures
+    summary = f"\nSucceeded: {Npapers}/{Ntotal} papers\nCost: {cost_papers:.2f}\n\nFailed: {Nfailed}/{Ntotal} papers\nCost: {cost_failures:.2f}\nTotal cost: {total_cost:.2f}\n"
+    return summary
+
+def tabularise(jobs):
+    """
+    Make a markdown table of job completion/failure/usage details
+    """
+    table = "|Paper+stages|Authors|Tokens|Cost|Status|\n|---|---|---|---|---|"
+    
+    for job in jobs:
+        job_id = job["job_id"]
+        title = job["title"]
+        error = job.get("error")
+        if error is not None:
+            final_status = "**Error:** "+error
+        else:
+            final_status = "**Completed**"
+        stages = job["stages"]        
+        table += f"\n|**{job_id}**|{len(stages)}|{get_tokens([job])}|{get_cost([job]):.2f}|{final_status}|"
+
+        ok = True
+        for stage in stages:
+            cost = stage_cost(stage) 
+            model = stage["model"]["name"]
+            if stage["model"].get("options",{}).get("effort") is not None:
+                model += " "+stage["model"]["options"]["effort"]
+            version = stage["version"]
+            tokens = stage_tokens(stage)
+            stage_status = stage.get("error")
+            if stage_status is None: # no error found
+                if ok:
+                    stage_status = "Success"
+                else:
+                    stage_status = "Not run"
+            else:
+                stage_status = "Error"
+                ok = False
+            table += f"\n|{version}|{model}|{tokens}|{cost:.2f}|{stage_status}|"
+
+    return table
+    
 def main(timestamp, paper_struct, Ntitles, models):
     """
     Run the paper generation pipeline 
@@ -60,28 +113,36 @@ def main(timestamp, paper_struct, Ntitles, models):
         results.extend(retry_results)
         failures.extend(retry_failures+retry_retry)
 
-    total_cost = 0 
+    summary = summarise(results, failures)
+    table = tabularise(results+failures)
+
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary_path: # only exists on GitHub; skip when running locally
+        with open(summary_path, "a", encoding="utf-8") as f:
+            f.write("### snrXvAI run\n")
+            f.write(summary)
+            f.write(table)
+    else:
+        print(summary)
+        print(table)
+
     if failures: # write failures to JSON
-        print (f"Failed jobs ({len(failures)}/{Npapers}):\n")
+        #print (f"Failed jobs ({len(failures)}/{Npapers}):\n")
         failures_save = { "date": timestamp, "papers": failures}
-        with open(PACKAGE_DIR / 'errors.json', 'w', encoding='utf-8') as f:
+        with open(OUTPUT_DIR / 'errors.json', 'w', encoding='utf-8') as f:
             json.dump(failures_save, f, ensure_ascii=False, indent=2)
-        print(f"Failed job listings saved to {PACKAGE_DIR}/errors.json")
+        print(f"\nFailed job listings saved to {OUTPUT_DIR}/errors.json")
         #print_failed_jobs(failures)
-        total_cost += get_cost(failures)
         
     if results: # write successful jobs to JSON
-        print(f"Successful jobs: ({len(results)}/{Npapers})")
+        #print(f"Successful jobs: ({len(results)}/{Npapers})")
         results_save = { "date": timestamp, "papers": results}
-        with open(PACKAGE_DIR / 'listing.json', 'w', encoding='utf-8') as f:
+        with open(OUTPUT_DIR / 'listing.json', 'w', encoding='utf-8') as f:
             json.dump(results_save, f, ensure_ascii=False, indent=2)
-        print(f"Successful job listing saved to {PACKAGE_DIR}/listing.json")
+        print(f"Successful job listing saved to {OUTPUT_DIR}/listing.json")
         #print_jobs(results)
-        total_cost += get_cost(results)
-        print(f"Total cost of run: {total_cost:.2f}")
         return 0
     else:
-        print(f"Total cost of run: {total_cost:.2f}")
         return 1
 
 def schedule_settings(timestamp):

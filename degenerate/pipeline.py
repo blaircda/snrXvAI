@@ -107,10 +107,11 @@ def process_paper(job):
             source = check_source(r["output"], job['job_id'])
             # get name of the model with effort for the pdf
             display_name = model["display_name"]
-            if model["options"].get("effort") is not None:
+            if model.get("options", {}).get("effort") is not None:
                 display_name += " ("+model["options"]["effort"]+")"
             paper_authors.append(display_name)
     except GenerationError as e:
+        stage["error"] = True
         if e.usage is not None:
             stage["usage"] = compute_cost(model, e.usage)
         raise

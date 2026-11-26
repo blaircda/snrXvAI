@@ -101,7 +101,7 @@ PREAMBLE_D = r"""\documentclass[12pt,a4paper]{article}
 """
 
 def save_failure(source, papername, reason):
-    FAILED_DIR.mkdir(exist_ok=True)
+    FAILED_DIR.mkdir(parents=True, exist_ok=True)
     with open(FAILED_DIR / f"{papername}_{reason}.tex","w", encoding="utf-8") as f:
         f.write(source) 
 
@@ -165,7 +165,7 @@ def make_paper(source, papername):
     """
     Creates LaTeX file from `source` and builds pdf
     """
-    PAPERS_DIR.mkdir(exist_ok=True)
+    PAPERS_DIR.mkdir(parents=True, exist_ok=True)
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -201,7 +201,7 @@ def make_paper(source, papername):
             raise OutputError("Building pdf failed: timed out after 60s") from e
 
         if proc.returncode != 0:
-            FAILED_DIR.mkdir(exist_ok=True)
+            FAILED_DIR.mkdir(parents=True, exist_ok=True)
 
             log_file = tmp / f"{papername}.log"
             if log_file.is_file():

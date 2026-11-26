@@ -41,7 +41,7 @@ def call_anthropic(model, sys_input, txt_input, call_id=None):
     usage = {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens}
     #anthropic does not track thinking tokens
 
-    LOGS_DIR.mkdir(exist_ok=True)
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
     (LOGS_DIR / f"{call_id}_response.json").write_text(
         response.model_dump_json(indent=2, exclude_none=True),
         encoding="utf-8",
@@ -49,7 +49,7 @@ def call_anthropic(model, sys_input, txt_input, call_id=None):
     
     if status != "end_turn":
         
-        #FAILED_DIR.mkdir(exist_ok=True)
+        #FAILED_DIR.mkdir(parents=True, exist_ok=True)
         #(FAILED_DIR / f"{call_id}_response.json").write_text(
         #    response.model_dump_json(indent=2, exclude_none=True),
         #    encoding="utf-8",

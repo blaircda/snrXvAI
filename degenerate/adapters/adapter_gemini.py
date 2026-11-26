@@ -51,7 +51,7 @@ def call_gemini(model, sys_input, txt_input, call_id=None):
     total_output_tokens = (thought_tokens or 0) + (output_tokens or 0)
     usage = {"input_tokens": input_tokens, "output_tokens": total_output_tokens}
     
-    LOGS_DIR.mkdir(exist_ok=True)
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
     (LOGS_DIR / f"{call_id}_response.json").write_text(
         interaction.model_dump_json(indent=2, exclude_none=True),
         encoding="utf-8",
@@ -59,7 +59,7 @@ def call_gemini(model, sys_input, txt_input, call_id=None):
         
     if status != "completed":
         
-        #FAILED_DIR.mkdir(exist_ok=True)
+        #FAILED_DIR.mkdir(parents=True, exist_ok=True)
         #(FAILED_DIR / f"{call_id}_response.json").write_text(
         #interaction.model_dump_json(indent=2, exclude_none=True),
         #encoding="utf-8",

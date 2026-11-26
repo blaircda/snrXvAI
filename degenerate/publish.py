@@ -48,7 +48,7 @@ def get_listings(listings_file):
 if __name__ == "__main__":
     PDF_DIR = create_site_dir()
 
-    date, listings = get_listings(PACKAGE_DIR / "listing.json")
+    date, listings = get_listings(OUTPUT_DIR / "listing.json")
     
     env = Environment(
         loader=FileSystemLoader(PACKAGE_DIR / "templates/"),

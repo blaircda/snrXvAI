@@ -45,7 +45,7 @@ def call_openrouter(model, sys_input, txt_input, call_id=None):
     status = response.status
     usage = {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens, "reported_cost": getattr(response.usage, "cost", None)} 
 
-    LOGS_DIR.mkdir(exist_ok=True)
+    LOGS_DIR.mkdir(parents=True,exist_ok=True)
     (LOGS_DIR / f"{call_id}_response.json").write_text(
         response.model_dump_json(indent=2, exclude_none=True),
         encoding="utf-8",
@@ -53,7 +53,7 @@ def call_openrouter(model, sys_input, txt_input, call_id=None):
     
     if status != "completed":
 
-        #FAILED_DIR.mkdir(exist_ok=True)
+        #FAILED_DIR.mkdir(parents=True, exist_ok=True)
         #(FAILED_DIR / f"{call_id}_response.json").write_text(
         #    response.model_dump_json(indent=2, exclude_none=True),
         #    encoding="utf-8",
