@@ -45,14 +45,14 @@ def summarise(results, failures):
     cost_papers = get_cost(results)
     cost_failures = get_cost(failures)
     total_cost = cost_papers + cost_failures
-    summary = f"\nSucceeded: {Npapers}/{Ntotal} papers\nCost: {cost_papers:.2f}\n\nFailed: {Nfailed}/{Ntotal} papers\nCost: {cost_failures:.2f}\nTotal cost: {total_cost:.2f}\n"
+    summary = f"\nSucceeded: {Npapers}/{Ntotal} papers\nCost: {cost_papers:.2f}\n\nFailed: {Nfailed}/{Ntotal} papers\nCost: {cost_failures:.2f}\n\nTotal cost: {total_cost:.2f}\n"
     return summary
 
 def tabularise(jobs):
     """
     Make a markdown table of job completion/failure/usage details
     """
-    table = "|Paper+stages|Authors|Tokens|Cost|Status|\n|---|---|---|---|---|"
+    table = "|**Paper** + Stages|**Authors**|**Tokens**|**Cost**|**Final Status** + Status by Stage|\n|---|---|---|---|---|"
     
     for job in jobs:
         job_id = job["job_id"]
@@ -119,7 +119,7 @@ def main(timestamp, paper_struct, Ntitles, models):
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_path: # only exists on GitHub; skip when running locally
         with open(summary_path, "a", encoding="utf-8") as f:
-            f.write("### snrXvAI run\n")
+            f.write(f"### snrXvAI run {timestamp}\n")
             f.write(summary)
             f.write(table)
     else:
