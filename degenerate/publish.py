@@ -1,7 +1,7 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import json, time, shutil
 from pathlib import Path
-from degenerate.paths import ROOT, SITE_DIR, PACKAGE_DIR, PAPERS_DIR
+from degenerate.paths import ROOT, SITE_DIR, PACKAGE_DIR, PAPERS_DIR, OUTPUT_DIR
 
 def create_site_dir():
     """
