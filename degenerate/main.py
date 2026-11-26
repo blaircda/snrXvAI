@@ -63,7 +63,7 @@ def tabularise(jobs):
         else:
             final_status = "**Completed**"
         stages = job["stages"]        
-        table += f"\n|**{job_id}**|{len(stages)}|{get_tokens([job])}|{get_cost([job]):.2f}|{final_status}|"
+        table += f"\n|**{job_id}**|{len(stages)}|{get_tokens([job])}|{get_cost([job]):.3f}|{final_status}|"
 
         ok = True
         for stage in stages:
@@ -82,7 +82,7 @@ def tabularise(jobs):
             else:
                 stage_status = "Error"
                 ok = False
-            table += f"\n|{version}|{model}|{tokens}|{cost:.2f}|{stage_status}|"
+            table += f"\n|{version}|{model}|{tokens}|{cost:.3f}|{stage_status}|"
 
     return table
     
