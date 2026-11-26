@@ -103,7 +103,7 @@ jobs:
           fi   
   deploy: # Deploy site if build finished
     needs: build
-    if: github.event_name == 'schedule' || inputs.models != 'dev'
+    if: github.event_name == 'schedule'
     permissions:
       pages: write      
       id-token: write   
